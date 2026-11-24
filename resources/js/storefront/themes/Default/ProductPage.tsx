@@ -93,7 +93,7 @@ function SaleBanner({ sale }: { sale: NonNullable<ProductPageData['sale']> }) {
   }, [until]);
   const left = until === null ? null : remaining(until, now);
   return (
-    <div className="sf-pdp-sale">
+    <div className={`sf-pdp-sale${left ? '' : ' sf-pdp-sale-compact'}`}>
       <p className="sf-pdp-sale-title">
         <svg
           width="26"

@@ -35,6 +35,9 @@ final class CatalogDemoSeeder
         'laptop-bags' => ['accessories', 'Laptop bags', 'Τσάντες laptop'],
     ];
 
+    /** Departments whose page is a landing page (sub-categories and highlights) instead of a product list. */
+    private const LANDING_PAGES = ['phones', 'tablets', 'laptops', 'audio'];
+
     /** @var array<string,array{string,string}> short English and Greek description of each top-level category */
     private const INTROS = [
         'phones' => ['The latest smartphones and everything that keeps them charged and protected.', 'Τα νεότερα smartphones και ό,τι χρειάζεστε για φόρτιση και προστασία.'],
@@ -111,7 +114,7 @@ final class CatalogDemoSeeder
             $parentId = $parent === null ? null : $ids[$parent];
             $positionKey = $parent ?? '';
             $positions[$positionKey] = ($positions[$positionKey] ?? 0) + 1;
-            $id = (int) DB::table('categories')->insertGetId(['parent_id' => $parentId, 'position' => $positions[$positionKey] + 100, 'status' => 'active', 'image_media_id' => $pictures->photo(self::photo($key)), 'created_at' => now(), 'updated_at' => now()]);
+            $id = (int) DB::table('categories')->insertGetId(['parent_id' => $parentId, 'position' => $positions[$positionKey] + 100, 'status' => 'active', 'image_media_id' => $pictures->photo(self::photo($key)), 'is_landing_page' => in_array($key, self::LANDING_PAGES, true), 'created_at' => now(), 'updated_at' => now()]);
             $ids[$key] = $id;
             foreach ($locales as $code => $locale) {
                 $name = $code === 'el' ? $el : $en;

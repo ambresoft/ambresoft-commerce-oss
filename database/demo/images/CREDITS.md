@@ -45,5 +45,25 @@ Every photo here is dedicated to the public domain (CC0) by its author and was f
 | category-wearables.jpg      | rawpixel  | CC0     | https://www.rawpixel.com/image/5926466/photo-image-background-public-domain-black        |
 | category-accessories.jpg    | stocksnap | CC0     | https://stocksnap.io/photo/iphone-keyboard-R7GVMRJWW9                                    |
 | banner-devices.jpg          | stocksnap | CC0     | https://stocksnap.io/photo/macbook-laptop-RMATTE7HXJ                                     |
-| banner-shipping.jpg         | stocksnap | CC0     | https://stocksnap.io/photo/iphone-keyboard-R7GVMRJWW9                                    |
 | banner-audio.jpg            | stocksnap | CC0     | https://stocksnap.io/photo/headphones-desk-KKOQ2ZWHO1                                    |
+
+## Made for this project
+
+These are original works of the Ambresoft Commerce project, released with it under the same license, except the
+Ambresoft name and logo:
+
+- `logo.png` — the Ambresoft logo, shown as the demo store logo. The Ambresoft name and logo are trademarks of Ambresoft
+  and are not licensed under the AGPL; replace them with your own store's logo.
+- `icon-*.png` — the "Quick navigation" menu icons.
+- `brand-*.png` — wordmarks of the fictional demo brands.
+- `payment-cod.png` — the cash on delivery badge.
+- `hero-*.jpg` — homepage banner artwork (desktop and `-phone` versions), composed from the CC0 product photos above.
+- `../videos/reel-*.mp4` and their `.jpg` covers — demo reels. `reel-made-to-move` is an original animation; the others are
+  short slideshows rendered from the CC0 product photos above.
+
+## Payment logos
+
+`payment-visa.png`, `payment-mastercard.png`, `payment-amex.png`, `payment-applepay.png` and `payment-paypal.png` are
+drawn from [Simple Icons](https://simpleicons.org) 13 (CC0-1.0). The logos are trademarks of their owners (Visa,
+Mastercard, American Express, Apple and PayPal); they are shown only to tell shoppers which payment methods a store
+accepts. Remove the ones your store does not offer.

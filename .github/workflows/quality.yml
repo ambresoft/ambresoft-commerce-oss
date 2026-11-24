@@ -1,0 +1,47 @@
+name: Foundation quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.24.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Configure disposable environment
+        run: cp .env.example .env
+      - name: Install
+        run: make install
+      - name: Generate local key
+        run: docker compose run --rm --no-deps app php artisan key:generate
+      - name: Verify
+        run: make check
+      - name: FrankenPHP HTTP smoke checks
+        run: |
+          docker compose run --rm --no-deps app php artisan migrate --force
+          docker compose up -d --build --wait --wait-timeout 120 app worker scheduler
+          curl --fail --silent --show-error http://localhost:8000/up > /dev/null
+          curl --fail --silent --show-error --user-agent 'Mozilla/5.0 CMS runtime smoke' http://localhost:8000/admin/login > /dev/null
+          curl --fail --silent --show-error http://localhost:8000/build/manifest.json > /dev/null
+          test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://localhost:8000/.env)" = 404
+      - name: Manifests and dependency advisories
+        run: |
+          docker compose run --rm --no-deps app composer validate --strict
+          docker compose run --rm --no-deps app composer audit
+          pnpm audit
+          git diff --check
+      - name: Stop services without deleting volumes
+        if: always()
+        run: docker compose down

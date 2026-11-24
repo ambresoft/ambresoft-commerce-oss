@@ -848,13 +848,13 @@ final class StorefrontLayoutTest extends TestCase
         self::assertSame(count(CatalogDemoSeeder::CATEGORIES), DB::table('category_translations')->where('locale_id', $en)->count());
         // Every demo category can be saved in the strict editor right away: its SEO texts are complete in each language.
         self::assertSame(0, DB::table('category_translations')->where(fn ($q) => $q->where('seo_title', '')->orWhere('seo_description', '')->orWhere('meta_keywords', ''))->count());
-        self::assertSame(34, DB::table('products')->where('sku', 'like', 'TECH-%')->count());
+        self::assertSame(37, DB::table('products')->where('sku', 'like', 'TECH-%')->count());
         // Every product and category has its bundled photo, and some products are on sale.
-        self::assertSame(34, DB::table('product_images')->whereIn('product_id', DB::table('products')->where('sku', 'like', 'TECH-%')->pluck('id'))->count());
+        self::assertSame(0, DB::table('products')->where('sku', 'like', 'TECH-%')->whereNotExists(fn ($q) => $q->selectRaw('1')->from('product_images')->whereColumn('product_images.product_id', 'products.id'))->count());
         self::assertSame(0, DB::table('categories')->whereNull('system_key')->whereNull('image_media_id')->count());
         self::assertGreaterThan(0, DB::table('product_sales')->count());
         $this->artisan('cms:demo-store')->assertSuccessful();
-        self::assertSame(34, DB::table('products')->where('sku', 'like', 'TECH-%')->count());
+        self::assertSame(37, DB::table('products')->where('sku', 'like', 'TECH-%')->count());
         // The built-in layouts get sample page texts once and keep what the merchant writes afterwards.
         $texts = fn (string $page) => DB::table('storefront_layout_translations')->join('storefront_layouts', 'storefront_layouts.id', '=', 'layout_id')->where('page_type', $page)->where('locale_id', $en)->first();
         self::assertNotSame('', $texts('default')->page_title);
@@ -867,13 +867,15 @@ final class StorefrontLayoutTest extends TestCase
         Cache::flush();
         $page = $this->rendered();
         // Menus are built by hand from the categories: links are full category paths, six first-level entries.
-        $mega = $page['regions']['navigation'][0]['blocks'][0]['content']['main'][0];
+        // The compact header opens the main menu from its search bar (the drawer).
+        $identity = collect($page['regions'])->flatten(1)->flatMap(fn (array $grid): array => $grid['blocks'] ?? [])->firstWhere('template', 'identity');
+        $mega = $identity['content']['drawer'][0];
         self::assertSame('Categories', $mega['name']);
         self::assertCount(6, $mega['children']);
         self::assertSame('/phones', $mega['children'][0]['url']);
         self::assertSame('/phones/smartphones', $mega['children'][0]['children'][0]['url']);
         // Product links are the category path plus the product slug.
-        $items = array_column($page['regions']['content'][0]['blocks'][0]['content']['items'], null, 'name');
+        $items = array_column(collect($page['regions']['content'])->flatMap(fn (array $grid): array => $grid['blocks'])->firstWhere('title', 'New arrivals')['content']['items'], null, 'name');
         self::assertSame('/phones/smartphones/aster-x5', $items['Aster X5 128GB']['url']);
         foreach ($items as $item) {
             self::assertMatchesRegularExpression('#^/[a-z0-9-]+(/[a-z0-9-]+)+$#', $item['url']);

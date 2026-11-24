@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 /**
- * Two local sample hero banners (Greek and English texts) in a sample group. Backgrounds are the bundled CC0 demo
+ * Three local sample hero banners (Greek and English texts) in a sample group. Backgrounds are the bundled CC0 demo
  * photos in database/demo/images (see CREDITS.md); nothing is fetched. Explicit opt-in, never in production; tracked by
  * stable keys so reruns create nothing and keep administrator edits.
  */
@@ -30,48 +30,70 @@ final class BannerDemoSeeder
             return $existing !== null ? (string) $existing : $this->banners->createGroup($actor, 'Homepage hero (sample)');
         });
 
-        $this->record('banner.hero1', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero1($group), $this->background('banner-devices')));
-        $this->record('banner.hero2', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero2($group), $this->background('banner-shipping')));
+        $this->record('banner.hero1', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero1($group), $this->artwork('hero-laptops')));
+        $this->record('banner.hero2', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero2($group), $this->artwork('hero-audio')));
+        $this->record('banner.hero3', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero3($group), $this->artwork('hero-phones')));
 
         return $created;
     }
 
-    /** @return array<string, mixed> New devices: dark scheme, content on the left, gradient mask, phone overrides. */
+    /** @return array<string, mixed> New laptops: deep green artwork, white text on the left. */
     private function hero1(string $group): array
     {
         return [
             ...$this->base($group, 0, 'dark'),
-            'names' => $this->texts('Hero 1 – New devices (sample)', 'Hero 1 – Νέες συσκευές (δείγμα)'),
+            'names' => $this->texts('Hero 1 – New laptops (sample)', 'Hero 1 – Νέα laptops (δείγμα)'),
             'title_weight' => 'bold', 'title_tag' => 'h2', 'button_style' => 'standard', 'url' => '/laptops',
-            'phone_custom' => true,
-            'layouts' => [
-                'pc' => [...$this->layout(), 'halign' => 'left', 'paddings' => '40px 60px 40px 60px', 'title_size' => 46, 'description_size' => 18, 'title_shadow' => true,
-                    'button_enabled' => true, 'button_color' => '#f5d7a1', 'button_text_color' => '#3b2412', 'mask_type' => 'gradient', 'mask_opacity' => 35],
-                'tablet' => [],
-                'phone' => ['halign' => 'center', 'paddings' => '24px', 'full_width' => true, 'title_size' => 30, 'description_size' => 15, 'mask_type' => 'semi', 'mask_opacity' => 45],
-            ],
+            'layouts' => $this->layouts('#6ee7b7', '#064e3b'),
             'contents' => $this->contents(
-                ['<span class="banner-title-above">Just landed</span>Nimbus Air laptops<br><i>with Aster phones &amp; tablets</i>', "All-day battery, featherweight design.\nUp to 15% off this week only.", 'Shop laptops'],
-                ['<span class="banner-title-above">Μόλις ήρθαν</span>Laptops Nimbus Air<br><i>με κινητά &amp; tablets Aster</i>', "Μπαταρία για όλη τη μέρα, πανάλαφρος σχεδιασμός.\nΈως 15% έκπτωση μόνο αυτή την εβδομάδα.", 'Δείτε τα laptops'],
+                ['<span class="banner-title-above">Just landed</span>Nimbus Air 13<br><i>1.2 kg. 18 hours.</i>', "Featherweight aluminium, silent and fanless.\nUp to 15% off this week only.", 'Shop laptops'],
+                ['<span class="banner-title-above">Μόλις ήρθε</span>Nimbus Air 13<br><i>1,2 κιλά. 18 ώρες.</i>', "Πανάλαφρο αλουμίνιο, αθόρυβο χωρίς ανεμιστήρα.\nΈως 15% έκπτωση μόνο αυτή την εβδομάδα.", 'Δείτε τα laptops'],
             ),
         ];
     }
 
-    /** @return array<string, mixed> Free shipping: light scheme, centred content, coloured word in the title. */
+    /** @return array<string, mixed> Audio week: light mint artwork, dark text on the left. */
     private function hero2(string $group): array
     {
         return [
             ...$this->base($group, 1, 'light'),
-            'names' => $this->texts('Hero 2 – Free shipping (sample)', 'Hero 2 – Δωρεάν αποστολή (δείγμα)'),
-            'title_weight' => 'heavy', 'title_tag' => 'div', 'button_style' => 'outline', 'url' => '/products',
-            'layouts' => [
-                'pc' => [...$this->layout(), 'halign' => 'center', 'full_width' => true, 'paddings' => '40px 80px', 'title_size' => 50, 'description_size' => 18,
-                    'button_enabled' => true, 'button_color' => '#14532d'],
-            ],
+            'names' => $this->texts('Hero 2 – Audio week (sample)', 'Hero 2 – Εβδομάδα ήχου (δείγμα)'),
+            'title_weight' => 'heavy', 'title_tag' => 'div', 'button_style' => 'standard', 'url' => '/audio',
+            'layouts' => $this->layouts('#14532d', '#ffffff'),
             'contents' => $this->contents(
-                ['<span style="color: #15803d">Free</span> shipping over €50', 'Orders placed before 14:00 ship the same day. Free 30-day returns on every device.', 'Shop now'],
-                ['<span style="color: #15803d">Δωρεάν</span> αποστολή άνω των 50€', 'Οι παραγγελίες έως τις 14:00 αποστέλλονται αυθημερόν. Δωρεάν επιστροφές 30 ημερών για κάθε συσκευή.', 'Αγορά τώρα'],
+                ['<span class="banner-title-above">Audio week</span>Hear only<br><span style="color: #15803d">what matters</span>', 'Noise-cancelling headphones and earbuds from €99.', 'Shop audio'],
+                ['<span class="banner-title-above">Εβδομάδα ήχου</span>Ακούστε μόνο<br><span style="color: #15803d">ό,τι μετράει</span>', 'Ακουστικά και earbuds με ακύρωση θορύβου από 99€.', 'Δείτε τον ήχο'],
             ),
+        ];
+    }
+
+    /** @return array<string, mixed> New phone: indigo artwork, white text on the left. */
+    private function hero3(string $group): array
+    {
+        return [
+            ...$this->base($group, 2, 'dark'),
+            'names' => $this->texts('Hero 3 – Aster X5 Pro (sample)', 'Hero 3 – Aster X5 Pro (δείγμα)'),
+            'title_weight' => 'bold', 'title_tag' => 'div', 'button_style' => 'standard', 'url' => '/phones',
+            'layouts' => $this->layouts('#5eead4', '#042f2e'),
+            'contents' => $this->contents(
+                ['<span class="banner-title-above">New</span>Aster X5 Pro<br><i>Zoom closer. Shoot brighter.</i>', 'Triple camera with 5× zoom and a 120 Hz display.', 'Shop phones'],
+                ['<span class="banner-title-above">Νέο</span>Aster X5 Pro<br><i>Πιο κοντά. Πιο φωτεινά.</i>', 'Τριπλή κάμερα με 5× zoom και οθόνη 120 Hz.', 'Δείτε τα κινητά'],
+            ),
+        ];
+    }
+
+    /**
+     * Desktop: text on the left over the artwork's open side. Phone: its own portrait artwork, text centred above the picture.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private function layouts(string $button, string $buttonText): array
+    {
+        return [
+            'pc' => [...$this->layout(), 'halign' => 'left', 'paddings' => '56px 7%', 'title_size' => 50, 'description_size' => 18,
+                'button_enabled' => true, 'button_color' => $button, 'button_text_color' => $buttonText],
+            'tablet' => [],
+            'phone' => ['valign' => 'top', 'halign' => 'center', 'paddings' => '36px 24px', 'full_width' => true, 'title_size' => 30, 'description_size' => 15],
         ];
     }
 
@@ -82,7 +104,7 @@ final class BannerDemoSeeder
             'group_id' => $group, 'position' => $position, 'status' => 'active', 'created_on' => now()->toDateString(),
             'color_scheme' => $scheme, 'object_type' => 'image', 'products_template' => 'grid', 'products_columns' => 4, 'products_rows' => 1,
             'object_valign' => 'center', 'object_halign' => 'center', 'background_halign' => 'center',
-            'new_window' => false, 'tablet_custom' => false, 'phone_custom' => false,
+            'new_window' => false, 'tablet_custom' => false, 'phone_custom' => true,
         ];
     }
 
@@ -109,7 +131,8 @@ final class BannerDemoSeeder
             $pc[$code] = ['title' => $title, 'description' => $description, 'button_text' => $button];
         }
 
-        return ['pc' => $pc];
+        // Phones repeat the texts: their own content row is what carries the portrait artwork.
+        return ['pc' => $pc, 'phone' => $pc];
     }
 
     /** @return array<string, string> */
@@ -124,17 +147,19 @@ final class BannerDemoSeeder
     }
 
     /**
-     * The same bundled demo photo as background for every active language.
+     * The bundled banner artwork as background for every active language: the wide image on desktop, the portrait one on phones.
      *
      * @return array<string, array<string, array<string, UploadedFile>>>
      */
-    private function background(string $name): array
+    private function artwork(string $name): array
     {
         $files = [];
         foreach (app(LocaleCatalog::class)->active()->pluck('code') as $code) {
-            $path = tempnam(sys_get_temp_dir(), 'banner') ?: throw new RuntimeException('Unable to create a temporary file.');
-            copy(database_path('demo/images/'.$name.'.jpg'), $path);
-            $files['pc'][$code]['background_image'] = new UploadedFile($path, $name.'.jpg', 'image/jpeg', null, true);
+            foreach (['pc' => $name, 'phone' => $name.'-phone'] as $device => $file) {
+                $path = tempnam(sys_get_temp_dir(), 'banner') ?: throw new RuntimeException('Unable to create a temporary file.');
+                copy(database_path('demo/images/'.$file.'.jpg'), $path);
+                $files[$device][$code]['background_image'] = new UploadedFile($path, $file.'.jpg', 'image/jpeg', null, true);
+            }
         }
 
         return $files;

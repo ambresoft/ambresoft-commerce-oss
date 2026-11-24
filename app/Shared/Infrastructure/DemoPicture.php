@@ -31,11 +31,12 @@ final class DemoPicture
         return (int) MediaFileRecord::create($stored)->id;
     }
 
-    /** Stores a copy of a bundled demo photo (database/demo/images/{name}.jpg) as a private image and returns its media file id. */
+    /** Stores a copy of a bundled demo picture (database/demo/images/{name}.jpg or .png) as a private image and returns its media file id. */
     public function photo(string $name): int
     {
         $path = tempnam(sys_get_temp_dir(), 'demo');
-        copy(database_path('demo/images/'.$name.'.jpg'), $path);
+        $source = database_path('demo/images/'.$name.'.jpg');
+        copy(is_file($source) ? $source : database_path('demo/images/'.$name.'.png'), $path);
         $stored = app(PrivateImageStorage::class)->store(new ImageUpload($path));
         @unlink($path);
 

@@ -241,16 +241,17 @@ final class BannerTest extends TestCase
         Storage::fake('local');
         $this->artisan('cms:banners-demo', ['actor' => (string) $this->actor->id])->assertSuccessful();
         $this->artisan('cms:banners-demo', ['actor' => (string) $this->actor->id])->assertSuccessful();
-        self::assertSame(2, DB::table('banners')->where('status', 'active')->count());
+        self::assertSame(3, DB::table('banners')->where('status', 'active')->count());
         self::assertSame(1, DB::table('banner_groups')->count());
-        self::assertSame(2, DB::table('banner_layouts')->where('device', 'pc')->count());
-        self::assertSame(1, DB::table('banner_layouts')->where('device', 'phone')->count());
+        self::assertSame(3, DB::table('banner_layouts')->where('device', 'pc')->count());
+        self::assertSame(3, DB::table('banner_layouts')->where('device', 'phone')->count());
         $media = DB::table('media_files')->whereIn('id', DB::table('banner_contents')->pluck('background_image_media_id'))->get();
         self::assertNotEmpty($media);
-        self::assertSame([960, 360], [(int) $media[0]->width, (int) $media[0]->height]);
+        self::assertContains('2400x900', $media->map(fn ($m) => $m->width.'x'.$m->height)->all());
+        self::assertContains('1080x1350', $media->map(fn ($m) => $m->width.'x'.$m->height)->all());
         $el = DB::table('locales')->where('code', 'el')->value('id');
-        self::assertStringContainsString('Laptops Nimbus Air', (string) DB::table('banner_contents')->where('locale_id', $el)->orderBy('banner_id')->value('title'));
-        $this->get('/admin/banners')->assertInertia(fn (Assert $p) => $p->where('banners.total', 2)->where('banners.data.0.state', 'live')->where('banners.data.0.group.name', 'Homepage hero (sample)'));
+        self::assertStringContainsString('Nimbus Air 13', (string) DB::table('banner_contents')->where('locale_id', $el)->orderBy('banner_id')->value('title'));
+        $this->get('/admin/banners')->assertInertia(fn (Assert $p) => $p->where('banners.total', 3)->where('banners.data.0.state', 'live')->where('banners.data.0.group.name', 'Homepage hero (sample)'));
     }
 
     public function test_view_only_staff_read_and_others_are_refused(): void

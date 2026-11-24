@@ -19,7 +19,7 @@ final class BlogDemoSeeder
     ];
 
     /** Cover photo of each post (bundled CC0 demo photos in database/demo/images). */
-    private const COVERS = ['new-store' => 'category-accessories', 'free-shipping' => 'banner-shipping', 'black-friday' => 'category-laptops', 'gift-cards' => 'aster-tab-8-mini',
+    private const COVERS = ['new-store' => 'category-accessories', 'free-shipping' => 'kova-commuter-backpack', 'black-friday' => 'category-laptops', 'gift-cards' => 'aster-tab-8-mini',
         'smartphone' => 'category-phones', 'laptop' => 'nimbus-air-13', 'tv' => 'category-tablets', 'headphones' => 'category-audio'];
 
     /** blog, days ago, [en title, excerpt, tags], [el title, excerpt, tags] */

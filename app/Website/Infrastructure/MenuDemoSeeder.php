@@ -42,9 +42,9 @@ final class MenuDemoSeeder
             }
         }
         $offers = $this->item($main, null, 'Offers', 'Προσφορές', 'heading', null, null, 20, $locales, null);
-        $this->item($main, $offers, 'Deals of the day', 'Προσφορές της ημέρας', 'url', '/offers/deals', null, 10, $locales, null);
-        $this->item($main, $offers, 'New arrivals', 'Νέες αφίξεις', 'url', '/offers/new', null, 20, $locales, null);
-        foreach ([['Commercial', 'Επαγγελματίες', '/commercial'], ['Gift card', 'Δωροκάρτα', '/gift-card'], ['Order status', 'Κατάσταση παραγγελίας', '/order-status'], ['Customer service', 'Εξυπηρέτηση πελατών', '/customer-service']] as $i => [$en, $el, $url]) {
+        $this->item($main, $offers, 'Deals of the day', 'Προσφορές της ημέρας', 'url', '/offers', null, 10, $locales, null);
+        $this->item($main, $offers, 'New arrivals', 'Νέες αφίξεις', 'url', '/new', null, 20, $locales, null);
+        foreach ([['Best sellers', 'Δημοφιλή', '/bestsellers'], ['Returns', 'Επιστροφές', '/returns-and-exchanges'], ['Order status', 'Κατάσταση παραγγελίας', '/order-status'], ['Customer service', 'Εξυπηρέτηση πελατών', '/contact-us']] as $i => [$en, $el, $url]) {
             $this->item($secondary, null, $en, $el, 'url', $url, null, ($i + 1) * 10, $locales, null);
         }
 
@@ -94,8 +94,8 @@ final class MenuDemoSeeder
         $menu = $this->menu('Footer (demo)', 'Υποσέλιδο (demo)', 'footer', $locales, 'link_groups');
         $columns = [
             ['My account', 'Ο λογαριασμός μου', [['Sign in', 'Σύνδεση', '/login'], ['Create account', 'Δημιουργία λογαριασμού', '/register']]],
-            ['{store_name}', '{store_name}', [['About us', 'Σχετικά με εμάς', '/about'], ['Contact us', 'Επικοινωνία', '/contact'], ['Gift certificates', 'Δωροεπιταγές', '/gift-certificates'], ['Our brands', 'Οι μάρκες μας', '/brands'], ['Blog', 'Blog', '/blog'], ['Sitemap', 'Χάρτης ιστότοπου', '/sitemap']]],
-            ['Customer service', 'Εξυπηρέτηση πελατών', [['About your order', 'Σχετικά με την παραγγελία σας', '/order-status'], ['Wishlist', 'Λίστα επιθυμιών', '/favorites'], ['Comparison list', 'Λίστα σύγκρισης', '/compare']]],
+            ['{store_name}', '{store_name}', [['About us', 'Σχετικά με εμάς', '/about-us'], ['Contact us', 'Επικοινωνία', '/contact-us'], ['Terms of use', 'Όροι χρήσης', '/terms-of-use'], ['Privacy policy', 'Πολιτική απορρήτου', '/privacy-policy'], ['Our brands', 'Οι μάρκες μας', '/brands'], ['Blog', 'Blog', '/blog/news'], ['Sitemap', 'Χάρτης ιστότοπου', '/sitemap']]],
+            ['Customer service', 'Εξυπηρέτηση πελατών', [['About your order', 'Σχετικά με την παραγγελία σας', '/order-status'], ['Returns and exchanges', 'Επιστροφές και αλλαγές', '/returns-and-exchanges'], ['Wishlist', 'Λίστα επιθυμιών', '/wishlist'], ['Comparison list', 'Λίστα σύγκρισης', '/comparison']]],
             ['Contact us', 'Επικοινωνία', [['44 Main street, Boston', 'Main street 44, Βοστώνη', null], ['+1 (917) 555-5555', '+1 (917) 555-5555', 'tel:+19175555555'], ['Mon-Sun 9.00 - 18.00', 'Δευ-Κυρ 9.00 - 18.00', null], ['demo@example.com', 'demo@example.com', 'mailto:demo@example.com'], ['View on map', 'Προβολή στον χάρτη', 'https://maps.google.com']]],
         ];
         foreach ($columns as $i => [$en, $el, $lines]) {
@@ -103,6 +103,24 @@ final class MenuDemoSeeder
             foreach ($lines as $j => [$lineEn, $lineEl, $url]) {
                 $this->item($menu, $group, $lineEn, $lineEl, $url === null ? 'heading' : 'url', $url, null, ($j + 1) * 10, $locales, null);
             }
+        }
+
+        return $menu;
+    }
+
+    /** The homepage "Quick navigation" tiles: store-wide pages, each with its bundled icon.
+     * @return int|null null when it already exists */
+    public function quickNavigation(): ?int
+    {
+        if (DB::table('website_menu_translations')->where('name', 'Quick navigation (demo)')->exists()) {
+            return null;
+        }
+        $locales = DB::table('locales')->where('is_active', true)->pluck('id', 'code')->all();
+        $menu = $this->menu('Quick navigation (demo)', 'Γρήγορη πλοήγηση (demo)', 'other', $locales);
+        $tiles = [['Offers', 'Προσφορές', '/offers', 'offers'], ['New arrivals', 'Νέες αφίξεις', '/new', 'new-arrivals'], ['Best sellers', 'Δημοφιλή', '/bestsellers', 'best-sellers'],
+            ['All brands', 'Όλες οι μάρκες', '/brands', 'brands'], ['Blog', 'Blog', '/blog/news', 'blog'], ['Sitemap', 'Χάρτης ιστότοπου', '/sitemap', 'sitemap']];
+        foreach ($tiles as $n => [$en, $el, $url, $icon]) {
+            $this->item($menu, null, $en, $el, 'url', $url, null, ($n + 1) * 10, $locales, app(DemoPicture::class)->photo('icon-'.$icon));
         }
 
         return $menu;

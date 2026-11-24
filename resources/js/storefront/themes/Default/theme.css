@@ -1523,32 +1523,43 @@
 }
 .sf-newsletter-row {
   display: flex;
-  gap: 12px;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgb(15 23 42 / 0.08);
+}
+.sf-newsletter-row:focus-within {
+  border-color: var(--sf-primary, #05ab7d);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--sf-primary, #05ab7d) 25%, transparent),
+    0 12px 32px rgb(15 23 42 / 0.08);
 }
 .sf-newsletter input[type='email'] {
   flex: 1;
   min-width: 0;
-  height: 52px;
-  padding: 0 16px;
-  border: 1px solid #6b7280;
-  border-radius: 8px;
-  background: #fff;
+  height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
   color: #333;
   font: inherit;
 }
 .sf-newsletter input[type='email']:focus {
-  outline: 2px solid var(--sf-primary, #05ab7d);
-  outline-offset: 2px;
+  outline: none;
 }
 .sf-newsletter button {
-  height: 52px;
+  height: 48px;
   padding: 0 32px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 999px;
   background: var(--sf-primary, #05ab7d);
   color: var(--sf-on-primary, #fff);
   font: inherit;
   font-weight: 600;
+  transition: background 0.2s;
 }
 .sf-newsletter button:hover:not(:disabled) {
   background: var(--sf-primary-hover, #079c72);
@@ -1565,7 +1576,11 @@
 }
 .sf-newsletter-terms,
 .sf-newsletter-error {
-  margin: 14px 0 0;
+  margin: 16px 0 0;
+}
+.sf-newsletter-terms {
+  color: #6b7280;
+  font-size: 14px;
 }
 .sf-newsletter-error {
   color: var(--sf-sale, #ff3d47);
@@ -1577,8 +1592,10 @@
   font-size: 18px;
 }
 @media (max-width: 767px) {
+  /* Phones stack the field over the button inside one rounded card. */
   .sf-newsletter-row {
     flex-direction: column;
+    border-radius: 24px;
   }
   /* In a column the field must not shrink to its (zero) flex basis. */
   .sf-newsletter input[type='email'] {
@@ -2117,6 +2134,20 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
+}
+/* Without a countdown the sale is a small label, not a full-width bar. */
+.sf-pdp-sale-compact {
+  width: fit-content;
+  padding: 6px 14px 6px 10px;
+  border-radius: 999px;
+}
+.sf-pdp-sale-compact .sf-pdp-sale-title {
+  gap: 8px;
+  font-size: 14px;
+}
+.sf-pdp-sale-compact svg {
+  width: 18px;
+  height: 18px;
 }
 .sf-pdp-countdown {
   display: flex;
@@ -6336,6 +6367,24 @@ span.sf-header-cart {
 .sf-menu-items.sf-carousel .sf-item {
   flex: 0 0 240px;
 }
+/* Tiles share the row like product cards: five on desktop, three on tablets, two and a peek on phones. */
+.sf-menu-tiles {
+  --sf-tiles: 5;
+}
+.sf-menu-tiles .sf-menu-items.sf-carousel .sf-item {
+  flex: 0 0 calc((100% - (var(--sf-tiles) - 1) * 12px) / var(--sf-tiles));
+  min-width: 0;
+}
+@media (max-width: 1023px) {
+  .sf-menu-tiles {
+    --sf-tiles: 3;
+  }
+}
+@media (max-width: 767px) {
+  .sf-menu-tiles {
+    --sf-tiles: 1.6;
+  }
+}
 .sf-menu-tile {
   display: flex;
   align-items: center;
@@ -7286,6 +7335,29 @@ a.sf-menu-tile:hover {
 }
 .sf-listing-subcats a:hover {
   border-color: var(--sf-primary, #05ab7d);
+}
+/* Phones swipe the subcategories in one row, like a carousel without arrows. */
+@media (max-width: 767px) {
+  .sf-listing-subcats {
+    margin-inline: -16px;
+  }
+  .sf-listing-subcats ul {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 2px 16px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .sf-listing-subcats ul::-webkit-scrollbar {
+    display: none;
+  }
+  .sf-listing-subcats li {
+    flex: none;
+    scroll-snap-align: start;
+  }
+  .sf-listing-subcats a {
+    white-space: nowrap;
+  }
 }
 .sf-listing-bar {
   display: flex;

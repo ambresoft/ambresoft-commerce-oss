@@ -3,7 +3,10 @@
 namespace App\Storefront\Presentation\Console;
 
 use App\Authorization\Infrastructure\Persistence\RoleRecord;
+use App\Catalog\Infrastructure\ShowcaseProductDemoSeeder;
 use App\Identity\Infrastructure\Persistence\UserRecord;
+use App\Shared\Infrastructure\Modules\AddonCatalog;
+use App\Shared\Infrastructure\Modules\AddonManager;
 use App\Storefront\Infrastructure\DemoStoreSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +23,8 @@ final class SeedDemoStore extends Command
     protected $description = 'Create a ready demo electronics store: categories, products with photos, menus and a full homepage';
 
     /** The other demo seeders, run as the demo administrator (each is idempotent). Newsletters first: the homepage sign-up joins its list. */
+    private const SEARCH = 'ambresoft/typesense';
+
     private const DEMOS = ['cms:newsletters-demo', 'cms:brands-demo', 'cms:banners-demo', 'cms:blog-demo', 'cms:faqs-demo', 'cms:pages-demo', 'cms:customers-demo', 'cms:orders-demo'];
 
     public function handle(DemoStoreSeeder $seeder): int
@@ -51,6 +56,11 @@ final class SeedDemoStore extends Command
                 foreach (array_slice(self::DEMOS, 1) as $demo) {
                     $this->call($demo, ['actor' => $admin]);
                 }
+                $reviews = app(ShowcaseProductDemoSeeder::class)->reviews();
+                if ($reviews > 0) {
+                    $this->info('Added '.$reviews.' reviews to the Nimbus Pro 16 showcase.');
+                }
+                $this->search($admin);
             }
 
             return self::SUCCESS;
@@ -58,6 +68,26 @@ final class SeedDemoStore extends Command
             $this->error($e->getMessage());
 
             return self::FAILURE;
+        }
+    }
+
+    /** Switches on the bundled Typesense search add-on and indexes the demo catalog, so the header shows its search bar. */
+    private function search(string $admin): void
+    {
+        $catalog = app(AddonCatalog::class);
+        if (! isset($catalog->discover(true)[self::SEARCH])) {
+            return;
+        }
+        try {
+            if (! isset($catalog->installed()[self::SEARCH])) {
+                app(AddonManager::class)->installBundled($admin, self::SEARCH);
+            }
+            if (! in_array(self::SEARCH, $catalog->enabledNames(), true)) {
+                app(AddonManager::class)->enable($admin, self::SEARCH);
+            }
+            $this->call('cms:search-reindex', ['--now' => true]);
+        } catch (Throwable $e) {
+            $this->warn('Search was not switched on ('.$e->getMessage().'). Start the typesense service (docker compose up -d typesense) and run this command again.');
         }
     }
 

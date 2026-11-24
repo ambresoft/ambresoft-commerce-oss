@@ -3,11 +3,13 @@
 namespace App\Website\Infrastructure;
 
 use App\Localization\Infrastructure\LocaleCatalog;
+use App\Storefront\Infrastructure\LayoutSettings;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 /**
- * Three local sample pages (privacy policy, returns and exchanges, contact us with a form) in Greek and English. The texts are generic
+ * Five local sample pages (about us, terms of use, privacy policy, returns and exchanges, contact us with a form) in Greek and English,
+ * each linked to its own storefront layout so it opens at its address. The texts are generic
  * examples, not legal advice. Explicit opt-in, never in production; tracked by stable keys so reruns create nothing
  * and keep administrator edits.
  */
@@ -22,19 +24,27 @@ final class PageDemoSeeder
             throw new RuntimeException('Page demo seeding is restricted to local and testing environments.');
         }
         $created = ['pages' => 0];
+        $this->record('page.about', $created, fn (): string => $this->pages->save($actor, null, null, $this->page(5, 'website',
+            ['About us', 'About us', 'Who we are and how we choose the devices we sell.', 'about, store, team', '<p>We are a small team of people who love good technology. Every phone, tablet, laptop and accessory in our store is one we would use ourselves.</p><h2>What we promise</h2><ul><li>Honest advice before you buy</li><li>Fast delivery and free returns within 30 days</li><li>Real people answering your questions</li></ul>'],
+            ['Σχετικά με εμάς', 'Σχετικά με εμάς', 'Ποιοι είμαστε και πώς επιλέγουμε τις συσκευές που πουλάμε.', 'σχετικά, κατάστημα, ομάδα', '<p>Είμαστε μια μικρή ομάδα που αγαπά την καλή τεχνολογία. Κάθε κινητό, tablet, laptop και αξεσουάρ του καταστήματος είναι κάτι που θα χρησιμοποιούσαμε κι εμείς.</p><h2>Τι υποσχόμαστε</h2><ul><li>Ειλικρινείς συμβουλές πριν αγοράσετε</li><li>Γρήγορη παράδοση και δωρεάν επιστροφές εντός 30 ημερών</li><li>Πραγματικούς ανθρώπους που απαντούν στις ερωτήσεις σας</li></ul>'],
+        )), $actor);
+        $this->record('page.terms', $created, fn (): string => $this->pages->save($actor, null, null, $this->page(8, 'website',
+            ['Terms of use', 'Terms of use', 'The terms that apply when you use this store.', 'terms, conditions', '<p>These sample terms explain how orders, prices, delivery and returns work in this demo store. Replace them with your own terms before you open your store.</p><h2>Orders and prices</h2><p>Prices include VAT. An order is confirmed when we send the confirmation email.</p><h2>Delivery and returns</h2><p>See our returns and exchanges page for details.</p>'],
+            ['Όροι χρήσης', 'Όροι χρήσης', 'Οι όροι που ισχύουν όταν χρησιμοποιείτε το κατάστημα.', 'όροι, προϋποθέσεις', '<p>Αυτοί οι ενδεικτικοί όροι εξηγούν πώς λειτουργούν οι παραγγελίες, οι τιμές, η παράδοση και οι επιστροφές στο demo κατάστημα. Αντικαταστήστε τους με τους δικούς σας πριν ανοίξετε το κατάστημα.</p><h2>Παραγγελίες και τιμές</h2><p>Οι τιμές περιλαμβάνουν ΦΠΑ. Μια παραγγελία επιβεβαιώνεται όταν σας στείλουμε το email επιβεβαίωσης.</p><h2>Παράδοση και επιστροφές</h2><p>Δείτε τη σελίδα επιστροφών και αλλαγών.</p>'],
+        )), $actor);
         $this->record('page.privacy', $created, fn (): string => $this->pages->save($actor, null, null, $this->page(10, 'website',
             ['Privacy policy', 'Privacy policy', 'How we collect, use and protect your personal data.', 'privacy, personal data, GDPR', $this->privacyEn()],
             ['Πολιτική Απορρήτου', 'Πολιτική Απορρήτου', 'Πώς συλλέγουμε, χρησιμοποιούμε και προστατεύουμε τα προσωπικά σας δεδομένα.', 'απόρρητο, προσωπικά δεδομένα, GDPR', $this->privacyEl()],
-        )));
+        )), $actor);
         $this->record('page.returns', $created, fn (): string => $this->pages->save($actor, null, null, $this->page(20, 'article',
             ['Returns and exchanges', 'Returns and exchanges', 'Return or exchange your order within 14 days.', 'returns, exchanges, refund', $this->returnsEn()],
             ['Επιστροφές και αλλαγές', 'Επιστροφές και αλλαγές', 'Επιστρέψτε ή αλλάξτε την παραγγελία σας μέσα σε 14 ημέρες.', 'επιστροφές, αλλαγές, επιστροφή χρημάτων', $this->returnsEl()],
-        )));
+        )), $actor);
 
         $this->record('page.contact', $created, fn (): string => $this->pages->save($actor, null, null, [...$this->page(30, 'website',
             ['Contact us', 'Contact us', 'Send us a message and we will reply as soon as possible.', 'contact, form, support', $this->contactEn()],
             ['Επικοινωνία', 'Επικοινωνία', 'Στείλτε μας μήνυμα και θα απαντήσουμε το συντομότερο δυνατό.', 'επικοινωνία, φόρμα, υποστήριξη', $this->contactEl()],
-        ), 'form' => $this->contactForm()]));
+        ), 'form' => $this->contactForm()]), $actor);
 
         return $created;
     }
@@ -193,7 +203,7 @@ HTML;
     }
 
     /** @param array<string, int> $created */
-    private function record(string $key, array &$created, callable $create): void
+    private function record(string $key, array &$created, callable $create, string $actor): void
     {
         $key = 'pages.'.$key;
         $existing = DB::table('feature_demo_records')->where('key', $key)->first();
@@ -205,6 +215,9 @@ HTML;
             return;
         }
         $id = $create();
+        // A page opens at its address only through a storefront layout linked to it.
+        $name = (string) DB::table('page_translations')->where('page_id', $id)->orderBy('locale_id')->value('name');
+        app(LayoutSettings::class)->create($actor, ['page_id' => (int) $id, 'position' => null, 'custom_html' => null, 'indexable' => true, 'translations' => [app(LocaleCatalog::class)->defaultCode() => ['name' => $name]]]);
         DB::table('feature_demo_records')->insert(['key' => $key, 'entity' => 'pages', 'entity_id' => $id]);
         $created['pages']++;
     }

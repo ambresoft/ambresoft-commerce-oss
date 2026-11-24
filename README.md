@@ -7,13 +7,15 @@
 
 <h1 align="center">Ambresoft Commerce</h1>
 
-<p align="center"><strong>The open-source ecommerce platform that gives you an enterprise store — without the enterprise bill.</strong></p>
+<p align="center"><strong>The open-source B2C ecommerce platform that gives you an enterprise store — without the enterprise bill.</strong></p>
 
 <p align="center">
-  Self-hosted · Open source (AGPL-3.0) · Multilingual · AI-assisted · Built on Laravel 13, React 19 and PostgreSQL
+  B2C · Self-hosted · Open source (AGPL-3.0) · Multilingual · AI-assisted · FrankenPHP, Typesense and Redis for speed
 </p>
 
 ---
+
+Ambresoft Commerce is built for **B2C online stores** — brands and retailers selling directly to consumers.
 
 Most store platforms make you choose: rent a hosted SaaS and pay a cut of every sale forever, or stitch together a
 dozen plugins and hope they keep working. **Ambresoft Commerce gives you a complete, modern store that you own.**
@@ -38,6 +40,45 @@ Ambresoft Commerce is free software under the [GNU Affero General Public License
   slips, stock rules and server-side price calculation you can trust.
 - **Speaks your customers' language.** Admin and storefront in English, Greek, Spanish, French, Italian and Dutch, with
   every piece of merchant content translatable per language.
+
+## Built for speed
+
+Shoppers leave slow stores. Ambresoft Commerce is engineered to be fast from the first request to the search box:
+
+- **FrankenPHP application server.** The app runs on [FrankenPHP](https://frankenphp.dev) — a modern PHP server built on
+  Caddy, with PHP embedded directly in the web server and a pool of PHP threads ready to answer. No separate PHP-FPM
+  hop, less overhead per request, and a production-grade web server out of the box.
+- **Typesense search.** Product search runs on [Typesense](https://typesense.org), a dedicated search engine built for
+  instant, typo-tolerant results. Shoppers get suggestions as they type, relevant matches even with spelling mistakes,
+  and search that stays fast as your catalog grows — without loading your database.
+- **Redis everywhere it counts.** Sessions, the application cache and background queues live in
+  [Redis](https://redis.io). The storefront cache is tag-invalidated, so pages are served from memory but a price,
+  stock or content change is visible immediately — never stale.
+- **PostgreSQL done right.** Business rules and integrity are enforced in the database, with indexed queries for
+  listings, filters and reports.
+- **Work happens in the background.** Emails, search indexing, feeds and file cleanup run on queue workers and the
+  scheduler, so customers never wait for them.
+
+## SEO that brings customers in
+
+<p align="center">
+  <img src="docs/images/seo-rich-results.png" alt="A search result for a product in an Ambresoft Commerce store, with breadcrumbs, star rating, price and stock" width="900">
+</p>
+
+Every storefront page is built to rank and to win the click:
+
+- **Rich results from structured data.** Product pages publish `Product`, `Offer` and `AggregateRating` data, so search
+  engines can show price, availability and star ratings right in the results. Category and store pages add
+  `BreadcrumbList`, `ItemList`, `Organization` and `WebSite` data.
+- **Clean, meaningful URLs.** Products live under their category path (`/laptops/business-laptops/nimbus-pro-16-…`),
+  with a canonical URL on every page and per-language slugs.
+- **Full control of meta texts.** Page titles, meta descriptions and keywords for products, categories, brands, pages,
+  blog posts and layouts, in every language, plus SEO rules to fill them automatically.
+- **Social sharing tags.** Open Graph data gives every shared link a proper title, description and image.
+- **Discovery and housekeeping.** An XML sitemap with scheduled publication, Google and Meta product feeds, 301
+  redirects when URLs change, and noindex controls while you are still building the store.
+- **Content that ranks.** A built-in blog, FAQs and static pages — with AI writing help — to target the searches your
+  customers make.
 
 ## Everything you get
 
@@ -160,9 +201,10 @@ FrankenPHP serves the application in classic mode. PHP, Composer, PostgreSQL and
    docker compose exec -T app php artisan cms:demo-store --with-admin
    ```
 
-   This fills a complete electronics shop — 34 products with real photos across phones, tablets, laptops, audio,
-   wearables and accessories, brands, deals, banners, blog posts, FAQs, pages, customers, orders and a fully built
-   homepage — and creates the super administrator `admin@example.com`. The password is generated and **printed once**
+   This fills a complete electronics shop — 37 products with real photos across phones, tablets, laptops, audio,
+   wearables and accessories, including a fully specified Nimbus Pro 16 flagship with variants, features, reviews and a
+   Black Friday deal — plus brands, deals, coupons, banners, videos, blog posts, FAQs, pages, customers, orders,
+   instant search and a fully built homepage — and creates the super administrator `admin@example.com`. The password is generated and **printed once**
    in the terminal. Open [localhost:8000/admin](http://localhost:8000/admin) and sign in.
 
    The demo administrator is **local only**: the command refuses `--with-admin` outside the `local` environment, and the

@@ -56,8 +56,9 @@ final class BrandDemoSeeder
                         $translations[$language->code] = ['name' => $name, 'description' => '<p>'.($language->code === 'el' ? 'Προϊόντα ' : 'Products by ').$name.'.</p>', 'image_alt' => $name];
                     }
                     $id = app(Brands::class)->save($actor, null, new SaveBrandData(['code' => $code, 'status' => 'active', 'position' => 0, 'translations' => $translations]));
-                    // Placeholder picture through the existing sample-image pipeline; replace it with a real logo in Brands.
-                    DB::table('brands')->where('id', $id)->update(['image_media_id' => app(DemoPicture::class)->create('#ffffff', $color, 240, 120)]);
+                    // The bundled demo wordmark when there is one, otherwise a placeholder; replace it with a real logo in Brands.
+                    $logo = is_file(database_path('demo/images/brand-'.$code.'.png')) ? app(DemoPicture::class)->photo('brand-'.$code) : app(DemoPicture::class)->create('#ffffff', $color, 240, 120);
+                    DB::table('brands')->where('id', $id)->update(['image_media_id' => $logo]);
                 }
                 $assigned += DB::table('products')->whereIn('id', $ids)->whereNull('brand_id')->update(['brand_id' => $id, 'lock_version' => DB::raw('lock_version + 1'), 'updated_by' => $actor, 'updated_at' => now()]);
             }

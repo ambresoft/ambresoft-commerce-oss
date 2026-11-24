@@ -193,7 +193,11 @@ final class PageTest extends TestCase
     {
         $this->artisan('cms:pages-demo', ['actor' => (string) $this->actor->id])->assertSuccessful();
         $this->artisan('cms:pages-demo', ['actor' => (string) $this->actor->id])->assertSuccessful();
-        self::assertSame(3, DB::table('pages')->where('status', 'active')->count());
+        self::assertSame(5, DB::table('pages')->where('status', 'active')->count());
+        // Each sample page is linked to a layout, so it opens at its address.
+        self::assertSame(5, DB::table('storefront_layouts')->whereNotNull('page_id')->count());
+        $this->get('/about-us')->assertOk();
+        $this->get('/contact-us')->assertOk();
         $privacy = (string) DB::table('pages')->where('position', 10)->value('id');
         self::assertSame('privacy-policy', $this->translation($privacy, 'en')->slug);
         self::assertSame('Πολιτική Απορρήτου', $this->translation($privacy, 'el')->name);
