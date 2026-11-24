@@ -1,0 +1,26 @@
+<?php
+
+return array_replace(require __DIR__.'/../en/banners.php', [
+    'title' => 'Banner',
+    'create' => 'Crea banner',
+    'edit' => 'Modifica banner',
+    'saved' => 'Banner salvato.',
+    'tab_general' => 'Generale',
+    'preview' => 'Anteprima',
+    'groups' => 'Gruppi',
+    'save' => 'Salva',
+    'permission_view' => 'Visualizza banner',
+    'permission_manage' => 'Gestisci banner',
+    'preview_height' => 'Altezza',
+    'button_hover' => 'Effetto al passaggio sul pulsante',
+    'button_hover_help' => 'Come reagisce il pulsante quando il puntatore ci passa sopra.',
+    'button_transition' => 'Transizione (secondi)',
+    'button_transition_help' => 'Quanto dura il cambiamento, da 0 a 2 secondi (ad es. 0,3).',
+    'hover_none' => 'Nessuno',
+    'hover_darken' => 'Più scuro',
+    'hover_lighten' => 'Più chiaro',
+    'hover_lift' => 'Solleva',
+    'hover_grow' => 'Ingrandisci',
+    'hover_glow' => 'Bagliore',
+    'hover_invert' => 'Scambia i colori',
+]);

@@ -1,0 +1,26 @@
+<?php
+
+return array_replace(require __DIR__.'/../en/banners.php', [
+    'title' => 'Bannières',
+    'create' => 'Créer une bannière',
+    'edit' => 'Modifier la bannière',
+    'saved' => 'Bannière enregistrée.',
+    'tab_general' => 'Général',
+    'preview' => 'Aperçu',
+    'groups' => 'Groupes',
+    'save' => 'Enregistrer',
+    'permission_view' => 'Voir les bannières',
+    'permission_manage' => 'Gérer les bannières',
+    'preview_height' => 'Hauteur',
+    'button_hover' => 'Effet au survol du bouton',
+    'button_hover_help' => 'Comment le bouton réagit quand le pointeur passe dessus.',
+    'button_transition' => 'Transition (secondes)',
+    'button_transition_help' => 'Durée du changement, de 0 à 2 secondes (par ex. 0,3).',
+    'hover_none' => 'Aucun',
+    'hover_darken' => 'Plus foncé',
+    'hover_lighten' => 'Plus clair',
+    'hover_lift' => 'Soulever',
+    'hover_grow' => 'Agrandir',
+    'hover_glow' => 'Lueur',
+    'hover_invert' => 'Inverser les couleurs',
+]);

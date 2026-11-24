@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Identity\Application\Command;
+
+use SensitiveParameter;
+
+final readonly class RegisterUserData
+{
+    public function __construct(
+        public string $name,
+        public string $email,
+        #[SensitiveParameter] public string $password,
+    ) {}
+}

@@ -1,0 +1,19 @@
+{
+    "name": "ambresoft/black-friday-theme",
+    "description": "A dark storefront palette for Black Friday. Changes colors only; keeps the storefront layout, content and shopping behavior intact.",
+    "version": "1.0.0",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [{ "name": "Ambresoft" }],
+    "autoload": { "psr-4": { "Ambresoft\\BlackFridayTheme\\": "src/" } },
+    "extra": {
+        "cms-module": {
+            "contract": 2,
+            "title": "Black Friday Theme",
+            "icon": "icon.svg",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\BlackFridayTheme\\Infrastructure\\BlackFridayThemeServiceProvider",
+            "requires": []
+        }
+    }
+}

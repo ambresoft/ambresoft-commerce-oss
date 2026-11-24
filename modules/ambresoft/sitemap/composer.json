@@ -1,0 +1,28 @@
+{
+    "name": "ambresoft/sitemap",
+    "description": "Versioned XML sitemaps with draft review, per-section scheduling and atomic publication.",
+    "version": "1.0.1",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ambresoft"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ambresoft\\Sitemap\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 4,
+            "title": "Sitemap",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\Sitemap\\Infrastructure\\SitemapServiceProvider",
+            "requires": [],
+            "migrations": "database/migrations",
+            "icon": "icon.svg"
+        }
+    }
+}

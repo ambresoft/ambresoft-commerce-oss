@@ -1,0 +1,71 @@
+/* The CMS decides every size. A frame only says whether it is open. */
+.sf-addon-widget {
+  position: fixed;
+  inset-block-end: max(0.5rem, env(safe-area-inset-bottom));
+  /* Left, because the store's back-to-top button holds the other corner. */
+  inset-inline-start: max(0.5rem, env(safe-area-inset-left));
+  z-index: 50;
+  width: 12.5rem;
+  height: 4.5rem;
+  border: 0;
+  /* Its own scheme differs from a dark store's, and a frame that differs paints an opaque box around the launcher. */
+  color-scheme: light;
+}
+
+.sf-addon-widget[data-state='open'] {
+  width: min(26rem, calc(100vw - 2rem));
+  height: min(44rem, calc(100dvh - 2rem));
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 25%);
+}
+
+@media (max-width: 40rem) {
+  .sf-addon-widget[data-state='open'] {
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* Beats `.sf-default a`. Darkened because the store's colour is often too light for text on white. */
+.sf-default a.sf-addon-page-link {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.125rem;
+  border-radius: 999px;
+  background: #fff;
+  color: color-mix(in srgb, var(--sf-primary) 72%, #000);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (max-width: 1023px) {
+  .sf-default a.sf-addon-page-link {
+    padding-inline: 0.75rem;
+  }
+
+  .sf-addon-page-link span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+/* The compact header puts search on its own row there, and the icon joins it. */
+@media (max-width: 767px) {
+  .sf-default a.sf-addon-page-link {
+    order: 4;
+  }
+
+  .sf-default .sf-chead-search:has(~ .sf-addon-page-link) {
+    flex-basis: calc(100% - 3.5rem);
+  }
+}

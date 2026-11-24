@@ -1,0 +1,14 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+parameters:
+    level: 6
+    paths:
+        - app
+        - modules
+        - docs/examples/addons
+    tmpDir: .phpstan-cache
+    ignoreErrors:
+        # Add-on config files are merged into the app config (mergeConfigFrom) and cached with it, so env() belongs there.
+        -
+            identifier: larastan.noEnvCallsOutsideOfConfig
+            path: modules/*/*/config/*

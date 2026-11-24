@@ -1,0 +1,30 @@
+{
+    "name": "ambresoft/google-analytics",
+    "description": "Google Analytics 4 on public storefront pages, with ecommerce events and server-side purchases.",
+    "version": "1.0.0",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ambresoft"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ambresoft\\GoogleAnalytics\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 4,
+            "title": "Google Analytics",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\GoogleAnalytics\\Infrastructure\\GoogleAnalyticsServiceProvider",
+            "requires": [],
+            "icon": "icon.svg",
+            "contributes": {
+                "settings": "Ambresoft\\GoogleAnalytics\\Infrastructure\\GoogleAnalyticsSettings"
+            }
+        }
+    }
+}

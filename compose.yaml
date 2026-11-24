@@ -1,0 +1,153 @@
+name: ambresoft-commerce
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+      - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/category-import.ini:ro
+      - ./docker/php/mail.ini:/usr/local/etc/php/conf.d/mail.ini:ro
+    ports:
+      - '127.0.0.1:${APP_PORT:-8000}:8000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+  postgres:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: local-only-postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - ./docker/postgres/init-testing.sql:/docker-entrypoint-initdb.d/10-testing.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  worker:
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+      # PHP mail() goes to mailpit here too: newsletters and queued e-mails are sent from these containers.
+      - ./docker/php/mail.ini:/usr/local/etc/php/conf.d/mail.ini:ro
+    command:
+      [
+        'php',
+        'artisan',
+        'queue:work',
+        'redis',
+        '--queue=default,maintenance',
+        '--tries=5',
+        '--timeout=60',
+      ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  scheduler:
+    healthcheck:
+      disable: true
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+      # PHP mail() goes to mailpit here too: newsletters and queued e-mails are sent from these containers.
+      - ./docker/php/mail.ini:/usr/local/etc/php/conf.d/mail.ini:ro
+    command: ['php', 'artisan', 'schedule:work']
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  redis:
+    image: redis:7.4-alpine
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  # Product search for the ambresoft/typesense add-on: a separate GPL-3.0 server (see THIRD_PARTY.md), reached by the
+  # app, worker and scheduler at http://typesense:8108. Not published to the host. Data survives restarts in the volume.
+  typesense:
+    image: typesense/typesense:30.2
+    environment:
+      TYPESENSE_DATA_DIR: /data
+      TYPESENSE_API_KEY: ${TYPESENSE_API_KEY:-local-only-typesense}
+      TYPESENSE_ENABLE_CORS: 'false'
+    volumes:
+      - typesense-data:/data
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'bash',
+          '-c',
+          'exec 3<>/dev/tcp/127.0.0.1/8108 && printf "GET /health HTTP/1.0\r\n\r\n" >&3 && grep -q "\"ok\":true" <&3',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  mailpit:
+    image: axllent/mailpit:v1.31.4
+    # Optional relay to a real SMTP server so chosen test recipients receive mail. Empty host = capture only.
+    # Relay is limited to recipients matching MAILPIT_RELAY_MATCHING (a regular expression); set it explicitly.
+    environment:
+      MP_SMTP_RELAY_HOST: ${MAILPIT_RELAY_HOST:-}
+      MP_SMTP_RELAY_PORT: ${MAILPIT_RELAY_PORT:-587}
+      MP_SMTP_RELAY_STARTTLS: ${MAILPIT_RELAY_STARTTLS:-true}
+      MP_SMTP_RELAY_AUTH: ${MAILPIT_RELAY_AUTH:-plain}
+      MP_SMTP_RELAY_USERNAME: ${MAILPIT_RELAY_USERNAME:-}
+      MP_SMTP_RELAY_PASSWORD: ${MAILPIT_RELAY_PASSWORD:-}
+      MP_SMTP_RELAY_MATCHING: ${MAILPIT_RELAY_MATCHING:-}
+      MP_SMTP_RELAY_OVERRIDE_FROM: ${MAILPIT_RELAY_OVERRIDE_FROM:-}
+    ports:
+      - '127.0.0.1:${MAILPIT_PORT:-8025}:8025'
+  pgadmin:
+    image: dpage/pgadmin4:9.18
+    profiles: ['db-admin']
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-}
+      PGADMIN_DISABLE_POSTFIX: 'true'
+    ports:
+      - '127.0.0.1:${PGADMIN_PORT:-5050}:80'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+  node:
+    image: node:22-bookworm-slim
+    working_dir: /work
+    volumes:
+      - .:/work
+      - node-modules:/work/node_modules
+    profiles: ['tools']
+    ports:
+      - '127.0.0.1:${VITE_PORT:-5173}:5173'
+    command: ['sh', '-c', 'corepack enable && corepack pnpm dev --host 0.0.0.0']
+
+volumes:
+  postgres-data:
+  redis-data:
+  typesense-data:
+  node-modules:
+  pgadmin-data:

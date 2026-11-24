@@ -1,0 +1,706 @@
+/* Black Friday Theme: color-only overrides for the bundled Default storefront.
+   Keep authored media, banner compositions and product-image blending intact. */
+:is(.sf-default, .store-auth, .store-closed) {
+  color-scheme: dark;
+  --sf-primary: #f5c451 !important;
+  --sf-primary-hover: #ffda7a !important;
+  --sf-on-primary: #17191f !important;
+  --sf-text: #f2f3f5 !important;
+  --sf-background: #12151b !important;
+  --sf-sale: #ff8993 !important;
+  --sf-surface: #1c2028;
+  --sf-muted: #b8bcc6;
+  --sf-pdp-soft: #282d37;
+  --sf-pdp-line: #454b58;
+  background-color: #12151b !important;
+  color: #f2f3f5 !important;
+}
+.sf-default .sf-block {
+  --sf-block-bg: #1c2028 !important;
+  --sf-title-color: #f2f3f5 !important;
+  --sf-icon-color: #f2f3f5 !important;
+  color: #f2f3f5 !important;
+}
+.sf-default .sf-block-filled,
+.sf-default .sf-block-bleed,
+.store-auth .store-auth-header,
+.store-closed > header {
+  background-color: #1c2028 !important;
+  color: #f2f3f5 !important;
+}
+.sf-default .sf-pdp,
+.sf-default .sf-ty {
+  --sf-pdp-soft: #282d37;
+  --sf-pdp-line: #454b58;
+  --ty-tint: #302a1e;
+  --ty-muted: #b8bcc6;
+  --ty-line: #454b58;
+}
+.sf-default .sf-co-header {
+  --sf-co-header-bg: #1c2028 !important;
+  --sf-co-header-text: #f2f3f5 !important;
+}
+
+.sf-default .sf-price del,
+.sf-default .sf-availability,
+.sf-default .sf-sku,
+.sf-default .sf-search input::placeholder,
+.sf-default .sf-pdp-arrow,
+.sf-default .sf-pdp-back,
+.sf-default .sf-pdp-sku,
+.sf-default .sf-pdp-highlights li span,
+.sf-default .sf-pdp-qty button,
+.sf-default .sf-pdp-was,
+.sf-default .sf-price-net,
+.sf-default .sf-bundle-head p,
+.sf-default .sf-bundle h3,
+.sf-default .sf-pdp-document > svg,
+.sf-default .sf-pdp-facts .is-returnable,
+.sf-default .sf-pdp-facts .is-final,
+.sf-default .sf-pdp-specs dt,
+.sf-default .sf-pdp-rating-score > span:not(.sf-stars),
+.sf-default .sf-pdp-review-meta,
+.sf-default .sf-pdp-empty,
+.sf-default .sf-showcase-prices del .sf-money,
+.sf-default .sf-showcase-drop,
+.sf-default .sf-card-rating,
+.sf-default .sf-brand-heading p,
+.sf-default .sf-wl-name small,
+.sf-default .sf-wl-state,
+.sf-default .sf-wl-tabs a span,
+.sf-default .sf-acc-hint,
+.sf-default .sf-acc-reveal,
+.sf-default .sf-acc-check small,
+.sf-default .sf-acc-table thead th,
+.sf-default .sf-acc-review-meta,
+.sf-default .sf-acc-order-go a,
+.sf-default .sf-ord-back,
+.sf-default .sf-ord-where,
+.sf-default .sf-ord-facts dt,
+.sf-default .sf-ord-item-info,
+.sf-default .sf-ord-totals dt,
+.sf-default .sf-ord-totals .is-muted,
+.sf-default .sf-ord-phone,
+.sf-default .sf-ord-timeline time,
+.sf-default .sf-cmp-head p,
+.sf-default .sf-cmp-rating,
+.sf-default .sf-cmp-filter button,
+.sf-default .sf-cmp-cell span,
+.sf-default .sf-cl-trail ol,
+.sf-default .sf-cl-trail li + li::before,
+.sf-default .sf-cl-description,
+.sf-default .sf-dir-link,
+.sf-default .sf-minicart-qty,
+.sf-default .sf-minicart-note,
+.sf-default .sf-cartpage h1 span,
+.sf-default .sf-cart-empty p,
+.sf-default .sf-cart-unit,
+.sf-default .sf-cart-unit del,
+.sf-default .sf-cart-sku,
+.sf-default .sf-cart-unit del .sf-money,
+.sf-default .sf-cart-problem span,
+.sf-default .sf-cart-qty-fixed,
+.sf-default .sf-cart-remove,
+.sf-default .sf-cart-vat button,
+.sf-default .sf-cart-shipping dd,
+.sf-default .sf-cart-code-remove,
+.sf-default .sf-cart-code summary svg,
+.sf-default .sf-blog-featured .sf-blog-card-body p,
+.sf-default .sf-cdrawer-item > svg,
+.sf-default .sf-cdrawer-text small,
+.sf-default .sf-track-intro,
+.sf-default .sf-track-card header p,
+.sf-default .sf-track-timeline li,
+.sf-default .sf-brand-page .sf-prose,
+.sf-default .sf-filter-option.is-empty,
+.sf-default .sf-range-ends,
+.sf-default .sf-listing-count,
+.sf-default .sf-card-category,
+.sf-default .sf-co-option small,
+.sf-default .sf-co-description,
+.sf-default .sf-co-amount,
+.sf-default .sf-co-lines small,
+.sf-default .sf-co-sub,
+.sf-default .sf-co-missing,
+.sf-default .sf-suggest-text small,
+.sf-default .sf-suggest-note,
+.sf-default .sf-co .sf-co-consent,
+.sf-default .sf-cart-clear,
+.sf-default .sf-ty-label,
+.sf-default .sf-ty-copy,
+.sf-default .sf-ty-note,
+.sf-default .sf-ty-totals dt,
+.store-auth .store-auth-lead,
+.store-auth .store-auth-card .field-reveal,
+.store-auth .store-auth-or,
+.store-auth .store-auth-bottom {
+  color: #b8bcc6 !important;
+}
+
+.sf-default .sf-carousel-controls button,
+.sf-default .sf-prose th,
+.sf-default .sf-prose td,
+.sf-default .sf-pdp-option.is-selected,
+.sf-default .sf-pdp-check input:checked::after,
+.sf-default .sf-pdp-review-form input:not([type='radio']),
+.sf-default .sf-pdp-review-form textarea,
+.sf-default .sf-wl-create input,
+.sf-default .sf-acc-card.is-danger,
+.sf-default .sf-acc-rows li,
+.sf-default .sf-ord-number,
+.sf-default .sf-cmp-clear:hover:not(:disabled),
+.sf-default .sf-cart-code input,
+.sf-default .sf-track-form input,
+.sf-default .sf-filter-search,
+.sf-default .sf-card-variations .is-current,
+.sf-default .sf-co-option,
+.sf-default .sf-co-code-form input,
+.sf-default .sf-brand-alphabet a {
+  border-color: #454b58 !important;
+}
+
+.sf-default .sf-skip,
+.sf-default .sf-product,
+.sf-default .sf-pdp-scroll,
+.sf-default .sf-pdp-option,
+.sf-default .sf-pdp-buy,
+.sf-default .sf-pdp-variation-alternatives,
+.sf-default .sf-bundle,
+.sf-default .sf-pdp-card-link,
+.sf-default .sf-pdp-history,
+.sf-default .sf-pdp-modal,
+.sf-default .sf-pdp-sticky,
+.sf-default .sf-product-showcase,
+.sf-default .sf-category.sf-card-shadow,
+.sf-default .sf-acc-address-menu,
+.sf-default .sf-cmp-filter button[aria-pressed='true'],
+.sf-default .sf-cart-info .sf-pdp-qty button,
+.sf-default .sf-cart-summary,
+.sf-default .sf-cart-code[open],
+.sf-default .sf-agegate-card,
+.sf-default .sf-suggest,
+.sf-default .sf-ty-card,
+.sf-default .sf-ty-summary,
+.store-auth .store-auth-card {
+  background-color: #1c2028 !important;
+}
+.sf-default .sf-fashion-search::backdrop {
+  background-color: #1c2028 !important;
+}
+
+.sf-default .sf-arrow,
+.sf-default .sf-prose table,
+.sf-default .sf-pdp-variation select,
+.sf-default .sf-pdp-outline,
+.sf-default .sf-pdp-check input,
+.sf-default .sf-pdp-history-ranges button,
+.sf-default .sf-wl-tabs a,
+.sf-default .sf-wl-add-list,
+.sf-default .sf-pdp-action,
+.sf-default .sf-acc-nav,
+.sf-default .sf-acc-card,
+.sf-default .sf-acc-field input,
+.sf-default .sf-acc-field select,
+.sf-default .sf-acc-field textarea,
+.sf-default .sf-acc-secondary,
+.sf-default .sf-acc-danger,
+.sf-default .sf-acc-addresses > li,
+.sf-default .sf-cmp-clear,
+.sf-default .sf-cmp-products,
+.sf-default .sf-cmp-features,
+.sf-default .sf-cl-card,
+.sf-default .sf-minicart-panel,
+.sf-default .sf-cart-badge,
+.sf-default .sf-cart-line,
+.sf-default .sf-agegate .sf-agegate-back,
+.sf-default .sf-menu-tile,
+.sf-default .sf-blog-card.sf-blog-featured,
+.sf-default .sf-track-form,
+.sf-default .sf-track-card,
+.sf-default .sf-brand-page,
+.sf-default .sf-range-field input,
+.sf-default .sf-listing-subcats a,
+.sf-default .sf-sort > .sf-sort-current,
+.sf-default .sf-sort-menu,
+.sf-default .sf-card-variations-arrow,
+.sf-default .sf-card-variations a,
+.sf-default .sf-card-variations .is-current,
+.sf-default .sf-chip,
+.sf-default .sf-pagination a,
+.sf-default .sf-ord-invoice,
+.sf-default .sf-popular-searches a,
+.sf-default .sf-ty-secondary,
+.store-auth .store-auth-card .field {
+  border-color: #454b58 !important;
+  background-color: #1c2028 !important;
+}
+
+.sf-default .sf-availability.is-in {
+  color: #70d6ac !important;
+}
+
+.sf-default .sf-search,
+.sf-default .sf-lang ul,
+.sf-default .sf-mega,
+.sf-default .sf-drawer,
+.sf-default .sf-pdp-bundle-add,
+.sf-default .sf-cart-toast-link,
+.sf-default .sf-chead-search,
+.sf-default .sf-cdrawer-panel,
+.sf-default .sf-fashion-search {
+  background-color: #1c2028 !important;
+  color: #f2f3f5 !important;
+}
+
+.sf-default .sf-lang a:hover,
+.sf-default .sf-lang a[aria-current='true'],
+.sf-default .sf-mega-col li.is-active > .sf-mega-row,
+.sf-default .sf-mega-row:hover,
+.sf-default .sf-acc-address-pin,
+.sf-default .sf-acc-state.is-published {
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary, #05ab7d) 14%,
+    #1c2028
+  ) !important;
+}
+
+.sf-default .sf-mega-col,
+.sf-default .sf-dir-nav,
+.sf-default .sf-cdrawer-main {
+  border-right-color: #454b58 !important;
+}
+
+.sf-default .sf-drawer-head,
+.sf-default .sf-drawer-row,
+.sf-default .sf-bundle-summary ul,
+.sf-default .sf-pdp-history-head,
+.sf-default .sf-wl-lists > li:first-child,
+.sf-default .sf-acc-table th,
+.sf-default .sf-acc-table td,
+.sf-default .sf-cdrawer-sub h2,
+.sf-default .sf-sort-menu li:first-child,
+.sf-default .sf-co-lines,
+.sf-default .sf-ty-card-head.is-divided,
+.sf-default .sf-ty-lines,
+.sf-default .sf-directory h2,
+.sf-default .sf-fashion-search-head {
+  border-bottom-color: #454b58 !important;
+}
+
+@media (max-width: 767px) {
+  .sf-default .sf-link-group,
+  :is(.sf-default, .store-auth)
+    .sf-footer-cols.is-accordion
+    .sf-footer-col:not(.sf-footer-extra) {
+    border-bottom-color: #454b58 !important;
+  }
+}
+
+.sf-default .sf-newsletter input[type='email'] {
+  border-color: #454b58 !important;
+  background-color: #1c2028 !important;
+  color: #f2f3f5 !important;
+}
+
+.sf-default .sf-prose blockquote {
+  border-left-color: #454b58 !important;
+  color: #b8bcc6 !important;
+}
+
+.sf-default .sf-prose hr,
+.sf-default .sf-wl-lists > li + li,
+.sf-default .sf-ord-items,
+.sf-default .sf-ord-items li + li,
+.sf-default .sf-ord-pay,
+.sf-default .sf-ord-totals .is-total,
+.sf-default .sf-cmp-row,
+.sf-default .sf-minicart-panel li + li,
+.sf-default .sf-cart-summary .is-total,
+.sf-default .sf-track-timeline li + li,
+.sf-default .sf-filter,
+.sf-default .sf-suggest-all,
+.sf-default .sf-ty-copyrows > div + div {
+  border-top-color: #454b58 !important;
+}
+
+.sf-default .sf-prose th,
+.sf-default .sf-pdp-bundle-add:hover,
+.sf-default .sf-pdp-bar,
+.sf-default .sf-showcase-cart:disabled,
+.sf-default .sf-wl-row:hover:not(:disabled),
+.sf-default .sf-acc-nav a:hover,
+.sf-default .sf-acc-nav button:hover,
+.sf-default .sf-acc-address-more,
+.sf-default .sf-acc-address-menu button:hover,
+.sf-default .sf-acc-address-more:hover,
+.sf-default .sf-acc-state,
+.sf-default .sf-acc-order-go a:hover,
+.sf-default .sf-acc-table tbody tr:hover,
+.sf-default .sf-cmp-picture,
+.sf-default .sf-cmp-filter,
+.sf-default .sf-cl-media,
+.sf-default .sf-dir-nav li.is-active,
+.sf-default .sf-cart-info .sf-pdp-qty,
+.sf-default .sf-cart-code,
+.sf-default .sf-cdrawer-sub,
+.sf-default .sf-cdrawer-item:hover,
+.sf-default .sf-cdrawer-item.is-active,
+.sf-default .sf-cdrawer-all,
+.sf-default .sf-cdrawer-thumb,
+.sf-default .sf-track-message,
+.sf-default .sf-range-slider::before,
+.sf-default .sf-suggest-picture,
+.store-auth .store-auth-or::before,
+.store-auth .store-auth-or::after {
+  background-color: #282d37 !important;
+}
+
+.sf-default .sf-pdp-countdown {
+  background-color: #1c2028 !important;
+  color: #b8bcc6 !important;
+}
+
+.sf-default .sf-pdp-countdown-unit strong,
+.sf-default .sf-ord-item-info strong,
+.sf-default .sf-ord-totals .is-total dt,
+.sf-default .sf-ord-details dd {
+  color: #f2f3f5 !important;
+}
+
+.sf-default .sf-history-axis {
+  fill: #b8bcc6 !important;
+}
+
+:is(.sf-default, .store-auth)
+  .sf-pdp-history-ranges
+  button[aria-pressed='true'],
+.sf-default .sf-pdp-notice,
+.sf-default .sf-pdp-action.is-active,
+.sf-default .sf-acc-nav a[aria-current='page'],
+.sf-default .sf-acc-notice,
+.sf-default .sf-acc-tags > span,
+.sf-default .sf-ord-icon,
+.sf-default .sf-cmp-hint,
+.sf-default .sf-co-icon {
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary, #05ab7d) 12%,
+    #1c2028
+  ) !important;
+}
+
+.sf-default .sf-pdp-form-error {
+  background-color: #3c2229 !important;
+}
+
+.sf-default .sf-pdp-mine,
+.sf-default .sf-wl-thumb-new,
+.sf-default .sf-suggest-item[aria-selected='true'],
+.sf-default .sf-suggest-all[aria-selected='true'],
+.sf-default .sf-suggest-item:hover,
+.sf-default .sf-suggest-all:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary, #05ab7d) 10%,
+    #1c2028
+  ) !important;
+}
+
+.sf-default .sf-pdp-review-form [role='alert'],
+.sf-default .sf-acc-error,
+.sf-default .sf-acc-address-menu .is-danger,
+.sf-default .sf-cart-problem,
+.sf-default .sf-agegate-error,
+.sf-default .sf-co-errors,
+.sf-default .sf-co-consent-required,
+.sf-default .sf-cart-clear:hover,
+.store-auth .store-auth-card [role='alert'] {
+  color: #ff9aa4 !important;
+}
+
+.sf-default .sf-showcase-cart {
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary, #05ab7d) 22%,
+    #1c2028
+  ) !important;
+  color: color-mix(in srgb, var(--sf-primary, #70d6ac) 70%, #f2f3f5) !important;
+}
+
+.sf-default .sf-showcase-cart:hover:not(:disabled) {
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary, #05ab7d) 34%,
+    #1c2028
+  ) !important;
+}
+
+.sf-default .sf-brand-ad button,
+.sf-default .sf-acc-field input[readonly],
+.sf-default .sf-cmp-group h3,
+.sf-default .sf-filter-count,
+.sf-default .sf-search-state,
+.sf-default .sf-ty-thumb {
+  background-color: #282d37 !important;
+  color: #b8bcc6 !important;
+}
+
+.sf-default .sf-acc-nav-list button,
+.store-auth .store-auth-footer {
+  border-top-color: #454b58 !important;
+  color: #b8bcc6 !important;
+}
+
+.sf-default .sf-acc-empty {
+  border-color: #454b58 !important;
+  color: #b8bcc6 !important;
+}
+
+.sf-default .sf-acc-danger {
+  border-color: #454b58 !important;
+  color: #ff9aa4 !important;
+}
+
+.sf-default .sf-acc-address-lines svg,
+.sf-default .sf-acc-delivery svg {
+  color: color-mix(in srgb, var(--sf-text, #f2f3f5) 60%, #fff) !important;
+}
+
+.sf-default .sf-acc-delivery {
+  border-color: #454b58 !important;
+  background-color: #282d37 !important;
+}
+
+.sf-default .sf-acc-delivery dt {
+  color: color-mix(in srgb, var(--sf-text, #f2f3f5) 70%, #fff) !important;
+}
+
+.sf-default .sf-acc-state.is-pending {
+  background-color: #382e1b !important;
+}
+
+.sf-default .sf-ord-thumb,
+.sf-default .sf-cmp-remove,
+.sf-default .sf-cart-empty {
+  border-color: #454b58 !important;
+  background-color: #1c2028 !important;
+  color: #b8bcc6 !important;
+}
+
+@media (max-width: 899px) {
+  .sf-default .sf-acc-nav-list {
+    border-top-color: #454b58 !important;
+  }
+}
+
+.sf-default .sf-cmp-row.is-different,
+.sf-default .sf-co-option:has(input:checked) {
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary, #05ab7d) 6%,
+    #1c2028
+  ) !important;
+}
+
+@media (min-width: 768px) {
+  .sf-default .sf-mega.is-full-width::before {
+    background-color: #1c2028 !important;
+  }
+}
+
+.sf-default .sf-minicart-panel::before {
+  border-top-color: #454b58 !important;
+  border-left-color: #454b58 !important;
+  background-color: #1c2028 !important;
+}
+
+.sf-default .sf-minicart-foot {
+  border-top-color: #454b58 !important;
+  background-color: #282d37 !important;
+}
+
+.sf-default .sf-cart-toast.is-error .sf-cart-toast-icon {
+  background-color: #1c2028 !important;
+  color: #ff9aa4 !important;
+}
+
+.sf-default .sf-cart-remove:hover:not(:disabled),
+.sf-default .sf-cart-code-remove:hover,
+.sf-default .sf-track-message.is-error,
+.sf-default .sf-listing-error {
+  background-color: #3c2229 !important;
+  color: #ff9aa4 !important;
+}
+
+@media (max-width: 959px) {
+  .sf-default .sf-cart-next {
+    background-color: #1c2028 !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .sf-default .sf-cart-side {
+    border-top-color: #454b58 !important;
+  }
+}
+
+.sf-default .sf-menu-circles .sf-menu-picture {
+  border-color: #454b58 !important;
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary) 4%,
+    #1c2028
+  ) !important;
+}
+
+.sf-default .sf-chead-menu {
+  border-left-color: #454b58 !important;
+}
+
+@media (max-width: 767px) {
+  .sf-default .sf-cdrawer-sub {
+    background-color: #1c2028 !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sf-default .sf-filters-panel.is-open,
+  .sf-default .sf-filters-foot {
+    background-color: #1c2028 !important;
+  }
+}
+
+.sf-default .sf-ord-cancel {
+  border-color: #454b58 !important;
+  background-color: #3c2229 !important;
+  color: #ff9aa4 !important;
+}
+
+.sf-default .sf-ord-cancel:hover {
+  border-color: #454b58 !important;
+  background-color: #3c2229 !important;
+}
+
+.sf-default .sf-ty-state {
+  background-color: #382e1b !important;
+  color: #f5d17c !important;
+}
+
+.sf-default .sf-ty-state.is-paid {
+  color: color-mix(in srgb, var(--ty-primary) 70%, #f2f3f5) !important;
+}
+
+.sf-default .sf-ty-copyrows {
+  border-color: #454b58 !important;
+  background-color: color-mix(
+    in srgb,
+    var(--ty-primary) 5%,
+    #1c2028
+  ) !important;
+}
+
+@media (max-width: 767px) {
+  .sf-default .sf-mobile-search-trigger {
+    background-color: #1c2028 !important;
+    color: #f2f3f5 !important;
+  }
+}
+
+.store-auth .store-auth-footer .store-secondary:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary) 10%,
+    #1c2028
+  ) !important;
+}
+
+.store-auth .store-auth-benefits li::before {
+  background-color: color-mix(
+    in srgb,
+    var(--sf-primary) 16%,
+    #1c2028
+  ) !important;
+}
+
+/* Product pictures keep their original light backing, including multiply blending. */
+.sf-default .sf-pdp-stage,
+.sf-default .sf-pdp-thumbs button,
+.sf-default .sf-pdp-slide,
+.sf-default .sf-bundle-main-media,
+.sf-default .sf-bundle-thumb,
+.sf-default .sf-pdp-option-media,
+.sf-default .sf-pdp-sticky-product img {
+  background-color: #f4f6f6;
+}
+.sf-default .sf-pdp {
+  --sf-star: #f5c451;
+}
+
+/* Keep selected, focused, invalid and disabled controls distinguishable. */
+.sf-default .sf-wl-tabs a.is-current,
+.sf-default .sf-pdp-option.is-selected,
+.sf-default .sf-card-variations .is-current,
+.sf-default .sf-pagination a[aria-current='page'] {
+  border-color: var(--sf-primary) !important;
+  background-color: #302a1e !important;
+  color: var(--sf-primary) !important;
+}
+.sf-default .sf-pdp-check input:checked {
+  background-color: var(--sf-primary) !important;
+}
+.sf-default .sf-pdp-check input:checked::after {
+  border-color: var(--sf-on-primary) !important;
+}
+.sf-default .sf-co-option:has(input:checked),
+.sf-default .sf-pdp-history-ranges button[aria-pressed='true'],
+:is(.sf-default, .store-auth) :is(input, select, textarea):focus {
+  border-color: var(--sf-primary) !important;
+}
+:is(.sf-default, .store-auth) [aria-invalid='true'] {
+  border-color: var(--sf-sale) !important;
+}
+.sf-default .sf-ty-primary {
+  color: var(--sf-on-primary) !important;
+}
+.sf-default .sf-cart:disabled,
+.sf-default .sf-showcase-cart:disabled {
+  background-color: #3b414d !important;
+  color: #b8bcc6 !important;
+}
+
+/* Keep browser-specific pseudo-elements separate: an unsupported selector invalidates its entire rule. */
+.sf-default .sf-range-slider input::-webkit-slider-thumb {
+  border-color: #f5c451 !important;
+  background-color: #1c2028 !important;
+}
+.sf-default .sf-range-slider input::-moz-range-thumb {
+  border-color: #f5c451 !important;
+  background-color: #1c2028 !important;
+}
+
+/* Controls sit over light product pictures, so give them their own contrasting surface. */
+.sf-default .sf-card-heart,
+.sf-default .sf-card-compare,
+.sf-default .sf-pdp-action,
+.sf-default .sf-arrow {
+  background-color: #1c2028 !important;
+  color: #f2f3f5;
+}
+.sf-default .sf-card-heart:hover,
+.sf-default .sf-card-compare:hover,
+.sf-default .sf-pdp-action:hover,
+.sf-default .sf-arrow:hover:not(:disabled) {
+  background-color: #343b49 !important;
+}
+.sf-default a.sf-menu-tile:hover {
+  background-color: #302a1e !important;
+}
+.sf-default .sf-card-heart.is-saved,
+.sf-default .sf-pdp-action.is-saved {
+  color: var(--sf-sale) !important;
+}
+.sf-default .sf-card-compare.is-active,
+.sf-default .sf-pdp-action.is-active {
+  color: var(--sf-primary) !important;
+}

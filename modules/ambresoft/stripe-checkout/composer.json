@@ -1,0 +1,32 @@
+{
+    "name": "ambresoft/stripe-checkout",
+    "description": "Stripe Checkout: customers pay on Stripe's hosted payment page with cards and the other methods Stripe offers them.",
+    "version": "1.0.0",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ambresoft"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ambresoft\\StripeCheckout\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 2,
+            "icon": "icon.svg",
+            "title": "Stripe Checkout",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\StripeCheckout\\Infrastructure\\StripeServiceProvider",
+            "requires": [],
+            "contributes": {
+                "payment-methods": {
+                    "stripe_checkout": "Ambresoft\\StripeCheckout\\Infrastructure\\StripeCheckoutPaymentMethod"
+                }
+            }
+        }
+    }
+}

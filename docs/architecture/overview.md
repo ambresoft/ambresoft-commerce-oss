@@ -1,0 +1,48 @@
+# Application architecture
+
+Phase 4 adds Catalog product administration through the existing Admin presentation and Application ports. See [the implemented Product contract](products.md) for drafts, exact prices, category integration, media, private-file cleanup, authorization and concurrency. Phase 4.1 adds a Pricing context for [currencies](currencies.md): one primary currency, manual secondary rates, exact conversion/formatting and Settings → Currencies. Phase 8 adds a `Tax` context ([taxes](taxes.md)): merchant-defined taxes, reusable rate areas, product assignment and a framework-free calculation service. Phase 9 adds a `Customer` context ([customers](customers.md)) for admin-managed customer profiles, addresses and groups. A `Geography` context ([geography](geography.md)) holds the shipping countries and regions (Greek nomoi) that checkout will read. A `Marketing` context ([banners](banners.md)) adds admin-managed advanced banners with device overrides and a live preview. Website → Pages ([website pages](website-pages.md)) adds simple content pages with a richer HTML editor. Customer sign-in uses the shared identity with staff pages under `/admin` ([authentication](authentication.md#customer-accounts-a99)); storefront, cart and checkout remain unimplemented.
+
+The open-source (AGPL-3.0) CMS is a modular monolith with context-first DDD and Laravel MVC: PostgreSQL, Redis, Inertia 3, React 19, TypeScript and Tailwind 4. Development targets Laravel 13, PHP 8.4 (minimum 8.3), Node 22 and pnpm 10, with Docker Compose and FrankenPHP classic mode, PHPUnit, Pint, PHPStan/Larastan, ESLint, Prettier, tsc and Vitest. Lockfiles capture exact dependency versions. [Pure layers and framework adapters](layered-ddd.md), [Laravel releases](https://laravel.com/docs/13.x/releases), [Inertia setup](https://inertiajs.com/server-side-setup).
+
+## Flow and ownership
+
+Request → route/middleware/Form Request → controller → typed Application use case → Domain rules/contracts → Infrastructure persistence where a contract is needed → event/job with explicit timing → Inertia → React. Simple read projections need not introduce a service or repository.
+
+Laravel resolves Form Requests and validates/authorizes them before controller invocation. Policies authorize resources; validation alone is not authorization. Simple CRUD need not have a wrapping service.
+
+| Boundary                                       | Responsibility                                                                                                                        |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Domain: `App\{Context}\Domain`                 | Essential business models/invariants/exceptions and needed repository contracts; plain PHP only; no framework or outward dependencies |
+| Application: `App\{Context}\Application`       | Reusable use cases, typed DTOs, orchestration; framework-free; depends on Domain and Application ports                                |
+| Infrastructure: `App\{Context}\Infrastructure` | Persistence adapters/bindings, Composer module loader; implements inward contracts                                                    |
+| Admin: `App\Admin`                             | Admin controllers/requests/page projections; invokes Application operations                                                           |
+| Storefront: `App\Storefront`            | Public controllers/requests/theme contracts; invokes the same Application operations                                                  |
+| Modules                                        | Composer packages depending on published core contracts and declared modules                                                          |
+| Controllers                                    | Coordinate policies/input/operations/responses; no pricing or stock algorithms                                                        |
+| Form Requests                                  | Validate and normalize transport input; authorize request scope                                                                       |
+| Policies                                       | Server-side permissions, including every bulk target and module action                                                                |
+| Services                                       | Cohesive substantial operations, transaction boundaries and cross-model invariants                                                    |
+| Queries                                        | Complex reusable reads only; normal Eloquent queries remain direct                                                                    |
+| Models                                         | Plain Domain entities; separate Infrastructure Eloquent records/mappers                                                               |
+| Events                                         | Typed meaningful facts with explicit commit timing                                                                                    |
+| Jobs                                           | Retryable async work using stable identifiers and relevant state checks                                                               |
+| Persistence                                    | Eloquent/query builder over PostgreSQL with explicit constraints; no blanket repositories                                             |
+| Frontend                                       | Independent admin/storefront page trees and layouts; share suitable primitives/types only                                             |
+
+Core describes essential ownership, not a namespace. A29 organizes app/{Context}/{Layer}, superseding A28's layer-first layout and framework coupling. Domain/Application contain no Laravel/Eloquent/HTTP dependencies; Infrastructure implements their interfaces. Admin remains a cross-context presentation interface. Command/Query folders organize operations without a bus, separate read store or CQRS infrastructure. Modules use published contracts, not source patches. No API-first SPA, microservices, universal attributes or page-builder framework; see [API policy](api-policy.md).
+
+## Foundation scope
+
+The neutral `/` page links to the implemented authentication entry point; it is not a storefront. `/up` is Laravel liveness. Phase 1 adds browser authentication and the verified, explicitly granted `/admin` shell. See [authentication](authentication.md). Phase 2 adds staff authorization and English/Greek admin localization; see [authorization](authorization.md) and [localization](localization.md). Phase 3 adds category administration only at `/admin/categories`, with normalized translations, hierarchy queries and shared private-image storage; see [categories](categories.md). Products, storefront and API routes remain absent.
+
+Identity is the first implemented bounded context: app/Identity/Domain contains plain User/UserId and repository interfaces; Application contains registration/reset handlers, DTOs and integration ports; Infrastructure contains the Eloquent UserRecord (existing users table), mapper, repository and Laravel broker/notification adapters; Presentation/Http contains auth controllers, requests and URL/rate policy. app/Shared/Infrastructure/Modules contains the actual cross-context activation loader. app/Http retains global middleware and the neutral root controller; app/Admin retains the dashboard/navigation shell. Use PascalCase PHP directories. Phase 2 adds Authorization (pure access-safety Domain/Application, framework persistence/gates and operator commands), Localization (plain content fallback and framework locale/catalog adapters), and a small Shared Domain translation contract. Staff/role controllers remain Admin presentation. No empty Query/Service or future commerce contexts. Optional modules remain Composer packages; future Storefront remains absent.
+
+Catalog now contains plain Category/rules/events, framework-free mutation DTOs/ports/participants and PostgreSQL/Eloquent Infrastructure adapters/queries. Admin coordinates its requests/Inertia screens; Media provides the consumed private-image storage/metadata capability, not a media library. Category hierarchy/deletion transactions remain Catalog-owned; addons react after commit or participate synchronously through explicit contracts. No placeholder Product/Storefront context or generic repository layer is introduced.
+
+## Documents
+
+[Audit](audit.md), [currencies](currencies.md), [decisions](decisions.md), [domain](domain-model.md), [initial schema](initial-schema.md), [database](database-principles.md), [modules](module-system.md), [extensions](extensions.md), [admin](admin-architecture.md), [storefront](storefront-architecture.md), [security](security.md), [observability](observability.md), [roadmap](development-phases.md), [structure](../project-structure.md), [development](../development.md).
+
+Project documents own decisions; skills own reusable guidance. An older skill reference calling a choice open/proposed is baseline guidance: use the current register for project status. Do not duplicate every decision inside skills.
+
+Current storefront foundation: A101 adds Website → Layouts and a persisted, editable React/Inertia homepage. Earlier Phase 0 absence statements above describe historical phase scope. See [storefront contract](storefront-architecture.md) for the implemented theme, layout, grid, block and public media boundaries.

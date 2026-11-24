@@ -1,0 +1,14 @@
+{
+	admin off
+	auto_https off
+	frankenphp {
+		num_threads 12
+	}
+}
+
+http://:8000 {
+	root * /var/www/html/public
+	php_server {
+		try_files {path} index.php
+	}
+}

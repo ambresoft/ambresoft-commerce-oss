@@ -1,0 +1,28 @@
+{
+    "name": "ambresoft/product-feeds",
+    "description": "Google Merchant Center and Meta (Facebook) catalog XML product feeds.",
+    "version": "1.0.0",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ambresoft"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ambresoft\\ProductFeeds\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 3,
+            "title": "Facebook/Google XML",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\ProductFeeds\\Infrastructure\\ProductFeedsServiceProvider",
+            "requires": [],
+            "migrations": "database/migrations",
+            "icon": "icon.svg"
+        }
+    }
+}
