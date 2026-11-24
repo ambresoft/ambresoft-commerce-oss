@@ -190,7 +190,7 @@ FrankenPHP serves the application in classic mode. PHP, Composer, PostgreSQL and
    docker compose run --rm app php artisan cms:permissions-sync
    docker compose run --rm app php artisan cms:addons-sync
    pnpm build
-   docker compose up -d app worker scheduler
+   docker compose up -d app worker scheduler typesense
    ```
 
    Generate the application key only when initializing a new installation. Never replace an existing installation's key as an update step.
