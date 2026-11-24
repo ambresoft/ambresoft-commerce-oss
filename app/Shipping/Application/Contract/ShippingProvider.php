@@ -13,10 +13,10 @@ use App\Shared\Application\Command\SettingField;
  */
 interface ShippingProvider
 {
-    /** Stable identifier stored with methods, accounts and shipments, e.g. `acs`. */
+    /** Stable identifier stored with methods, accounts and shipments, e.g. `swift`. */
     public function id(): string;
 
-    /** Display name shown to administrators (not translated), e.g. "ACS Courier". */
+    /** Display name shown to administrators (not translated), e.g. the carrier's brand name. */
     public function name(): string;
 
     /** @return list<SettingField> Provider-wide settings */

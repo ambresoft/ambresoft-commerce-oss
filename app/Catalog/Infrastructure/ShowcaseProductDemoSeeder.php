@@ -186,9 +186,9 @@ final class ShowcaseProductDemoSeeder
     private function sticker(int $product, array $locales): void
     {
         $sticker = DB::table('stickers')->insertGetId(['name' => 'Black Friday (demo)', 'type' => 'manual', 'style' => 'text', 'status' => 'active', 'placement' => 'image_top', 'show_card' => true, 'show_detail' => true,
-            'background' => '#111111', 'color' => '#F5C451', 'radius' => 20, 'created_at' => now(), 'updated_at' => now()]);
+            'background' => '#111111', 'color' => '#F5C451', 'border_color' => '#F5C451', 'border_width' => 2, 'radius' => 20, 'created_at' => now(), 'updated_at' => now()]);
         foreach ($locales as $code => $locale) {
-            DB::table('sticker_translations')->insert(['sticker_id' => $sticker, 'locale_id' => $locale, 'text' => 'BLACK FRIDAY', 'short_text' => 'BF']);
+            DB::table('sticker_translations')->insert(['sticker_id' => $sticker, 'locale_id' => $locale, 'text' => 'Black Friday', 'short_text' => '']);
         }
         DB::table('product_stickers')->insert(['product_id' => $product, 'sticker_id' => $sticker]);
     }

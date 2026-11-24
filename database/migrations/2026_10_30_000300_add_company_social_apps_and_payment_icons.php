@@ -22,7 +22,7 @@ return new class extends Migration
         DB::statement("ALTER TABLE company_settings ADD CONSTRAINT company_settings_links CHECK ($checks)");
         $this->audit(fn (string $fields): string => $fields.','.implode(',', self::LINKS));
 
-        // Payment method pictures (Visa, PayPal, ...) shown in the footer, in upload order.
+        // Payment method pictures (Visa, Mastercard, ...) shown in the footer, in upload order.
         Schema::create('company_payment_icons', function (Blueprint $t): void {
             $t->id();
             $t->foreignId('media_file_id')->unique()->constrained('media_files')->restrictOnDelete();

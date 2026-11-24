@@ -201,6 +201,7 @@ export default function BlockDialog({
               <FormField
                 id="block-css"
                 label={t('layouts.css_class')}
+                hint={t('layouts.css_class_hint')}
                 value={block.css_class}
                 maxLength={128}
                 pattern="[a-zA-Z0-9_ -]*"

@@ -20,13 +20,40 @@ export function FullscreenSearch({
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const element = dialog.current;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const body = document.body.style;
+    const before = {
+      overflow: body.overflow,
+      position: body.position,
+      top: body.top,
+      width: body.width,
+    };
+    // iOS Safari scrolls the page under an open overlay despite overflow: hidden, so the page is pinned in place and
+    // put back at the same spot afterwards.
+    const scrollY = window.scrollY;
+    Object.assign(body, {
+      overflow: 'hidden',
+      position: 'fixed',
+      top: `-${scrollY}px`,
+      width: '100%',
+    });
+    // The search fills what is visible: above the on-screen keyboard while it is open, the whole screen once it is put away.
+    const viewport = window.visualViewport;
+    const fit = () => {
+      if (!element || !viewport) return;
+      element.style.setProperty('--sf-search-height', `${viewport.height}px`);
+      element.style.setProperty('--sf-search-top', `${viewport.offsetTop}px`);
+    };
+    fit();
+    viewport?.addEventListener('resize', fit);
+    viewport?.addEventListener('scroll', fit);
     element?.showModal();
     element?.querySelector('input')?.focus();
     return () => {
+      viewport?.removeEventListener('resize', fit);
+      viewport?.removeEventListener('scroll', fit);
       element?.close();
-      document.body.style.overflow = overflow;
+      Object.assign(body, before);
+      window.scrollTo(0, scrollY);
     };
   }, []);
   const close = () => {
@@ -55,6 +82,7 @@ export function FullscreenSearch({
           limit={display.search_suggestions ?? 6}
           minLength={display.search_min_length ?? 0}
           icon={icon}
+          keepOpen
         />
         <button
           type="button"
@@ -123,7 +151,8 @@ export default function HeaderSearch({
             icon={icon}
             onClose={() => {
               setOpen(false);
-              trigger.current?.focus();
+              // Back to the opener without jumping there: the page returns to where the shopper was.
+              trigger.current?.focus({ preventScroll: true });
             }}
           />,
           document.querySelector('.sf-default') ?? document.body,

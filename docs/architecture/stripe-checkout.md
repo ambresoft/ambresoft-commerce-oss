@@ -1,6 +1,6 @@
 # Stripe Checkout (bundled add-on `ambresoft/stripe-checkout`)
 
-Stripe's hosted payment page for one-time payments, built on the same contracts as the PayPal add-on ([payments](payments.md)) plus a generic, provider-neutral webhook path in the `Payment` context. Decision A93.
+Stripe's hosted payment page for one-time payments, built on the shared payment method contracts ([payments](payments.md)) plus a generic, provider-neutral webhook path in the `Payment` context. Decision A93.
 
 Out of scope by design: subscriptions, Stripe Billing, Connect, Elements/Payment Element, custom card forms, stored cards and off-session payments. Card data never touches Ambresoft. A publishable key is not needed and no Stripe.js is loaded.
 

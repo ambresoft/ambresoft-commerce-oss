@@ -451,17 +451,17 @@ it('shows email results with a retry and hides the customer IP without the capab
         can_gift_card: false,
       }}
       shipping={{
-        method: { id: '4', name: 'ACS standard' },
+        method: { id: '4', name: 'Swift standard' },
         charge: '€4.50',
         details: null,
-        provider: { id: 'acs', name: 'ACS Courier' },
+        provider: { id: 'swift', name: 'Swift Courier' },
         can_create: true,
         create_blocker: null,
         shipments: [
           {
             id: '12',
-            provider: 'acs',
-            provider_name: 'ACS Courier',
+            provider: 'swift',
+            provider_name: 'Swift Courier',
             account_name: 'Athens',
             state: 'created',
             tracking_number: '7200000001',
@@ -559,7 +559,7 @@ it('shows email results with a retry and hides the customer IP without the capab
     expect.anything(),
   );
 
-  expect(screen.getAllByText('ACS standard')[0]).toBeVisible();
+  expect(screen.getAllByText('Swift standard')[0]).toBeVisible();
   expect(screen.getByText('tax_added').closest('div')).toHaveTextContent(
     '€4.80',
   );

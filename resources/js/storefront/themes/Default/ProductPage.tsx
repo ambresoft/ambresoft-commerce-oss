@@ -51,21 +51,55 @@ function ChartIcon() {
     </svg>
   );
 }
-function ReturnIcon() {
+/** The buy box facts' icons: in stock, out of stock, shipping, returns and a later date. */
+function FactIcon({
+  name,
+}: {
+  name: 'check' | 'cross' | 'truck' | 'return' | 'calendar';
+}) {
   return (
     <svg
       aria-hidden="true"
       viewBox="0 0 24 24"
-      width="18"
-      height="18"
+      width="20"
+      height="20"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M9 14 4 9l5-5" />
-      <path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />
+      {name === 'check' && (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="m8 12.5 2.8 2.8L16.5 9.5" />
+        </>
+      )}
+      {name === 'cross' && (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="m9 9 6 6M15 9l-6 6" />
+        </>
+      )}
+      {name === 'truck' && (
+        <>
+          <path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7" />
+          <circle cx="7" cy="17.5" r="1.8" />
+          <circle cx="17" cy="17.5" r="1.8" />
+        </>
+      )}
+      {name === 'return' && (
+        <>
+          <path d="M9 14 4 9l5-5" />
+          <path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />
+        </>
+      )}
+      {name === 'calendar' && (
+        <>
+          <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+          <path d="M3.5 10h17M8 3v4M16 3v4" />
+        </>
+      )}
     </svg>
   );
 }
@@ -114,12 +148,14 @@ function SaleBanner({ sale }: { sale: NonNullable<ProductPageData['sale']> }) {
       {left && (
         <div className="sf-pdp-countdown" role="timer">
           <span>{t('storefront.sale_expires_within')}</span>
-          {(['days', 'hours', 'minutes', 'seconds'] as const).map((unit) => (
-            <span key={unit} className="sf-pdp-countdown-unit">
-              <strong>{left[unit]}</strong>
-              {t(`storefront.${unit}`)}
-            </span>
-          ))}
+          <span className="sf-pdp-countdown-units">
+            {(['days', 'hours', 'minutes', 'seconds'] as const).map((unit) => (
+              <span key={unit} className="sf-pdp-countdown-unit">
+                <strong>{left[unit]}</strong>
+                {t(`storefront.${unit}`)}
+              </span>
+            ))}
+          </span>
         </div>
       )}
     </div>
@@ -163,10 +199,9 @@ function Price({
                 <del>
                   <Money amount={product.base_price} format={format} inline />
                 </del>
-                {product.saving && (
-                  <span>
-                    {t('storefront.you_save')}{' '}
-                    <Money amount={product.saving} format={format} inline />
+                {product.discount_percent != null && (
+                  <span className="sf-pdp-off">
+                    -{product.discount_percent}%
                   </span>
                 )}
               </p>
@@ -174,6 +209,12 @@ function Price({
             <p className="sf-pdp-now">
               <Money amount={product.price} format={format} />
             </p>
+            {product.base_price && product.saving && (
+              <p className="sf-pdp-saved">
+                {t('storefront.you_save')}{' '}
+                <Money amount={product.saving} format={format} inline />
+              </p>
+            )}
             <NetPrice item={product} format={format} />
           </div>
         )}
@@ -188,14 +229,19 @@ function Price({
       <Stickers stickers={product.stickers ?? []} placement="above_price" />
       <ul className="sf-pdp-facts">
         <li className={product.available ? 'is-in' : 'is-out'}>
-          <span className="sf-pdp-dot" aria-hidden="true" />
+          <FactIcon name={product.available ? 'check' : 'cross'} />
           {product.available
             ? product.availability.label
             : t('storefront.unavailable')}
         </li>
-        {product.free_shipping && <li>{t('storefront.free_shipping')}</li>}
+        {product.free_shipping && (
+          <li>
+            <FactIcon name="truck" />
+            {t('storefront.free_shipping')}
+          </li>
+        )}
         <li className={product.returnable ? 'is-returnable' : 'is-final'}>
-          <ReturnIcon />
+          <FactIcon name="return" />
           {t(
             product.returnable
               ? 'storefront.returnable'
@@ -204,6 +250,7 @@ function Price({
         </li>
         {product.available_from && (
           <li>
+            <FactIcon name="calendar" />
             {t('storefront.available_from', {
               date: new Date(product.available_from).toLocaleDateString(),
             })}

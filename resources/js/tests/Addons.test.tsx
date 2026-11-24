@@ -33,9 +33,9 @@ vi.mock('../layouts/admin/AdminLayout', () => ({
   default: ({ children }: { children: ReactNode }) => <main>{children}</main>,
 }));
 
-const paypal: AddonRow = {
-  name: 'ambresoft/paypal',
-  title: 'PayPal',
+const stripe: AddonRow = {
+  name: 'ambresoft/stripe-checkout',
+  title: 'Stripe Checkout',
   description: '',
   author: 'CMS',
   version: '1.0.0',
@@ -45,10 +45,10 @@ const paypal: AddonRow = {
   compatible: true,
   cms: '^1.0',
   requires: [],
-  contributes: { 'payment-methods': ['paypal'] },
+  contributes: { 'payment-methods': ['stripe_checkout'] },
   error: null,
   upgrade_available: false,
-  settings: [{ name: 'PayPal', href: '/admin/payment-methods/paypal/edit' }],
+  settings: [{ name: 'Stripe Checkout', href: '/admin/payment-methods/stripe_checkout/edit' }],
   actions: {
     install: false,
     enable: false,
@@ -69,22 +69,22 @@ it('opens the upload from the + button and links an add-on to its settings', () 
     <AddonsIndex
       navigation={[]}
       breadcrumbs={[]}
-      addons={[paypal]}
+      addons={[stripe]}
       cmsVersion="1.0.0"
       uploads={{ enabled: true, allowed: true, maxMb: 20 }}
     />,
   );
-  const row = screen.getByText('PayPal').closest('tr')!;
+  const row = screen.getByText('Stripe Checkout').closest('tr')!;
   expect(within(row).getByRole('link', { name: 'Settings' })).toHaveAttribute(
     'href',
-    '/admin/payment-methods/paypal/edit',
+    '/admin/payment-methods/stripe_checkout/edit',
   );
   expect(screen.queryByLabelText('ZIP package')).not.toBeVisible();
   fireEvent.click(screen.getByRole('button', { name: 'Upload an add-on' }));
   expect(screen.getByLabelText('ZIP package')).toBeVisible();
-  fireEvent.click(within(row).getByRole('switch', { name: 'Disable: PayPal' }));
+  fireEvent.click(within(row).getByRole('switch', { name: 'Disable: Stripe Checkout' }));
   expect(post).toHaveBeenCalledWith(
-    '/admin/addons/ambresoft/paypal/disable',
+    '/admin/addons/ambresoft/stripe-checkout/disable',
     {},
     expect.anything(),
   );
@@ -95,7 +95,7 @@ it('hides the upload button for staff without the upload capability', () => {
     <AddonsIndex
       navigation={[]}
       breadcrumbs={[]}
-      addons={[{ ...paypal, settings: [] }]}
+      addons={[{ ...stripe, settings: [] }]}
       cmsVersion="1.0.0"
       uploads={{ enabled: true, allowed: false, maxMb: 20 }}
     />,
@@ -115,17 +115,17 @@ it('shows the add-on icon, or the default puzzle icon when it declares none', ()
       uploads={{ enabled: false, allowed: false, maxMb: 20 }}
       addons={[
         {
-          ...paypal,
-          icon_url: '/admin/addons/ambresoft/paypal/icon?v=1.0.0',
+          ...stripe,
+          icon_url: '/admin/addons/ambresoft/stripe-checkout/icon?v=1.0.0',
         },
-        { ...paypal, name: 'acme/plain', title: 'Plain', icon_url: null },
+        { ...stripe, name: 'acme/plain', title: 'Plain', icon_url: null },
       ]}
     />,
   );
   const images = container.querySelectorAll('img');
   expect(images).toHaveLength(1);
   expect(images[0].getAttribute('src')).toBe(
-    '/admin/addons/ambresoft/paypal/icon?v=1.0.0',
+    '/admin/addons/ambresoft/stripe-checkout/icon?v=1.0.0',
   );
   // The icon-less add-on falls back to the inline puzzle icon.
   expect(container.querySelectorAll('svg path').length).toBeGreaterThan(0);
@@ -141,7 +141,7 @@ it('picks a ZIP in the upload dialog, refuses other files and enables the instal
     <AddonsIndex
       navigation={[]}
       breadcrumbs={[]}
-      addons={[paypal]}
+      addons={[stripe]}
       cmsVersion="1.0.0"
       uploads={{ enabled: true, allowed: true, maxMb: 20 }}
     />,

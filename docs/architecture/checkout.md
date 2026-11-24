@@ -103,8 +103,7 @@ from the cart and the quote.
   against the real addresses; one that no longer applies says why and is left out), taxes, the shipping charge and the
   payment fee. Its VAT follows the products (A117).
 
-**Shipping.** For each active method the server calls `OrderShipping::quote()` (manual rates, carriers such as the ACS
-add-on), with the address, lines, subtotal and chosen payment method. Only available methods are offered.
+**Shipping.** For each active method the server calls `OrderShipping::quote()` (manual rates, or a carrier add-on), with the address, lines, subtotal and chosen payment method. Only available methods are offered.
 `OrderAdministration::create()` calculates the charge again when the order is placed. A store without shipping methods
 takes orders without one.
 

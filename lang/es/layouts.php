@@ -63,4 +63,7 @@ return array_replace(require __DIR__.'/../en/layouts.php', [
     'template_reel_carousel' => 'Carrusel de reels',
     'template_reel_single' => 'Un solo reel',
     'source_most_viewed' => 'Reels más vistos',
+    'css_class_hint' => 'Integrada: sf-flush-top coloca el primer bloque de la página justo debajo del encabezado, sin espacio encima.',
+    'fill_height' => 'Ocupar la altura de la cuadrícula',
+    'fill_height_help' => 'En escritorio el banner crece hasta la altura completa de su cuadrícula, por ejemplo un banner alto junto a dos banners apilados. En móviles conserva su propia forma.',
 ]);

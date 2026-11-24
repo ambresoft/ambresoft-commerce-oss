@@ -203,6 +203,7 @@ export type PublicDisplay = {
   /** Which banners load at once. */
   preload?: 'none' | 'first' | 'all';
   remove_border_radius?: boolean;
+  fill_height?: boolean;
   background_color?: string;
   title_size_desktop?: number;
   title_size_tablet?: number;

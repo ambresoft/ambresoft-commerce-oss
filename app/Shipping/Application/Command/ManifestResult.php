@@ -4,7 +4,7 @@ namespace App\Shipping\Application\Command;
 
 /**
  * Outcome of issuing a manifest: its number, or the carrier's refusal with the tracking numbers that block it
- * (e.g. ACS refuses while printed-vouchers are missing).
+ * (e.g. a courier refuses while printed vouchers are missing).
  */
 final readonly class ManifestResult
 {

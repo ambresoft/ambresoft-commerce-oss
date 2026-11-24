@@ -72,12 +72,12 @@ it('shows the shipping and payment method once the order has them', () => {
     <AccountOrder
       order={{
         ...order,
-        shipping_method: 'ACS Courier',
+        shipping_method: 'Swift Courier',
         payment_method: 'Cash on delivery',
       }}
     />,
   );
-  expect(screen.getByText('ACS Courier')).toBeInTheDocument();
+  expect(screen.getByText('Swift Courier')).toBeInTheDocument();
   expect(screen.getAllByText('Cash on delivery').length).toBeGreaterThan(0);
 });
 

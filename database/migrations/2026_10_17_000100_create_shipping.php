@@ -22,7 +22,7 @@ return new class extends Migration
         });
         DB::statement("ALTER TABLE shipping_carrier_settings ADD CONSTRAINT shipping_carrier_settings_values CHECK (provider ~ '^[a-z][a-z0-9_.-]{1,59}$' AND jsonb_typeof(settings) = 'object' AND lock_version > 0)");
 
-        // Named carrier accounts (e.g. two ACS contracts). Fields are declared by the provider; credentials never leave the server.
+        // Named carrier accounts (e.g. two courier contracts). Fields are declared by the provider; credentials never leave the server.
         Schema::create('shipping_carrier_accounts', function (Blueprint $t): void {
             $t->id();
             $t->string('provider', 60);
@@ -126,7 +126,7 @@ return new class extends Migration
         });
         DB::statement('ALTER TABLE orders ADD CONSTRAINT order_shipping_method CHECK ((shipping_method_id IS NULL) = (shipping_method_name IS NULL))');
 
-        // Carrier shipments (e.g. ACS vouchers). Historical rows outlive methods, accounts and add-ons.
+        // Carrier shipments (e.g. courier vouchers). Historical rows outlive methods, accounts and add-ons.
         Schema::create('order_shipments', function (Blueprint $t): void {
             $t->id();
             $t->foreignId('order_id')->constrained('orders')->restrictOnDelete();
@@ -176,7 +176,7 @@ return new class extends Migration
         DB::statement('CREATE UNIQUE INDEX order_shipment_tracking_number ON order_shipments (provider, tracking_number) WHERE tracking_number IS NOT NULL');
         DB::statement("CREATE UNIQUE INDEX order_shipment_single_creating ON order_shipments (order_id) WHERE state = 'creating'");
 
-        // Carrier pickup lists / manifests (e.g. the ACS daily pickup list).
+        // Carrier pickup lists / manifests (e.g. a courier's daily pickup list).
         Schema::create('shipping_manifests', function (Blueprint $t): void {
             $t->id();
             $t->string('provider', 60);

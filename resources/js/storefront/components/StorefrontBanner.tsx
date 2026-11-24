@@ -21,12 +21,15 @@ export default function StorefrontBanner({
   banner,
   eager = false,
   heights,
+  fill = false,
 }: {
   banner?: PublicBanner;
   /** A banner the block preloads (its first, or every one): its images load at once and with priority. */
   eager?: boolean;
   /** The block's banner height as a percentage of the design's own, on desktop and tablet (phones keep theirs). */
   heights?: { pc?: number; tablet?: number };
+  /** Grow to the height the grid gives the banner (desktop and tablet); without one it keeps its own shape. */
+  fill?: boolean;
 }) {
   const t = useTranslation();
   const device = useSyncExternalStore(
@@ -36,6 +39,7 @@ export default function StorefrontBanner({
   );
   const box = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
   // Other banners load their pictures only when they come near the screen.
   const [near, setNear] = useState(
     eager || typeof IntersectionObserver === 'undefined',
@@ -43,9 +47,10 @@ export default function StorefrontBanner({
   useEffect(() => {
     const element = box.current;
     if (!element || typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver(([entry]) =>
-      setWidth(entry.contentRect.width),
-    );
+    const observer = new ResizeObserver(([entry]) => {
+      setWidth(entry.contentRect.width);
+      setHeight(entry.contentRect.height);
+    });
     observer.observe(element);
     return () => observer.disconnect();
   }, [banner]);
@@ -67,11 +72,24 @@ export default function StorefrontBanner({
   if (!banner) return null;
   const { settings, devices, products } = banner;
   const resolved = devices[device];
+  const filling = fill && device !== 'phone';
   // Same width, more height: the design has more room and nothing is stretched or scaled differently.
-  const heightScale = Math.min(
-    2.5,
-    Math.max(1, (device === 'phone' ? 100 : (heights?.[device] ?? 100)) / 100),
-  );
+  const heightScale =
+    filling && width > 0 && height > 0
+      ? Math.min(
+          4,
+          Math.max(
+            1,
+            height / width / (canvas[device].height / canvas[device].width),
+          ),
+        )
+      : Math.min(
+          2.5,
+          Math.max(
+            1,
+            (device === 'phone' ? 100 : (heights?.[device] ?? 100)) / 100,
+          ),
+        );
   const size = {
     width: canvas[device].width,
     height: Math.round(canvas[device].height * heightScale),
@@ -85,7 +103,11 @@ export default function StorefrontBanner({
     <div
       ref={box}
       className="relative w-full overflow-hidden"
-      style={{ aspectRatio: `${size.width} / ${size.height}` }}
+      // Filling: the grid's height when it gives one; otherwise (an auto height) the design's own shape.
+      style={{
+        aspectRatio: `${size.width} / ${size.height}`,
+        ...(filling ? { width: '100%', height: '100%' } : {}),
+      }}
     >
       <div
         style={{

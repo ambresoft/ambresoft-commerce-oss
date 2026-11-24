@@ -37,6 +37,7 @@ const product: ProductPageData = {
   image: null,
   price: '2799.00',
   base_price: '3000.00',
+  discount_percent: 7,
   saving: '201.00',
   sale: { title: 'Black Friday', ends_at: '2099-01-01T00:00:00+02:00' },
   brand: {
@@ -302,7 +303,7 @@ it('renders nothing without a product', () => {
   expect(container).toBeEmptyDOMElement();
 });
 
-it('shows the saving above the price and hides the sections the block switches off', () => {
+it('shows the saving under the price and hides the sections the block switches off', () => {
   shared.props = {
     ...shared.props,
     i18n: {
@@ -322,12 +323,13 @@ it('shows the saving above the price and hides the sections the block switches o
       })}
     />,
   );
-  expect(container.querySelector('.sf-pdp-was')).toHaveTextContent(
+  expect(container.querySelector('.sf-pdp-saved')).toHaveTextContent(
     'You save: €201.00',
   );
   expect(container.querySelector('.sf-pdp-was del')).toHaveTextContent(
     '€3,000.00',
   );
+  expect(container.querySelector('.sf-pdp-off')).toHaveTextContent('-7%');
   expect(container.querySelector('#sf-pdp-bundle')).toBeNull();
   expect(container.querySelector('#description')).toBeNull();
   expect(container.querySelector('#reviews')).toBeNull();

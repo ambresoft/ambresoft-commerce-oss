@@ -8,7 +8,7 @@ use App\Shipping\Application\Command\ManifestResult;
 use App\Shipping\Application\Command\ShippingDocument;
 
 /**
- * Carrier pickup lists / manifests that finalize the day's shipments (e.g. the ACS daily pickup list). Issuing is not
+ * Carrier pickup lists / manifests that finalize the day's shipments (e.g. a courier's daily pickup list). Issuing is not
  * idempotent at the carrier; the CMS serializes and de-duplicates requests.
  */
 interface ManifestsShipments

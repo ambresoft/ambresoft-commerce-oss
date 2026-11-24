@@ -56,6 +56,7 @@ final class SeedDemoStore extends Command
                 foreach (array_slice(self::DEMOS, 1) as $demo) {
                     $this->call($demo, ['actor' => $admin]);
                 }
+                $seeder->promotions();
                 $reviews = app(ShowcaseProductDemoSeeder::class)->reviews();
                 if ($reviews > 0) {
                     $this->info('Added '.$reviews.' reviews to the Nimbus Pro 16 showcase.');

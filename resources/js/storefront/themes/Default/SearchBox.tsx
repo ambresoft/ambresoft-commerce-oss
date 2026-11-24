@@ -54,15 +54,22 @@ export default function SearchBox({
   limit,
   minLength = 0,
   icon,
+  keepOpen = false,
 }: {
   /** Suggestions to show; 0 turns them off. */
   limit: number;
   /** Characters a query needs before it is searched (the store's search setting; 0 for any). */
   minLength?: number;
   icon: ReactNode;
+  /**
+   * The full-screen search: the list stays open when the field loses focus (a phone's "Done" hides the keyboard, not
+   * the results), and dragging the list hides the keyboard so every result can be reached.
+   */
+  keepOpen?: boolean;
 }) {
   const t = useTranslation();
   const listId = useId();
+  const input = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState(currentQuery);
   const [reply, setReply] = useState<Reply | null>(null);
   const [recent, setRecent] = useState<Suggestion[]>([]);
@@ -204,8 +211,10 @@ export default function SearchBox({
       onSubmit={submit}
     >
       <input
+        ref={input}
         type="search"
         name="q"
+        enterKeyHint="search"
         value={query}
         maxLength={100}
         placeholder={t('storefront.search_placeholder')}
@@ -225,7 +234,9 @@ export default function SearchBox({
           setOpen(true);
         }}
         onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
+        onBlur={() => {
+          if (!keepOpen) setOpen(false);
+        }}
         onKeyDown={onKeyDown}
       />
       <button type="submit" aria-label={t('storefront.search')}>
@@ -240,6 +251,11 @@ export default function SearchBox({
         hidden={!shown}
         // Choosing with the mouse must not blur the field first.
         onMouseDown={(event) => event.preventDefault()}
+        // A drag (not a tap) through the full-screen results puts the keyboard away.
+        onTouchMove={() => {
+          if (keepOpen && document.activeElement === input.current)
+            input.current?.blur();
+        }}
       >
         {showingRecent && (
           <section

@@ -115,7 +115,8 @@ final class DemoStoreSeeder
         $banners = $layout === null ? null : DB::table('storefront_blocks')->where('layout_id', $layout)->where('type', 'banners')->first();
         if ($banners !== null) {
             $settings = [...json_decode((string) $banners->settings, true) ?: [], 'full_width' => true, 'visible_desktop' => 1, 'visible_tablet' => 1, 'height_desktop' => 100, 'autoplay_seconds' => 6];
-            DB::table('storefront_blocks')->where('id', $banners->id)->update(['settings' => json_encode($settings)]);
+            // sf-flush-top: the hero sits right under the header.
+            DB::table('storefront_blocks')->where('id', $banners->id)->update(['settings' => json_encode($settings), 'css_class' => trim($banners->css_class.' sf-flush-top')]);
         }
         // Phones swipe the starter carousels; their arrows only cover the pictures.
         foreach ($layout === null ? [] : DB::table('storefront_blocks')->where('layout_id', $layout)->whereIn('type', ['banners', 'products', 'categories'])->get() as $block) {
@@ -173,26 +174,30 @@ final class DemoStoreSeeder
      * @param array<string,int> $categories */
     private function showcaseBlocks(array $categories, ?int $quickNavigation): void
     {
-        $laptops = isset($categories['laptops']) ? DB::table('products')->where('sku', 'like', 'TECH-%')->whereIn('category_id', DB::table('categories')->where('parent_id', $categories['laptops'])->pluck('id'))->orderBy('id')->pluck('id')->all() : [];
+        $inDepartment = fn (string $key): array => isset($categories[$key]) ? DB::table('products')->where('sku', 'like', 'TECH-%')->whereIn('category_id', DB::table('categories')->where('parent_id', $categories[$key])->pluck('id'))->orderBy('id')->pluck('id')->all() : [];
+        $laptops = $inDepartment('laptops');
         // Hand-picked: a new store has no paid orders yet, so a "best sellers" source would show nothing.
         $favourites = DB::table('products')->where('sku', 'like', 'TECH-%')->whereIn('id', DB::table('product_translations')->whereIn('slug', ['nimbus-pro-16-blk-32-1t', 'aster-x5', 'nimbus-air-13', 'volta-studio-anc', 'orbit-watch-3', 'volta-buds-pro', 'aster-tab-11', 'lumo-read-paper-7', 'kova-30w-charger'])->select('product_id'))->orderBy('id')->pluck('id')->all();
         $quick = $quickNavigation ?? DB::table('website_menu_translations')->where('name', 'Quick navigation (demo)')->value('menu_id');
         $blocks = [
-            ['visual_menu', 'menu_tiles_carousel', 'Quick navigation', 'Γρήγορη πλοήγηση', ['limit' => 12, 'hide_arrows_mobile' => true], $quick === null ? [] : ['menu' => ['menu_id', [$quick]]]],
-            ['reels', 'reel_carousel', 'Our videos', 'Τα βίντεο μας', ['source' => 'newest', 'limit' => 12, 'per_row' => 5, 'hide_arrows_mobile' => true], []],
-            ['products', 'product_carousel', 'Deals of the week', 'Προσφορές της εβδομάδας', ['source' => 'sale', 'limit' => 10, 'show_rating' => true, 'hide_arrows_mobile' => true], []],
-            ['products', 'product_carousel', 'Laptops for every need', 'Laptops για κάθε ανάγκη', ['source' => 'manual', 'limit' => 8, 'hide_arrows_mobile' => true], ['items' => ['product_id', $laptops]]],
-            ['products', 'product_carousel', 'Customer favourites', 'Αγαπημένα των πελατών', ['source' => 'manual', 'limit' => 10, 'show_rating' => true, 'hide_arrows_mobile' => true], ['items' => ['product_id', $favourites]]],
-            ['coupons', 'coupon_carousel', 'Coupons for you', 'Κουπόνια για εσάς', ['limit' => 6, 'per_row' => 3, 'hide_arrows_mobile' => true], ['items' => ['coupon_id', DB::table('coupons')->whereIn('code', ['WELCOME10', 'SAVE20', 'FREESHIP'])->orderBy('id')->pluck('id')->all()]]],
-            ['brands', 'brand_carousel', 'Our brands', 'Οι μάρκες μας', ['source' => 'alphabetical', 'limit' => 12, 'per_row' => 4, 'image_width' => 320, 'image_height' => 180, 'image_radius' => 20, 'hide_arrows_mobile' => true], []],
-            ['blog_posts', 'blog_carousel', 'From the blog', 'Από το blog', ['source' => 'latest', 'limit' => 6, 'hide_arrows_mobile' => true], []],
+            ['visual_menu', 'menu_tiles_carousel', 'Quick navigation', 'Γρήγορη πλοήγηση', ['limit' => 12, 'hide_arrows_mobile' => true], $quick === null ? [] : ['menu' => ['menu_id', [$quick]]], null],
+            ['reels', 'reel_carousel', 'Our videos', 'Τα βίντεο μας', ['source' => 'newest', 'limit' => 12, 'per_row' => 5, 'hide_arrows_mobile' => true], [], null],
+            ['products', 'product_carousel', 'Deals of the week', 'Προσφορές της εβδομάδας', ['source' => 'sale', 'limit' => 10, 'show_rating' => true, 'hide_arrows_mobile' => true], [], null],
+            ['products', 'product_carousel', 'Laptops for every need', 'Laptops για κάθε ανάγκη', ['source' => 'manual', 'limit' => 8, 'hide_arrows_mobile' => true], ['items' => ['product_id', $laptops]], null],
+            ['products', 'product_carousel', 'Customer favourites', 'Αγαπημένα των πελατών', ['source' => 'manual', 'limit' => 10, 'show_rating' => true, 'hide_arrows_mobile' => true], ['items' => ['product_id', $favourites]], null],
+            // A coloured full-width section with a promo picture beside the carousel.
+            ['products', 'product_carousel', 'Audio week', 'Εβδομάδα ήχου', ['source' => 'manual', 'limit' => 8, 'per_row' => 4, 'hide_arrows_mobile' => true, 'background_color' => '#D1FAE5', 'full_width_background' => true,
+                'image_side' => 'left', 'image_fit' => 'cover', 'image_link' => '/audio'], ['items' => ['product_id', $inDepartment('audio')]], 'promo-audio'],
+            ['coupons', 'coupon_carousel', 'Coupons for you', 'Κουπόνια για εσάς', ['limit' => 6, 'per_row' => 3, 'hide_arrows_mobile' => true], ['items' => ['coupon_id', DB::table('coupons')->whereIn('code', ['WELCOME10', 'SAVE20', 'FREESHIP'])->orderBy('id')->pluck('id')->all()]], null],
+            ['brands', 'brand_carousel', 'Our brands', 'Οι μάρκες μας', ['source' => 'alphabetical', 'limit' => 12, 'per_row' => 4, 'image_width' => 320, 'image_height' => 180, 'image_radius' => 20, 'hide_arrows_mobile' => true], [], null],
+            ['blog_posts', 'blog_carousel', 'From the blog', 'Από το blog', ['source' => 'latest', 'limit' => 6, 'hide_arrows_mobile' => true], [], null],
         ];
         $layout = DB::table('storefront_layouts')->where('page_type', 'homepage')->value('id');
         if ($layout === null) {
             return;
         }
         $added = false;
-        foreach ($blocks as [$type, $template, $en, $el, $settings, $selections]) {
+        foreach ($blocks as [$type, $template, $en, $el, $settings, $selections, $picture]) {
             if (DB::table('storefront_blocks')->where('layout_id', $layout)->where('name', $en)->exists()) {
                 continue;
             }
@@ -201,7 +206,9 @@ final class DemoStoreSeeder
             $block = (string) Str::uuid();
             $row = (int) DB::table('storefront_grids')->where('layout_id', $layout)->where('region', 'content')->max('row') + 1;
             DB::table('storefront_grids')->insert(['id' => $grid, 'layout_id' => $layout, 'region' => 'content', 'width' => 16, 'row' => $row, 'position' => 1]);
-            DB::table('storefront_blocks')->insert(['id' => $block, 'layout_id' => $layout, 'type' => $type, 'name' => $en, 'template' => $template, 'settings' => json_encode($settings)]);
+            // A picture beside the carousel; phones get its wide "{picture}-phone" version.
+            $pictures = $picture === null ? [] : ['image_media_id' => app(DemoPicture::class)->photo($picture), 'image_mobile_media_id' => app(DemoPicture::class)->photo($picture.'-phone')];
+            DB::table('storefront_blocks')->insert(['id' => $block, 'layout_id' => $layout, 'type' => $type, 'name' => $en, 'template' => $template, 'settings' => json_encode($settings), ...$pictures]);
             DB::table('storefront_placements')->insert(['id' => (string) Str::uuid(), 'layout_id' => $layout, 'grid_id' => $grid, 'block_id' => $block, 'position' => 1]);
             foreach (DB::table('locales')->get() as $locale) {
                 DB::table('storefront_block_translations')->insert(['block_id' => $block, 'locale_id' => $locale->id, 'title' => $locale->code === 'el' ? $el : $en]);
@@ -212,23 +219,97 @@ final class DemoStoreSeeder
                 }
             }
         }
-        if (! $added) {
-            return;
+        if ($added) {
+            $this->orderHomepage($layout);
         }
-        // Demo order: banners, quick navigation, new arrivals, categories, deals, videos, then the rest as added.
-        $rank = ['banners' => 1, 'Quick navigation' => 2, 'products:newest' => 3, 'categories' => 4, 'Deals of the week' => 5, 'Our videos' => 6];
+    }
+
+    /**
+     * Demo order: banners, quick navigation, new arrivals, categories, the promotions, deals, videos, then the rest as
+     * added. Whole rows move, so a row of side-by-side grids stays together.
+     */
+    private function orderHomepage(string $layout): void
+    {
+        $rank = ['banners' => 1, 'Quick navigation' => 2, 'products:newest' => 3, 'categories' => 4, 'Our promotions' => 4.4, 'Promotions' => 4.6, 'Deals of the week' => 5, 'Our videos' => 6];
         $grids = DB::table('storefront_grids as g')->join('storefront_placements as p', 'p.grid_id', '=', 'g.id')->join('storefront_blocks as b', 'b.id', '=', 'p.block_id')
-            ->where('g.layout_id', $layout)->where('g.region', 'content')->orderBy('g.row')->get(['g.id', 'g.row', 'b.type', 'b.name', 'b.settings']);
+            ->where('g.layout_id', $layout)->where('g.region', 'content')->orderBy('g.row')->orderBy('g.position')->orderBy('p.position')->get(['g.id', 'g.row', 'b.type', 'b.name', 'b.settings']);
         $key = fn (object $g): string => isset($rank[$g->name]) ? $g->name : ($g->type === 'products' && (json_decode((string) $g->settings, true)['source'] ?? '') === 'newest' && $g->name === 'Products' ? 'products:newest' : $g->type);
-        $sorted = $grids->sortBy(fn (object $g): array => [$rank[$key($g)] ?? 100, $g->row])->values();
-        // Two passes keep the (layout, region, row) positions unique while they move.
-        foreach ($sorted as $n => $g) {
-            DB::table('storefront_grids')->where('id', $g->id)->update(['row' => 10000 + $n]);
+        // Each row is ranked by its first block.
+        $rows = $grids->groupBy('row')->map(fn ($row): array => ['row' => (int) $row->first()->row, 'rank' => $rank[$key($row->first())] ?? 100, 'ids' => $row->pluck('id')->unique()->values()->all()])
+            ->sortBy(fn (array $row): array => [$row['rank'], $row['row']])->values();
+        // Two passes keep the row numbers apart while they move.
+        foreach ($rows as $n => $row) {
+            DB::table('storefront_grids')->whereIn('id', $row['ids'])->update(['row' => 10000 + $n]);
         }
-        foreach ($sorted as $n => $g) {
-            DB::table('storefront_grids')->where('id', $g->id)->update(['row' => $n + 1]);
+        foreach ($rows as $n => $row) {
+            DB::table('storefront_grids')->whereIn('id', $row['ids'])->update(['row' => $n + 1]);
         }
         DB::table('storefront_layouts')->where('id', $layout)->increment('lock_version');
+    }
+
+    /**
+     * The homepage promotions: a heading, then one row of three grids. The side grids stack two banner blocks each (the
+     * top ones small carousels), the centre one is a single banner that fills the row's height. Needs the sample
+     * promotion banners (cms:banners-demo); the hero carousel then shows its own group instead of the latest banners.
+     */
+    public function promotions(): bool
+    {
+        return DB::transaction(fn (): bool => $this->placePromotions());
+    }
+
+    private function placePromotions(): bool
+    {
+        $layout = DB::table('storefront_layouts')->where('page_type', 'homepage')->value('id');
+        $records = DB::table('feature_demo_records')->where('key', 'like', 'banners.%')->pluck('entity_id', 'key');
+        $promo = fn (string $name): ?string => isset($records['banners.promo.'.$name]) ? (string) $records['banners.promo.'.$name] : null;
+        $names = ['trail', 'buds', 'reader', 'watch', 'charger', 'backpack', 'band'];
+        if ($layout === null || in_array(null, array_map($promo, $names), true)) {
+            return false;
+        }
+        $hero = $records['banners.group.hero'] ?? null;
+        $heroBlock = DB::table('storefront_blocks')->where('layout_id', $layout)->where('type', 'banners')->where('name', '<>', 'Promotions')->where('name', 'not like', 'Promotions %')->orderBy('id')->first();
+        if ($hero !== null && $heroBlock !== null && (json_decode((string) $heroBlock->settings, true)['source'] ?? 'latest') === 'latest') {
+            DB::table('storefront_blocks')->where('id', $heroBlock->id)->update(['settings' => json_encode([...json_decode((string) $heroBlock->settings, true) ?: [], 'source' => 'group'])]);
+            DB::table('storefront_block_selections')->where('block_id', $heroBlock->id)->where('field', 'group')->delete();
+            DB::table('storefront_block_selections')->insert(['block_id' => $heroBlock->id, 'field' => 'group', 'position' => 1, 'banner_group_id' => $hero]);
+            DB::table('storefront_layouts')->where('id', $layout)->increment('lock_version');
+        }
+        if (DB::table('storefront_blocks')->where('layout_id', $layout)->where('name', 'Promotions')->exists()) {
+            return false;
+        }
+        $row = (int) DB::table('storefront_grids')->where('layout_id', $layout)->where('region', 'content')->max('row') + 1;
+        $place = function (string $grid, int $position, string $name, string $template, array $settings, array $banners, array $title = ['', ''], array $html = ['', '']) use ($layout): void {
+            $block = (string) Str::uuid();
+            DB::table('storefront_blocks')->insert(['id' => $block, 'layout_id' => $layout, 'type' => $template === 'html' ? 'html' : 'banners', 'name' => $name, 'template' => $template, 'settings' => json_encode((object) $settings)]);
+            DB::table('storefront_placements')->insert(['id' => (string) Str::uuid(), 'layout_id' => $layout, 'grid_id' => $grid, 'block_id' => $block, 'position' => $position]);
+            foreach (DB::table('locales')->get() as $locale) {
+                $greek = $locale->code === 'el';
+                DB::table('storefront_block_translations')->insert(['block_id' => $block, 'locale_id' => $locale->id, 'title' => $title[$greek ? 1 : 0], 'html' => $html[$greek ? 1 : 0]]);
+            }
+            foreach ($banners as $n => $banner) {
+                DB::table('storefront_block_selections')->insert(['block_id' => $block, 'field' => 'items', 'position' => $n + 1, 'banner_id' => $banner]);
+            }
+        };
+        $grid = function (int $row, int $position, int $width) use ($layout): string {
+            $id = (string) Str::uuid();
+            DB::table('storefront_grids')->insert(['id' => $id, 'layout_id' => $layout, 'region' => 'content', 'width' => $width, 'row' => $row, 'position' => $position]);
+
+            return $id;
+        };
+        $place($grid($row, 1, 16), 1, 'Our promotions', 'html', [], [], ['Discover our promotions', 'Ανακαλύψτε τις προσφορές μας'],
+            ['<p>Hand-picked offers on wearables, audio, e-readers and accessories.</p>', '<p>Επιλεγμένες προσφορές σε wearables, ήχο, e-readers και αξεσουάρ.</p>']);
+        // Side banners are 40% taller than the default design; the carousels change slide every 6 seconds and show dots.
+        $single = ['source' => 'manual', 'limit' => 1, 'height_desktop' => 140, 'height_tablet' => 140];
+        $carousel = [...$single, 'limit' => 4, 'autoplay_seconds' => 6, 'navigation_style' => 'dots', 'hide_arrows_mobile' => true];
+        [$left, $centre, $right] = [$grid($row + 1, 1, 5), $grid($row + 1, 2, 6), $grid($row + 1, 3, 5)];
+        $place($left, 1, 'Promotions', 'banner_carousel', $carousel, [$promo('trail'), $promo('buds')]);
+        $place($left, 2, 'Promotions 2', 'banner_single', $single, [$promo('reader')]);
+        $place($centre, 1, 'Promotions 3', 'banner_single', [...$single, 'fill_height' => true], [$promo('watch')]);
+        $place($right, 1, 'Promotions 4', 'banner_carousel', $carousel, [$promo('charger'), $promo('backpack')]);
+        $place($right, 2, 'Promotions 5', 'banner_single', $single, [$promo('band')]);
+        $this->orderHomepage($layout);
+
+        return true;
     }
 
     /** The homepage newsletter sign-up, joining the first active newsletter list (when there is one). */
@@ -266,7 +347,7 @@ final class DemoStoreSeeder
             }
         }
         if (! DB::table('company_payment_icons')->exists()) {
-            foreach (['Visa' => 'payment-visa', 'Mastercard' => 'payment-mastercard', 'American Express' => 'payment-amex', 'Apple Pay' => 'payment-applepay', 'PayPal' => 'payment-paypal', 'Cash on delivery' => 'payment-cod'] as $name => $picture) {
+            foreach (['Visa' => 'payment-visa', 'Mastercard' => 'payment-mastercard', 'American Express' => 'payment-amex', 'Apple Pay' => 'payment-applepay', 'Cash on delivery' => 'payment-cod'] as $name => $picture) {
                 // The logos of common payment methods; the merchant keeps only the ones they accept in Settings → Company.
                 DB::table('company_payment_icons')->insert(['media_file_id' => app(DemoPicture::class)->photo($picture), 'name' => $name, 'position' => (int) DB::table('company_payment_icons')->count() + 1, 'created_at' => now(), 'updated_at' => now()]);
             }

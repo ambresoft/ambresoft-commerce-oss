@@ -71,17 +71,17 @@ const shell = { navigation: [], breadcrumbs: [] };
 
 it('keeps carrier setup and pickup links scoped to staff capabilities and provider support', () => {
   const carriers = [
-    { id: 'acs', name: 'ACS Courier', accounts: 0, manifests: true },
+    { id: 'swift', name: 'Swift Courier', accounts: 0, manifests: true },
     { id: 'other', name: 'Other courier', accounts: 2, manifests: false },
   ];
   const view = render(<ShippingCarriersIndex {...shell} carriers={carriers} />);
   const cards = screen.getAllByRole('listitem');
   expect(
     within(cards[0]).getByRole('link', { name: 'Settings and accounts' }),
-  ).toHaveAttribute('href', '/admin/shipping-carriers/acs');
+  ).toHaveAttribute('href', '/admin/shipping-carriers/swift');
   expect(
     within(cards[0]).getByRole('link', { name: 'Pickup lists' }),
-  ).toHaveAttribute('href', '/admin/shipping-carriers/acs/manifests');
+  ).toHaveAttribute('href', '/admin/shipping-carriers/swift/manifests');
   expect(
     within(cards[1]).queryByRole('link', { name: 'Pickup lists' }),
   ).not.toBeInTheDocument();
@@ -137,8 +137,8 @@ it('edits manual rates and only offers carriers that can price for carrier metho
       method={null}
       providers={[
         {
-          id: 'acs',
-          name: 'ACS Courier',
+          id: 'swift',
+          name: 'Swift Courier',
           quotes: true,
           shipments: true,
           accounts: [{ id: '4', name: 'Athens', usable: true }],
@@ -189,7 +189,7 @@ it('edits manual rates and only offers carriers that can price for carrier metho
   });
 
   // A chosen image is sent as multipart form data.
-  const logo = new File(['png'], 'acs.png', { type: 'image/png' });
+  const logo = new File(['png'], 'swift.png', { type: 'image/png' });
   fireEvent.change(screen.getByLabelText('Image', { selector: 'input' }), {
     target: { files: [logo] },
   });
@@ -208,15 +208,15 @@ it('edits manual rates and only offers carriers that can price for carrier metho
   const carriers = screen.getByRole('combobox', { name: 'Carrier' });
   fireEvent.click(carriers);
   expect(screen.queryByRole('option', { name: 'Labels only' })).toBeNull();
-  choose(carriers, 'ACS Courier');
+  choose(carriers, 'Swift Courier');
   choose(screen.getByRole('combobox', { name: 'Account' }), 'Athens');
 });
 
 const carrier: CarrierView = {
-  id: 'acs',
-  name: 'ACS Courier',
-  owner: 'ambresoft/acs-courier',
-  owner_title: 'ACS Courier',
+  id: 'swift',
+  name: 'Swift Courier',
+  owner: 'acme/swift-courier',
+  owner_title: 'Swift Courier',
   version: 2,
   settings: [],
   settings_issues: [],
@@ -249,13 +249,13 @@ it('keeps stored carrier secrets write-only and tests a connection', () => {
   window.history.replaceState(
     {},
     '',
-    '/admin/shipping-carriers/acs?tab=accounts',
+    '/admin/shipping-carriers/swift?tab=accounts',
   );
   const visit = vi.spyOn(router, 'visit').mockImplementation(() => undefined);
   render(<ShippingCarrierShow {...shell} carrier={carrier} />);
   fireEvent.click(screen.getByRole('button', { name: 'Test connection' }));
   expect(visit.mock.calls[0][0]).toBe(
-    '/admin/shipping-carriers/acs/accounts/4/verify',
+    '/admin/shipping-carriers/swift/accounts/4/verify',
   );
 
   fireEvent.click(screen.getByRole('button', { name: 'Edit' }));
@@ -267,7 +267,7 @@ it('keeps stored carrier secrets write-only and tests a connection', () => {
   );
   fireEvent.click(screen.getByRole('button', { name: 'Save' }));
   const [url, options] = visit.mock.calls[1];
-  expect(url).toBe('/admin/shipping-carriers/acs/accounts/4');
+  expect(url).toBe('/admin/shipping-carriers/swift/accounts/4');
   expect(options?.data).toEqual({
     version: 3,
     name: 'Athens',
@@ -283,8 +283,8 @@ it('warns about unprinted vouchers and issues a pickup list with its request key
     <ShippingCarrierManifests
       {...shell}
       carrier={{
-        id: 'acs',
-        name: 'ACS Courier',
+        id: 'swift',
+        name: 'Swift Courier',
         manifest_label: 'Pickup lists',
       }}
       accounts={[{ id: '4', name: 'Athens' }]}
@@ -318,11 +318,11 @@ it('warns about unprinted vouchers and issues a pickup list with its request key
     }),
   ).toHaveAttribute(
     'href',
-    '/admin/shipping-carriers/acs/manifests/2310140001/print?account=4&date=2026-10-14',
+    '/admin/shipping-carriers/swift/manifests/2310140001/print?account=4&date=2026-10-14',
   );
   fireEvent.click(screen.getByRole('button', { name: 'Issue pickup list' }));
   expect(post).toHaveBeenCalledWith(
-    '/admin/shipping-carriers/acs/manifests',
+    '/admin/shipping-carriers/swift/manifests',
     {
       account: '4',
       date: '2026-10-14',

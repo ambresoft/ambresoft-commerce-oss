@@ -63,4 +63,7 @@ return array_replace(require __DIR__.'/../en/layouts.php', [
     'template_reel_carousel' => 'Reelscarrousel',
     'template_reel_single' => 'Enkele reel',
     'source_most_viewed' => 'Meest bekeken reels',
+    'css_class_hint' => 'Ingebouwd: sf-flush-top plaatst het eerste blok van de pagina direct onder de header, zonder ruimte erboven.',
+    'fill_height' => 'Hoogte van het raster vullen',
+    'fill_height_help' => 'Op desktop groeit de banner tot de volledige hoogte van het raster, bijvoorbeeld een hoge banner naast twee gestapelde banners. Op telefoons behoudt de banner zijn eigen vorm.',
 ]);

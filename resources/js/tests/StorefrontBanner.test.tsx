@@ -237,3 +237,36 @@ it('gives the button its hover effect and transition time, without one by defaul
   expect(button().style.getPropertyValue('--bb-t')).toBe('0.5s');
   expect(button().style.getPropertyValue('--bb-bg')).not.toBe('');
 });
+
+it('fills the height its grid gives it on desktop and keeps the phone design', () => {
+  vi.stubGlobal(
+    'ResizeObserver',
+    class {
+      constructor(
+        private callback: (
+          entries: { contentRect: { width: number; height: number } }[],
+        ) => void,
+      ) {}
+      observe() {
+        // A 600px wide banner in a 500px tall grid.
+        this.callback([{ contentRect: { width: 600, height: 500 } }]);
+      }
+      disconnect() {}
+    },
+  );
+  const canvas = (container: HTMLElement) =>
+    container.querySelector<HTMLElement>('.banner-preview')!;
+  window.innerWidth = 1400;
+  const { container } = render(<StorefrontBanner banner={banner} fill />);
+  // 500 / 600 of the 1200px design width: 1000px tall, at the same scale.
+  expect(canvas(container)).toHaveStyle({ width: '1200px', height: '1000px' });
+  expect(container.querySelector('[style*="scale(0.5)"]')).toBeInTheDocument();
+  expect(
+    container.querySelector<HTMLElement>('.relative.w-full')!.style.height,
+  ).toBe('100%');
+  act(() => {
+    window.innerWidth = 390;
+    window.dispatchEvent(new Event('resize'));
+  });
+  expect(canvas(container)).toHaveStyle({ width: '375px', height: '520px' });
+});

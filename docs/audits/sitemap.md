@@ -80,7 +80,7 @@ The add-on is **enabled locally at 1.0.1**. Its prior installed state was preser
 
 Generate/Refresh Draft completed through the real local queue with **200 eligible draft URLs**: homepage 1, products 129, categories 49, Pages 3, brands 8, Blog landings 2 and Blog posts 8. These 200 URLs are now published locally. An anonymous HTTP request to `/sitemap.xml` returned **200** with `application/xml; charset=UTF-8`. Parsing the actual response confirmed the standard namespace, 200 unique absolute canonical URLs, and no private paths or query parameters. Chrome also displayed the XML tree. Public successful publication/index/headers/failure behavior is additionally verified by Docker HTTP feature tests in cms_test.
 
-The Add-ons list visibly renders the same Ambresoft mark as PayPal for Sitemap. No existing add-on was disabled or reconfigured.
+The Add-ons list visibly renders the same Ambresoft mark as the other bundled add-ons for Sitemap. No existing add-on was disabled or reconfigured.
 
 ### Follow-up: Add-ons Settings shortcut
 

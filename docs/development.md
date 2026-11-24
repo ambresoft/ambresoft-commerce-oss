@@ -40,7 +40,7 @@ pnpm build
 docker compose up -d app
 ```
 
-After every deployment or update, run `php artisan migrate`, `php artisan cms:permissions-sync` and `php artisan cms:addons-sync` (installs new bundled add-ons such as PayPal and ACS Courier disabled and applies upgrades of bundled add-ons; enabled states never change). Keep `storage/addons` (uploaded add-ons) persistent across deployments; set `ADDON_UPLOADS=false` on installations where add-on code may only arrive through deployment. See the [add-on guide](addons.md), [payments](architecture/payments.md) and [shipping](architecture/shipping.md).
+After every deployment or update, run `php artisan migrate`, `php artisan cms:permissions-sync` and `php artisan cms:addons-sync` (installs new bundled add-ons disabled and applies upgrades of bundled add-ons; enabled states never change). Keep `storage/addons` (uploaded add-ons) persistent across deployments; set `ADDON_UPLOADS=false` on installations where add-on code may only arrive through deployment. See the [add-on guide](addons.md), [payments](architecture/payments.md) and [shipping](architecture/shipping.md).
 
 Visit http://localhost:8000/admin/login (staff) or /login (customers) and /up (liveness). Authentication, staff/role administration, persisted admin language and Phase 3 categories are implemented; no Products/storefront. No default user credentials exist.
 
@@ -490,9 +490,9 @@ Apply `2026_11_29_000100_create_brand_files`, rebuild the frontend and restart w
 
 The local test setup includes Nike at `/admin/brands/9/edit`, three explicitly labelled demo shoes under `/demo-footwear`, and `output/pdf/nike-demo-shoe-size-guide.pdf`. These examples were deliberately created only in the local database, not added as automatic production seed data. The guide is fictional sample content, not an official manufacturer chart.
 
-## Feed Engine removal and ACS Courier distribution
+## Feed Engine removal
 
-Apply `php artisan migrate` (`2026_12_03_000100_remove_timeline_feed`), run `pnpm build`, then restart the worker and scheduler. The migration removes Feed Engine data and Timeline presentation without touching other layouts (A146). ACS Courier is no longer bundled: on a new installation, upload its ZIP in **Add-ons** and enable it. An existing installation that had the bundled ACS stops loading it after this update: Disable and Uninstall it in Add-ons, then upload the ZIP and enable it. Its methods, accounts and shipments are kept.
+Apply `php artisan migrate` (`2026_12_03_000100_remove_timeline_feed`), run `pnpm build`, then restart the worker and scheduler. The migration removes Feed Engine data and Timeline presentation without touching other layouts (A146).
 
 ## Google Tag Manager
 

@@ -107,7 +107,7 @@ Every storefront page is built to rank and to win the click:
 
 - Guest and account checkout, saved addresses, server-calculated totals, invoice requests with **EU VIES / Greek AADE
   VAT verification**.
-- Payments: cash on delivery, bank deposit and **Stripe Checkout** built in; PayPal and more as add-ons;
+- Payments: cash on delivery, bank deposit and **Stripe Checkout** built in, more providers as add-ons;
   payment fees and limits, payment restrictions per category or customer.
 - Shipping carriers and methods, rate areas, free-shipping rules, regions and countries.
 - Taxes with priorities, rate areas and price-included options; currency and number-format settings.

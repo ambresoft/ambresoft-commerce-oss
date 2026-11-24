@@ -12,10 +12,10 @@ use App\Payment\Application\Command\SettingField;
  */
 interface PaymentMethod
 {
-    /** Stable identifier stored with settings and orders, e.g. `cod` or `paypal`. */
+    /** Stable identifier stored with settings and orders, e.g. `cod` or `stripe_checkout`. */
     public function id(): string;
 
-    /** Who supplies the method, shown to administrators (not translated), e.g. "Core" or "PayPal". */
+    /** Who supplies the method, shown to administrators (not translated), e.g. "Core" or "Stripe Checkout". */
     public function provider(): string;
 
     /**

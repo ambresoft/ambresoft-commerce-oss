@@ -278,3 +278,20 @@ it('does not refetch on rerenders and adds a late history reply above the curren
   fireEvent.blur(field());
   expect(historySignal.aborted).toBe(true);
 });
+
+it('keeps the full-screen results when the phone keyboard is put away, and a drag through them puts it away', async () => {
+  suggestionsFetch(vi.fn().mockResolvedValue(reply(['Nimbus Pro 16'])));
+  const { rerender } = render(<SearchBox limit={6} icon={null} keepOpen />);
+  await type('nimb');
+  (field() as HTMLInputElement).focus();
+  fireEvent.touchMove(screen.getByRole('listbox'));
+  expect(document.activeElement).not.toBe(field());
+  fireEvent.blur(field());
+  expect(field().getAttribute('aria-expanded')).toBe('true');
+  expect(screen.getByText('Nimbus Pro 16')).toBeTruthy();
+  // The header's own field still closes its list when it loses focus.
+  rerender(<SearchBox limit={6} icon={null} />);
+  fireEvent.focus(field());
+  fireEvent.blur(field());
+  expect(field().getAttribute('aria-expanded')).toBe('false');
+});

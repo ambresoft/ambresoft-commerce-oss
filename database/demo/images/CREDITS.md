@@ -58,12 +58,14 @@ Ambresoft name and logo:
 - `brand-*.png` — wordmarks of the fictional demo brands.
 - `payment-cod.png` — the cash on delivery badge.
 - `hero-*.jpg` — homepage banner artwork (desktop and `-phone` versions), composed from the CC0 product photos above.
+- `promo-audio.jpg` and `promo-audio-phone.jpg` — the homepage audio promo beside the carousel (tall and wide versions), composed from the CC0 `volta-studio-anc.jpg` photo.
+- `promo-{trail,buds,reader,watch,charger,backpack,band}.jpg` and their `-phone` versions — the homepage promotions banners, composed from the CC0 product photos above (`orbit-trail-gps`, `volta-buds-pro`, `lumo-read-paper-7`, `orbit-watch-3`, `kova-30w-charger`, `kova-commuter-backpack`, `orbit-band-5-lime`).
 - `../videos/reel-*.mp4` and their `.jpg` covers — demo reels. `reel-made-to-move` is an original animation; the others are
   short slideshows rendered from the CC0 product photos above.
 
 ## Payment logos
 
-`payment-visa.png`, `payment-mastercard.png`, `payment-amex.png`, `payment-applepay.png` and `payment-paypal.png` are
+`payment-visa.png`, `payment-mastercard.png`, `payment-amex.png` and `payment-applepay.png` are
 drawn from [Simple Icons](https://simpleicons.org) 13 (CC0-1.0). The logos are trademarks of their owners (Visa,
-Mastercard, American Express, Apple and PayPal); they are shown only to tell shoppers which payment methods a store
+Mastercard, American Express and Apple); they are shown only to tell shoppers which payment methods a store
 accepts. Remove the ones your store does not offer.

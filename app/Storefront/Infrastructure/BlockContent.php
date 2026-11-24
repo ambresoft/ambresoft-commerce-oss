@@ -969,7 +969,7 @@ final class BlockContent
             $cards[$b->id] = ['id' => (string) $b->id, 'banner' => ['settings' => $settings, 'devices' => $devices, 'products' => $products[$b->id] ?? []]];
         }
 
-        return $this->display($blocks, $this->selected($selections, $cards), ['visible_desktop', 'visible_tablet', 'height_desktop', 'height_tablet', 'autoplay_seconds', 'navigation', 'navigation_style', 'drag_scroll', 'infinite_scroll', 'full_width', 'remove_border_radius', 'preload'], $context['locale']);
+        return $this->display($blocks, $this->selected($selections, $cards), ['visible_desktop', 'visible_tablet', 'height_desktop', 'height_tablet', 'autoplay_seconds', 'navigation', 'navigation_style', 'drag_scroll', 'infinite_scroll', 'full_width', 'remove_border_radius', 'fill_height', 'preload'], $context['locale']);
     }
 
     /** Product objects inside a banner use current public catalog eligibility, never admin projections.

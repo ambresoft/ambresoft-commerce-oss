@@ -78,7 +78,7 @@ final class PaymentPageController
         return redirect()->to(URL::temporarySignedRoute('checkout.complete', now()->addDays(CheckoutController::COMPLETE_DAYS), ['order' => $this->orderOf($payment)]));
     }
 
-    /** The provider's own reference of the attempt, as appended to the return URL (PayPal `token`, Stripe `session_id`). */
+    /** The provider's own reference of the attempt, as appended to the return URL (for example Stripe `session_id`). */
     private function providerReference(Request $request): string
     {
         $token = $request->query('token', $request->query('session_id', ''));

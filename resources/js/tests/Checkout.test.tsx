@@ -274,7 +274,7 @@ it('confirms the order and offers to pay what an online method still needs', () 
             extras: [{ label: 'Floor', value: '3' }],
           },
           payment: {
-            name: 'PayPal',
+            name: 'Card payment',
             state: 'unpaid',
             instructions: '',
             pay_url: '/pay/9?signature=abc',

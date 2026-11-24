@@ -33,8 +33,46 @@ final class BannerDemoSeeder
         $this->record('banner.hero1', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero1($group), $this->artwork('hero-laptops')));
         $this->record('banner.hero2', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero2($group), $this->artwork('hero-audio')));
         $this->record('banner.hero3', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero3($group), $this->artwork('hero-phones')));
+        $this->promotions($actor, $created);
 
         return $created;
+    }
+
+    /**
+     * The homepage promotions grid: six side banners (wide product cards) and one tall centre banner, each with its own
+     * phone artwork. Tracked as banners.promo.{name} so the homepage can place them.
+     *
+     * @param  array<string, int>  $created
+     */
+    private function promotions(string $actor, array &$created): void
+    {
+        $group = $this->record('group.promotions', 'banner_groups', $created, 'groups', function () use ($actor): string {
+            $existing = DB::table('banner_groups')->whereRaw('lower(name) = ?', ['homepage promotions (sample)'])->value('id');
+
+            return $existing !== null ? (string) $existing : $this->banners->createGroup($actor, 'Homepage promotions (sample)');
+        });
+        // name, scheme, link, button colour and text colour, English then Greek: eyebrow, title, description, button.
+        $promos = [
+            ['trail', 'dark', '/wearables', '#6ee7b7', '#064e3b', ['Orbit', 'Trail GPS', 'Maps, altitude and 14 days of battery.', 'Shop now'], ['Orbit', 'Trail GPS', 'Χάρτες, υψόμετρο και 14 ημέρες μπαταρία.', 'Δείτε το']],
+            ['buds', 'dark', '/audio/earbuds', '#5eead4', '#042f2e', ['Volta', 'Buds Pro', 'Noise cancelling that fits in a pocket.', 'Shop now'], ['Volta', 'Buds Pro', 'Ακύρωση θορύβου που χωράει στην τσέπη.', 'Δείτε τα']],
+            ['reader', 'light', '/tablets/e-readers', '#059669', '#ffffff', ['Lumo', 'Read Paper 7', 'A glare-free screen for weeks of reading.', 'Shop now'], ['Lumo', 'Read Paper 7', 'Οθόνη χωρίς αντανακλάσεις για εβδομάδες διαβάσματος.', 'Δείτε το']],
+            ['watch', 'dark', '/wearables/smartwatches', '#6ee7b7', '#064e3b', ['Orbit Watch 3', 'Made to move.', 'Health, fitness and messages on your wrist.', 'Shop smartwatches'], ['Orbit Watch 3', 'Φτιαγμένο για κίνηση.', 'Υγεία, γυμναστική και μηνύματα στον καρπό σας.', 'Δείτε τα smartwatches']],
+            ['charger', 'light', '/accessories', '#16a34a', '#ffffff', ['Kova', '30W USB-C', 'Charge a phone to 50% in 30 minutes.', 'Shop now'], ['Kova', '30W USB-C', 'Φόρτιση κινητού στο 50% σε 30 λεπτά.', 'Δείτε το']],
+            ['backpack', 'dark', '/accessories/laptop-bags', '#6ee7b7', '#064e3b', ['Kova', 'Commuter pack', 'A padded home for a 16" laptop.', 'Shop now'], ['Kova', 'Commuter pack', 'Προστατευμένη θέση για laptop 16".', 'Δείτε το']],
+            ['band', 'light', '/wearables/fitness-trackers', '#4d7c0f', '#ffffff', ['Orbit', 'Band 5', 'Steps, sleep and heart rate for a week.', 'Shop now'], ['Orbit', 'Band 5', 'Βήματα, ύπνος και παλμοί για μια εβδομάδα.', 'Δείτε το']],
+        ];
+        foreach ($promos as $position => [$name, $scheme, $url, $button, $buttonText, $english, $greek]) {
+            $this->record('promo.'.$name, 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, [
+                ...$this->base($group, $position, $scheme),
+                'names' => $this->texts('Promotion – '.$english[1].' (sample)', 'Προώθηση – '.$greek[1].' (δείγμα)'),
+                'title_weight' => 'heavy', 'title_tag' => 'div', 'button_style' => 'standard', 'url' => $url,
+                'layouts' => $this->promotionLayouts($name === 'watch', $button, $buttonText),
+                'contents' => $this->contents(
+                    ['<span class="banner-title-above">'.$english[0].'</span>'.$english[1], $english[2], $english[3]],
+                    ['<span class="banner-title-above">'.$greek[0].'</span>'.$greek[1], $greek[2], $greek[3]],
+                ),
+            ], $this->artwork('promo-'.$name)));
+        }
     }
 
     /** @return array<string, mixed> New laptops: deep green artwork, white text on the left. */
@@ -94,6 +132,21 @@ final class BannerDemoSeeder
                 'button_enabled' => true, 'button_color' => $button, 'button_text_color' => $buttonText],
             'tablet' => [],
             'phone' => ['valign' => 'top', 'halign' => 'center', 'paddings' => '36px 24px', 'full_width' => true, 'title_size' => 30, 'description_size' => 15],
+        ];
+    }
+
+    /**
+     * Side banners: text on the left over the artwork's open side; the tall centre one: centred under the picture.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private function promotionLayouts(bool $tall, string $button, string $buttonText): array
+    {
+        return [
+            'pc' => [...$this->layout(), 'valign' => $tall ? 'bottom' : 'center', 'halign' => $tall ? 'center' : 'left', 'paddings' => $tall ? '40px 6% 80px 6%' : '40px 48% 40px 6%',
+                'title_size' => $tall ? 64 : 60, 'description_size' => $tall ? 30 : 28, 'button_enabled' => true, 'button_color' => $button, 'button_text_color' => $buttonText],
+            'tablet' => [],
+            'phone' => ['valign' => 'top', 'halign' => 'center', 'paddings' => '32px 24px', 'full_width' => true, 'title_size' => 30, 'description_size' => 15],
         ];
     }
 

@@ -1314,7 +1314,7 @@ export function Collection({
   return (
     <div
       style={style}
-      className={`sf-carousel-wrap ${carousel && display.hide_arrows_mobile ? 'sf-hide-arrows-mobile' : ''} sf-nav-${carousel ? navigation : 'none'} ${kind === 'menu' ? `sf-menu-carousel ${menuCards ? 'sf-menu-cards' : block.template === 'menu_tiles_carousel' ? 'sf-menu-tiles' : 'sf-menu-circles'}` : ''} ${kind === 'banner' && display.full_width ? 'sf-banners-full' : ''} ${kind === 'banner' && (display.full_width || display.remove_border_radius) ? 'sf-banners-square' : ''}`}
+      className={`sf-carousel-wrap ${carousel && display.hide_arrows_mobile ? 'sf-hide-arrows-mobile' : ''} sf-nav-${carousel ? navigation : 'none'} ${kind === 'menu' ? `sf-menu-carousel ${menuCards ? 'sf-menu-cards' : block.template === 'menu_tiles_carousel' ? 'sf-menu-tiles' : 'sf-menu-circles'}` : ''} ${kind === 'banner' && display.full_width ? 'sf-banners-full' : ''} ${kind === 'banner' && display.fill_height ? 'sf-banners-fill' : ''} ${kind === 'banner' && (display.full_width || display.remove_border_radius) ? 'sf-banners-square' : ''}`}
       onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -1400,6 +1400,7 @@ export function Collection({
                   tablet: display.height_tablet,
                 }}
                 banner={item.banner}
+                fill={display.fill_height}
                 eager={
                   display.preload === 'all' ||
                   (display.preload === 'first' && item.id === items[0]?.id)

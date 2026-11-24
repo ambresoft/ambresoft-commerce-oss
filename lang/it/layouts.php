@@ -63,4 +63,7 @@ return array_replace(require __DIR__.'/../en/layouts.php', [
     'template_reel_carousel' => 'Carosello di reels',
     'template_reel_single' => 'Reel singolo',
     'source_most_viewed' => 'Reels più visti',
+    'css_class_hint' => 'Integrata: sf-flush-top colloca il primo blocco della pagina subito sotto l\'intestazione, senza spazio sopra.',
+    'fill_height' => 'Riempi l\'altezza della griglia',
+    'fill_height_help' => 'Su desktop il banner cresce fino all\'altezza completa della griglia, ad esempio un banner alto accanto a due banner impilati. Sui telefoni mantiene la propria forma.',
 ]);

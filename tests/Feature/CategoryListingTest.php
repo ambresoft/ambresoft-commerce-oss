@@ -358,9 +358,9 @@ final class CategoryListingTest extends TestCase
     {
         $type = app(StorefrontRegistry::class)->type('main_content');
         $defaults = $type->validate([]);
-        self::assertSame([3, 24, 'recommended', true, true, false, false, false], [$defaults['products_per_row'], $defaults['products_per_page'], $defaults['default_sort'], $defaults['show_sorting'], $defaults['show_count'], $defaults['show_brand'], $defaults['show_category'], $defaults['show_variations']]);
+        self::assertSame([3, 24, 'recommended', true, true, false, false, true], [$defaults['products_per_row'], $defaults['products_per_page'], $defaults['default_sort'], $defaults['show_sorting'], $defaults['show_count'], $defaults['show_brand'], $defaults['show_category'], $defaults['show_variations']]);
         self::assertSame(5, $type->validate(['products_per_row' => 5])['products_per_row']);
-        self::assertSame('2', $defaults['mobile_products_per_row']);
+        self::assertSame('1', $defaults['mobile_products_per_row']);
         self::assertSame('2', $defaults['tablet_products_per_row']);
         self::assertSame('3', $type->validate(['tablet_products_per_row' => '3'])['tablet_products_per_row']);
         self::assertSame('1', $type->validate(['mobile_products_per_row' => '1'])['mobile_products_per_row']);
@@ -400,10 +400,9 @@ final class CategoryListingTest extends TestCase
         self::assertSame(['Old five stars', 'Three stars', 'Not reviewed', 'Sold out five stars'], array_column($first['items'], 'name'));
         self::assertSame(['Sold out five stars', 'Old five stars', 'Three stars', 'Not reviewed'], $this->names($this->listing('sort=rating')));
 
-        // The card carries its category; the block shows it, and the variations, only when asked (both off by default).
+        // The card carries its category; the block shows it only when asked, the variations unless switched off.
         self::assertSame(['name' => 'Smartphones', 'url' => '/tech/phones/smartphones'], $first['items'][0]['category']);
-        self::assertSame([false, false], [$first['display']['show_category'], $first['display']['show_variations']]);
-        self::assertArrayNotHasKey('variants', $first['items'][0]);
+        self::assertSame([false, true], [$first['display']['show_category'], $first['display']['show_variations']]);
         self::assertArrayNotHasKey('brand_link', $first['items'][0]);
         DB::table('products')->where('id', $old)->update(['brand_id' => $this->brand('apple', 'Apple')]);
         $group = DB::table('variation_groups')->insertGetId(['name' => 'Colours', 'created_at' => now(), 'updated_at' => now()]);

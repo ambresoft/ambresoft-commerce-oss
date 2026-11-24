@@ -233,6 +233,31 @@
 .sf-single {
   display: block;
 }
+/* A banner block set to fill its grid's height: on desktop its grid stretches to the row (beside stacked blocks) and
+   every wrapper down to the banner passes that height on; the banner then grows its design to fit. */
+@media (min-width: 1024px) {
+  .sf-grid:has(> .sf-block .sf-banners-fill) {
+    display: flex;
+    flex-direction: column;
+  }
+  .sf-block:has(> .sf-banners-fill) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+  .sf-banners-fill {
+    flex: 1;
+  }
+  .sf-banners-fill > .sf-items,
+  .sf-banners-fill .sf-item,
+  .sf-banners-fill .sf-banner,
+  .sf-banners-fill .sf-banner > a {
+    height: 100%;
+  }
+  .sf-banners-fill .sf-banner > a {
+    display: block;
+  }
+}
 .sf-banner-items.sf-carousel .sf-item {
   flex: 0 0 calc((100% - (var(--sf-vis, 1) - 1) * 20px) / var(--sf-vis, 1));
 }
@@ -547,6 +572,10 @@
 }
 .sf-banner-items ~ .sf-arrow {
   top: 50%;
+}
+/* Category tiles are square pictures with a name under them, whatever the image height setting: centre on the picture. */
+.sf-category-items.sf-sized:not(.sf-brand-items) ~ .sf-arrow {
+  top: calc(50% - 16px);
 }
 .sf-nav-outside .sf-arrow-prev,
 .sf-nav-inside .sf-arrow-prev {
@@ -2165,6 +2194,13 @@
   color: #555;
   font-size: 14px;
 }
+/* The four units stay one even row; on narrow boxes the row moves under the label instead of splitting 2 + 2. */
+.sf-pdp-countdown-units {
+  flex: 1 1 220px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
 .sf-pdp-countdown-unit {
   display: grid;
   justify-items: center;
@@ -2179,14 +2215,14 @@
 .sf-pdp-priceline {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
 }
 .sf-pdp-qty {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
-  margin-left: auto;
   border: 1px solid var(--sf-pdp-line);
   border-radius: 999px;
 }
@@ -2218,20 +2254,35 @@
 .sf-pdp-was {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
   margin: 0;
-  font-size: 17px;
-  color: #666;
+  font-size: 16px;
+  color: #7a8583;
 }
 .sf-pdp-was del .sf-money {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 400;
-  color: var(--sf-sale, #ff3d47);
+  color: inherit;
 }
-.sf-pdp-was span .sf-money {
-  font-size: 17px;
+/* The same yellow percentage badge as the product cards. */
+.sf-pdp-off {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #ffc53d;
+  color: #1a1a1a;
+  font-size: 14px;
+  font-weight: 800;
+}
+.sf-pdp-saved {
+  margin: 0;
+  font-size: 15px;
   font-weight: 600;
+  color: color-mix(in srgb, var(--sf-primary, #05ab7d) 75%, #000);
+}
+.sf-pdp-saved .sf-money {
+  font-size: inherit;
+  font-weight: inherit;
   color: inherit;
 }
 .sf-price-net {
@@ -2249,14 +2300,14 @@
   margin: 0;
   line-height: 1;
 }
+/* Stock, shipping and returns: an icon list between two thin lines. */
 .sf-pdp-facts {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   margin: 0;
-  padding: 16px;
+  padding: 16px 0;
   list-style: none;
-  border-radius: 12px;
-  background: var(--sf-pdp-soft);
+  border-block: 1px solid var(--sf-pdp-line);
   font-size: 15px;
 }
 .sf-pdp-facts li {
@@ -2264,18 +2315,35 @@
   align-items: center;
   gap: 10px;
 }
-.sf-pdp-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--sf-primary, #05ab7d);
+.sf-pdp-facts svg {
+  flex-shrink: 0;
+  color: var(--sf-primary, #05ab7d);
 }
-.sf-pdp-facts .is-out .sf-pdp-dot {
-  background: var(--sf-sale, #ff3d47);
+.sf-pdp-facts .is-out svg {
+  color: var(--sf-sale, #ff3d47);
 }
 .sf-pdp-facts .is-in {
   font-weight: 600;
+  color: color-mix(in srgb, var(--sf-primary, #05ab7d) 75%, #000);
+}
+/* Beside the price: a soft box with white square buttons (below it on the narrowest phones). */
+.sf-pdp-priceline .sf-pdp-qty {
+  gap: 4px;
+  padding: 6px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--sf-pdp-soft, #f3f5f4);
+}
+.sf-pdp-priceline .sf-pdp-qty button {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
   color: var(--sf-primary, #05ab7d);
+}
+.sf-pdp-priceline .sf-pdp-qty output {
+  min-width: 34px;
 }
 .sf-pdp-add {
   display: inline-flex;
@@ -3247,7 +3315,7 @@ button.sf-pdp-pill {
     display: none;
   }
   .sf-pdp-now .sf-money {
-    font-size: 36px;
+    font-size: 28px;
   }
   .sf-pdp-highlights ul {
     grid-auto-columns: calc((100% - 10px) / 2);
@@ -6701,14 +6769,21 @@ a.sf-menu-tile:hover {
   .sf-chead-search {
     order: 3;
     flex-basis: 100%;
+    min-width: 0;
   }
   .sf-chead-search .sf-search {
     order: 0;
     flex: 1 1 auto;
   }
+  /* The logo takes the room the buttons leave and scales down, so the first row never wraps. */
+  .sf-chead .sf-logo {
+    flex: 1 1 0;
+    min-width: 0;
+  }
   .sf-chead .sf-logo img {
     max-height: 36px;
-    max-width: 130px;
+    max-width: min(130px, 100%);
+    height: auto;
   }
   .sf-chead-pill {
     height: 38px;
@@ -6718,6 +6793,20 @@ a.sf-menu-tile:hover {
   .sf-chead-icon-cart .sf-header-cart {
     width: 38px;
     height: 38px;
+  }
+}
+@media (max-width: 379px) {
+  .sf-chead-end {
+    gap: 6px;
+  }
+  .sf-chead-pill {
+    height: 34px;
+    padding: 0 8px;
+  }
+  .sf-chead-icon,
+  .sf-chead-icon-cart .sf-header-cart {
+    width: 34px;
+    height: 34px;
   }
 }
 
@@ -8171,6 +8260,10 @@ a.sf-menu-tile:hover {
 }
 /* The checkout header sits flush under the window's top edge. */
 .sf-main:has(> .sf-grid-row:first-child .sf-co-header) {
+  padding-top: 0;
+}
+/* Block CSS class "sf-flush-top": the page's first block (a hero banner, say) sits right under the header, with no gap. */
+.sf-main:has(> .sf-grid-row:nth-child(1 of .sf-grid-row) .sf-flush-top) {
   padding-top: 0;
 }
 /* Beats `.sf-default a`. */
@@ -9651,17 +9744,22 @@ a.sf-menu-tile:hover {
   --sf-search-head-height: 156px;
   position: fixed;
   inset: 0;
+  /* The visible part of the screen (above an open keyboard), kept up to date by the overlay; full height without it. */
+  top: var(--sf-search-top, 0px);
+  bottom: auto;
   width: 100vw;
   max-width: none;
   height: 100vh;
-  height: 100dvh;
+  height: var(--sf-search-height, 100dvh);
   max-height: none;
   margin: 0;
   padding: 0;
   border: 0;
   background: #fff;
   color: #222;
-  overflow-y: auto;
+  /* Only the results scroll; a drag elsewhere never moves the page underneath. */
+  overflow: hidden;
+  overscroll-behavior: contain;
 }
 .sf-fashion-search::backdrop {
   background: #fff;
@@ -9689,6 +9787,8 @@ a.sf-menu-tile:hover {
   font-weight: 500;
 }
 .sf-fashion-search .sf-search {
+  /* Static, so the results panel is placed against the whole overlay. */
+  position: static;
   flex: 1;
   min-width: 0;
   width: 100%;
@@ -9711,13 +9811,15 @@ a.sf-menu-tile:hover {
   flex-shrink: 0;
 }
 .sf-fashion-search .sf-suggest {
-  position: fixed;
+  position: absolute;
   inset-inline: clamp(24px, 5.5vw, 80px);
   top: calc(
     var(--sf-search-head-height) + env(safe-area-inset-top, 0px) + 16px
   );
   bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   max-height: none;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   align-content: start;
   padding: 0;
   border-radius: 0;
@@ -9784,6 +9886,7 @@ a.sf-menu-tile:hover {
     text-align: start;
   }
   .sf-mobile-search-trigger span {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -10992,5 +11095,72 @@ a.sf-menu-tile:hover {
   }
   .sf-pdp-options .sf-pdp-option-media {
     flex-shrink: 0;
+  }
+}
+
+/* Two cards per row on phones: tighter padding and smaller type so names and prices fit the narrow card. */
+@media (max-width: 767px) {
+  .sf-listing-grid[data-mobile-columns='2'] {
+    gap: 8px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-product {
+    padding: 6px;
+    border-radius: 12px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-product-showcase {
+    padding: 0;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-showcase-body {
+    gap: 2px;
+    padding: 8px 8px 10px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-product h3 {
+    min-height: 2.7em;
+    margin: 6px 0 0;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-card-category,
+  .sf-listing-grid[data-mobile-columns='2'] .sf-card-rating {
+    font-size: 11px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-product .sf-stars svg {
+    width: 12px;
+    height: 12px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-showcase-prices del .sf-money {
+    font-size: 12px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-showcase-price .sf-money {
+    font-size: 17px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-showcase-drop {
+    font-size: 12px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-showcase-badge {
+    padding: 2px 6px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-product .sf-card-heart,
+  .sf-listing-grid[data-mobile-columns='2'] .sf-product .sf-card-compare {
+    top: 6px;
+    right: 6px;
+    width: 32px;
+    height: 32px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-product .sf-card-heart svg,
+  .sf-listing-grid[data-mobile-columns='2'] .sf-product .sf-card-compare svg {
+    width: 18px;
+    height: 18px;
+  }
+  .sf-listing-grid[data-mobile-columns='2']
+    .sf-product
+    .sf-card-heart
+    + .sf-card-compare {
+    top: 42px;
+  }
+  .sf-listing-grid[data-mobile-columns='2'] .sf-showcase-cart {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px 0 0 0;
   }
 }

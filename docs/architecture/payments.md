@@ -1,7 +1,7 @@
 # Payments — Phase 10
 
 The `Payment` context owns payment methods, their configuration and the money recorded against orders. Payment state
-is independent of the order (fulfilment) status. Cash on delivery is core; Stripe Checkout is a bundled first-party add-on; PayPal is a separately distributed add-on (A160);
+is independent of the order (fulfilment) status. Cash on delivery is core; Stripe Checkout is a bundled first-party add-on;
 other providers are add-ons using the same contract ([add-on developer guide](../addons.md)). Decision A86.
 
 ## Adaptation to the current order lifecycle
@@ -13,7 +13,7 @@ same operations:
   configured, owner add-on enabled, supporting the order currency). The order stores the method and its name at that time.
 - **Offline methods** (cash on delivery, the example bank transfer): placing the order records no payment. Staff
   record the money when it is actually collected (`orders.payments`).
-- **Redirect methods** (PayPal): staff share a signed **customer payment link** (`/pay/{order}`, 30 days). The page
+- **Redirect methods** (Stripe Checkout): staff share a signed **customer payment link** (`/pay/{order}`, 30 days). The page
   shows only the store, order number, amount due and method, and offers "Pay". The server opens a provider payment for
   the outstanding server-calculated amount and sends the customer to the provider; the return URL triggers a
   server-side capture and verification. A future storefront checkout will call the same `OrderPayments` operations.
@@ -63,8 +63,8 @@ recorded money.
 
 - Amounts and currency are calculated on the server (outstanding = total − captured, bcmath). Browser-submitted amounts,
   return URLs or "success" parameters are never trusted.
-- Every capture is verified server-side by the method (PayPal: capture status, amount, currency and our reference in
-  `custom_id`) and again by `OrderPayments` (amount/currency equal to the attempt, capture reference present and unique).
+- Every capture is verified server-side by the method (Stripe: session status, amount, currency and our reference in
+  `client_reference_id`) and again by `OrderPayments` (amount/currency equal to the attempt, capture reference present and unique).
   Anything else is recorded as `failed` (`verification_failed`, `duplicate_capture`) and logged without payload.
 - Duplicate protection: one open attempt per order; an atomic claim (`UPDATE … WHERE state = 'created'`) before every
   capture, taken over only when stale (2 minutes); provider idempotency keys (`cms-create-{reference}`,
@@ -91,30 +91,9 @@ each language, multi-line, up to 500 characters, then it is enabled). Both have 
 language, display order, enabled state and optional status after payment. Choosing either never marks an order paid;
 staff record the payment once the money (cash or deposit) has arrived. Neither is an add-on.
 
-## PayPal (separately distributed add-on `ambresoft/paypal`)
-
-Not part of this repository (A160); upload its ZIP in **Add-ons**. Behaviour:
-
-
-- Orders v2 server-side redirect flow: `POST /v2/checkout/orders` (intent `CAPTURE`, one purchase unit with
-  `reference_id`/`custom_id` = attempt reference, `payment_source.paypal.experience_context` with return/cancel URLs,
-  `PAY_NOW`, `NO_SHIPPING`, store brand name) → `payer-action` link → return → `POST …/{id}/capture` → verification.
-  Declines (`INSTRUMENT_DECLINED`) are failed attempts the customer can retry with a new PayPal order; `ORDER_NOT_APPROVED`
-  keeps the attempt open; `ORDER_ALREADY_CAPTURED` reads the order instead of capturing again.
-- Settings: environment (Sandbox default; Live only when selected), client ID, client secret (secret). Saving changed
-  credentials verifies them with an OAuth token request; the method can be enabled only afterwards.
-- Supported currencies follow PayPal's list; amounts are sent only when exactly representable (HUF/JPY/TWD without
-  decimals), so a shop currency with more decimals than PayPal allows makes PayPal unavailable instead of rounding.
-- Activation: the add-on (Add-ons) and the payment method (Payment methods) are separate switches. Default after
-  uploading: add-on installed and disabled; method disabled until configured.
-
-Configure: Add-ons → PayPal → Enable; Payment methods → PayPal → Sandbox, client ID and secret of a PayPal REST app
-(developer.paypal.com → Apps & Credentials) → Save (verifies) → Enabled. Test with sandbox buyer accounts; switch to Live
-with live credentials when ready.
-
 ## Stripe Checkout (bundled add-on `ambresoft/stripe-checkout`)
 
-Stripe's hosted Checkout Sessions for one-time payments, confirmed by signed webhooks through the provider-neutral webhook path described in [Stripe Checkout](stripe-checkout.md) (A93): `HandlesPaymentWebhooks` (signature verification and event translation by the method), `payment_webhook_events` (one row per verified event ID), `PaymentWebhooks` and `OrderPayments::applyProviderResult` (once-only settlement, late-money recording). `ExpiresProviderPayments` lets a method end an old provider session when the CMS cancels or replaces an attempt. Return URLs carry the provider reference as `token` (PayPal) or `session_id` (Stripe); a provider that cannot append it to the cancel URL relies on the signed URL alone.
+Stripe's hosted Checkout Sessions for one-time payments, confirmed by signed webhooks through the provider-neutral webhook path described in [Stripe Checkout](stripe-checkout.md) (A93): `HandlesPaymentWebhooks` (signature verification and event translation by the method), `payment_webhook_events` (one row per verified event ID), `PaymentWebhooks` and `OrderPayments::applyProviderResult` (once-only settlement, late-money recording). `ExpiresProviderPayments` lets a method end an old provider session when the CMS cancels or replaces an attempt. Return URLs carry the provider reference (for example Stripe's `session_id`); a provider that cannot append it to the cancel URL relies on the signed URL alone.
 
 ## Permissions
 
@@ -125,7 +104,7 @@ roles via `cms:permissions-sync --grant-commerce-defaults`).
 ## Limitations
 
 Refunds, voiding of recorded manual payments,
-partial captures, PayPal webhooks (PayPal pending captures are resolved by "Check status"; Stripe uses webhooks), payment emails/variables, or payment
+partial captures, payment emails/variables, or payment
 status in the order list. Additional providers, saved cards and recurring payments are out of scope.
 
 ## Method images

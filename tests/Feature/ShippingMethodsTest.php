@@ -171,7 +171,7 @@ final class ShippingMethodsTest extends TestCase
         self::assertSame([], Storage::disk('local')->allFiles());
 
         // Created together with its image (multipart).
-        $method = $this->method(['image' => $this->png('acs.png')]);
+        $method = $this->method(['image' => $this->png('carrier.png')]);
         $media = DB::table('shipping_methods')->where('id', $method)->value('image_media_id');
         self::assertNotNull($media);
         $this->get('/admin/shipping-methods/'.$method.'/edit')->assertInertia(fn (Assert $page) => $page->where('method.image.meta.width', 1));

@@ -63,4 +63,7 @@ return array_replace(require __DIR__.'/../en/layouts.php', [
     'template_reel_carousel' => 'Carrousel de reels',
     'template_reel_single' => 'Reel unique',
     'source_most_viewed' => 'Reels les plus vus',
+    'css_class_hint' => 'Intégrée : sf-flush-top place le premier bloc de la page juste sous l\'en-tête, sans espace au-dessus.',
+    'fill_height' => 'Remplir la hauteur de la grille',
+    'fill_height_help' => 'Sur ordinateur, la bannière occupe toute la hauteur de sa grille, par exemple une grande bannière à côté de deux bannières empilées. Sur mobile, elle garde sa propre forme.',
 ]);

@@ -136,7 +136,7 @@ Throw `ShippingProviderRejected(reason, message)` when the carrier refused (the 
 `ShippingProviderUnavailable` when the outcome is unknown (timeouts, unreadable answers). Weights reach you in kg;
 amounts as exact decimal strings. The CMS stores settings and accounts (secrets encrypted, never sent to the
 browser), renders all forms, prevents duplicate shipments, applies order statuses once and records everything; your
-provider never writes order or shipping data. The ACS Courier add-on (`ambresoft/acs-courier`, distributed separately from the CMS) is a complete example.
+provider never writes order or shipping data.
 
 ## Extension point: search providers
 

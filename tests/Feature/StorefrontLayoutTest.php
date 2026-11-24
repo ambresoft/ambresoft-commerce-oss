@@ -569,8 +569,8 @@ final class StorefrontLayoutTest extends TestCase
         $this->save($layout);
         $display = $this->rendered()['regions']['content'][0]['blocks'][0]['content']['display'];
         self::assertSame([false, false], [$display['show_favorites'], $display['card_shadow']]);
-        // Reviews: off by default; cards carry the average and count of approved reviews only, from one grouped query.
-        self::assertFalse($display['show_rating']);
+        // Reviews: on by default; cards carry the average and count of approved reviews only, from one grouped query.
+        self::assertTrue($display['show_rating']);
         $customer = DB::table('customers')->insertGetId(['email' => 'rev@example.test', 'first_name' => 'Rev', 'last_name' => 'Iewer', 'status' => 'active', 'created_at' => now(), 'updated_at' => now()]);
         $other = DB::table('customers')->insertGetId(['email' => 'rev2@example.test', 'first_name' => 'Rev', 'last_name' => 'Two', 'status' => 'active', 'created_at' => now(), 'updated_at' => now()]);
         foreach ([[$customer, 5, 'approved'], [$other, 4, 'approved']] as [$who, $stars, $status]) {
@@ -899,11 +899,20 @@ final class StorefrontLayoutTest extends TestCase
         self::assertSame(['Deals of the week', 'Laptops for every need', 'Customer favourites', 'Our brands', 'From the blog'], DB::table('storefront_blocks')->whereIn('name', ['Deals of the week', 'Laptops for every need', 'Customer favourites', 'Our brands', 'From the blog'])->join('storefront_placements', 'storefront_placements.block_id', '=', 'storefront_blocks.id')->join('storefront_grids', 'storefront_grids.id', '=', 'storefront_placements.grid_id')->orderBy('storefront_grids.row')->pluck('name')->all());
         // Every homepage block shows content: banners, deals, laptops, favourites, brands and blog posts.
         Cache::flush();
-        $blocks = collect($this->rendered()['regions']['content'])->flatMap(fn (array $grid): array => $grid['blocks'])->keyBy('title');
+        $all = collect($this->rendered()['regions']['content'])->flatMap(fn (array $grid): array => $grid['blocks']);
+        $blocks = $all->keyBy('title');
         foreach (['Deals of the week', 'Laptops for every need', 'Customer favourites', 'Our brands', 'From the blog', 'New arrivals'] as $title) {
             self::assertNotEmpty($blocks[$title]['content']['items'] ?? [], $title);
         }
-        self::assertNotEmpty(collect($blocks)->firstWhere('template', 'banner_carousel')['content']['items'] ?? []);
+        // The hero shows its own group; the promotions row: two carousels and a single banner either side, a tall one between.
+        foreach ($all->whereIn('template', ['banner_carousel', 'banner_single']) as $banners) {
+            self::assertNotEmpty($banners['content']['items'] ?? []);
+        }
+        self::assertSame(['banner_carousel', 'banner_single', 'banner_single', 'banner_carousel', 'banner_single'], DB::table('storefront_blocks')->where('name', 'like', 'Promotions%')
+            ->join('storefront_placements', 'storefront_placements.block_id', '=', 'storefront_blocks.id')->join('storefront_grids', 'storefront_grids.id', '=', 'storefront_placements.grid_id')
+            ->orderBy('storefront_grids.position')->orderBy('storefront_placements.position')->pluck('template')->all());
+        self::assertSame(1, DB::table('storefront_grids')->whereIn('id', DB::table('storefront_placements')->whereIn('block_id', DB::table('storefront_blocks')->where('name', 'like', 'Promotions%')->select('id'))->select('grid_id'))->distinct()->count('row'));
+        self::assertTrue($all->firstWhere('content.display.fill_height', true)['template'] === 'banner_single');
         // Rerunning keeps the account (and its password) and creates nothing twice.
         $this->artisan('cms:demo-store', ['--with-admin' => true, '--email' => 'demo@example.com'])->expectsOutputToContain('already exists')->assertSuccessful();
         self::assertSame(1, UserRecord::where('email', 'demo@example.com')->count());

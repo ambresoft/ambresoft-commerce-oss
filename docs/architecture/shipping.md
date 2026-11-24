@@ -1,8 +1,8 @@
 # Shipping methods, carriers and shipments — Phase 11
 
 The `Shipping` context owns shipping methods, their rates, carrier configuration (settings and named accounts) and
-the carrier shipments of orders. Carriers are add-ons implementing one provider contract; ACS Courier is the first,
-`ambresoft/acs-courier`, a paid add-on distributed separately and installed by ZIP upload (A146). Decisions A89 (shipping) and A90 (ACS Courier).
+the carrier shipments of orders. Carriers are add-ons implementing one provider contract (see the [add-on developer guide](../addons.md)), installed by ZIP
+upload. Decision A89.
 
 ## Adaptation to the current order lifecycle
 
@@ -105,64 +105,8 @@ account identifiers, tracking events and carrier documents.
 The Carriers page is visible with either `shipping-carriers.manage` or `orders.shipments`. Reference roles: store
 admin gets shipping-methods view/manage and `orders.shipments`; order manager gets `orders.shipments`.
 
-## ACS Courier (add-on `ambresoft/acs-courier`, installed separately)
-
-Implements every capability against the ACS Web Services (specification "ACS Rest API Web Services", April 2026):
-`POST https://webservices.acscourier.net/ACSRestServices/api/ACSAutoRest` with `{"ACSAlias", "ACSInputParameters"}`,
-the account's API key in the `ACSApiKey` header and `Company_ID`, `Company_Password`, `User_ID`, `User_Password` in
-every call.
-
-- **Errors**: HTTP 403 = API key refused; 406 = more than 10 calls per second (calls are throttled to 8/s per key);
-  other HTTP 200 answers are successful only when `ACSExecution_HasError` is false and the operation has no
-  `Error_Message`. Read-only calls are retried once on timeouts, 406 and 5xx; voucher creation, deletion and pickup
-  lists are never retried automatically. Logs (`acs_call`) contain the alias, account ID, status, duration and outcome —
-  never inputs, credentials or keys.
-- **Prices** (`ACS_Price_Calculation`): Greece only — ACS cannot price Cyprus or abroad, so those destinations get no
-  quote (never a guessed one). Origin station = the two letters of the billing code; destination station from
-  `ACS_Area_Find_By_Zip_Code` (town matched against the area names, cached a day per account and postcode), else
-  `ACS_Address_Validation` for Greek addresses, else "destination ambiguous". `REM` is added for inaccessible areas
-  (ΔΠ), `COD` when the order's payment method is the configured COD method. Weight: product weights when enabled and
-  known, otherwise the default weight; minimum 0.5 kg; above 100 kg no online price. Net and VAT amounts come from
-  `Total_Ammount` and `Total_Vat_Ammount`.
-- **Vouchers** (`ACS_Create_Voucher`): Greece only (Cyprus needs content declarations, not supported). Fields:
-  recipient, company, street and number (split only when the address line clearly contains a number), postcode,
-  area, mobile/landline (Greek numbers, 69… = mobile), email, weight 0.5–999 kg, parcels 1–99 (explicit; the
-  additional parcel numbers come from `ACS_Get_Multipart_Vouchers`), pickup date (not past, not Sunday), cash on
-  delivery of the outstanding amount (EUR orders; cash or cheque) and delivery notes (≤ 250 characters, prefilled from
-  the customer note if configured). `Reference_Key1` = order number, `Reference_Key2` = `order-{id}`,
-  `Charge_Type` 2, `Acs_Station_Branch_Destination` 1 as in the specification's example.
-- **Labels** `ACS_Print_Voucher` (laser A4 = 2, thermal = 1); **delete** `ACS_Delete_Voucher` (ACS refuses after the
-  pickup list); **pickup lists** `ACS_Issue_Pickup_List` (ACS refuses while vouchers of the day are unprinted; the
-  blocking vouchers are listed with their orders), `ACS_Get_Pickup_Lists`, `ACS_Pickup_List_Display_Voucher`,
-  `ACS_Print_Pickup_List`.
-- **Tracking** `ACS_Trackingsummary` + `ACS_TrackingDetails`: status 4 with `delivery_flag` 1 = delivered; 6 =
-  returning; 7 with `returned_flag` 1 = returned; a non-delivery reason code = exception; otherwise in transit or
-  created. Nothing else is inferred.
-
-### Configuring ACS (two accounts)
-
-1. **Add-ons** → Upload `acs-courier-<version>.zip`, then enable ACS Courier (an upload installs it disabled). Disabling it later keeps methods,
-   accounts and shipments; its methods are simply not offered.
-2. **Shipping & Taxes → Carriers → ACS Courier → General settings**: default weight, calculate product weight, COD
-   payment method, order status after the voucher is created, delivered and returned statuses, shipment notes.
-3. **Accounts → Add account** for each ACS contract, e.g. "Athens store" and "Thessaloniki warehouse": account name,
-   Company ID, Company password, ACS username (`User_ID`), ACS password (`User_Password`), Billing code
-   (`Billing_Code`), API key (`ACSApiKey`). Secrets are stored encrypted and never shown again; leave them empty to keep
-   them. **Test connection** performs a harmless read with the account.
-4. **Shipping & Taxes → Shipping methods → New**: real-time carrier rates, carrier ACS Courier, the account to use,
-   gross or net price, surcharge, taxes, optional areas/payment methods/customer groups → enable. A manual-rate method
-   may also choose ACS and an account to create vouchers while charging its own rates.
-
-### Daily workflow
-
-Order page → **Shipping** card → *Create voucher* (check the prefilled fields) → *Print voucher* (laser or thermal) →
-at the end of the day **Carriers → Pickup lists** → account and date → *Issue pickup list* (print unprinted vouchers
-first) → *Print*. Use *Update tracking* on the order to read ACS tracking; delivered/returned statuses apply once.
-*Delete voucher* works until the voucher is on a pickup list. If a creation was interrupted, check at ACS and use
-*Mark as failed* before trying again.
-
 ## Limitations
 
 No storefront checkout or customer method choice; no carrier webhooks or scheduled tracking (staff refresh); no
 public tracking page or link; no pickup-point/locker selection; packaging boxes are not used to split parcels;
-other carriers are not included.
+no carrier is bundled.
