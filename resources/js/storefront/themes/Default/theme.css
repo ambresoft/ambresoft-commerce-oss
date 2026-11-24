@@ -6901,169 +6901,447 @@ a.sf-menu-tile:hover {
   }
 }
 
-/* Order tracking: the lookup form, then the order's status card with its history. */
+/* Order tracking: a hero with the lookup, then the order's live status card and its history (or a clear next step). */
 .sf-track {
+  --sf-track-green: var(--sf-primary, #05ab7d);
   display: grid;
-  gap: 16px;
-  max-width: 720px;
+  gap: 24px;
+  max-width: 880px;
+  margin: 8px auto 48px;
 }
-.sf-track h1 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 700;
+.sf-track svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.sf-track-hero {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 48px 32px 36px;
+  overflow: hidden;
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at 85% 10%,
+      color-mix(in srgb, var(--sf-track-green) 22%, transparent),
+      transparent 45%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--sf-track-green) 12%, #fff),
+      #fff 70%
+    );
+  border: 1px solid color-mix(in srgb, var(--sf-track-green) 18%, #fff);
+  text-align: center;
+}
+.sf-track-hero > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.sf-track-hero-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: var(--sf-track-green);
+  color: var(--sf-on-primary, #fff);
+  box-shadow: 0 12px 28px
+    color-mix(in srgb, var(--sf-track-green) 35%, transparent);
+}
+.sf-track-hero-icon svg {
+  width: 32px;
+  height: 32px;
+}
+.sf-track-hero h1 {
+  margin: 8px 0 0;
+  font-weight: 800;
+  font-size: clamp(28px, 4vw, 40px);
+  letter-spacing: -0.02em;
 }
 .sf-track-intro {
+  max-width: 560px;
   margin: 0;
-  color: #555;
+  color: #4b5563;
+  font-size: 17px;
 }
 .sf-track-form {
-  display: grid;
-  gap: 8px;
-  padding: 20px;
-  border: 1px solid var(--sf-pdp-line, #e6e6e6);
-  border-radius: 16px;
-  background: #fff;
+  justify-self: stretch;
+  width: 100%;
+  margin-inline: auto;
+  max-width: 600px;
+  margin-top: 12px;
 }
-.sf-track-form label {
-  font-size: 14px;
-  font-weight: 600;
-}
-.sf-track-form div {
+.sf-track-field {
   display: flex;
+  align-items: center;
   gap: 8px;
+  padding: 6px 6px 6px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgb(15 23 42 / 0.08);
+  color: #6b7280;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
-.sf-track-form input {
+.sf-track-field:focus-within {
+  border-color: var(--sf-track-green);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--sf-track-green) 22%, transparent),
+    0 14px 34px rgb(15 23 42 / 0.08);
+}
+.sf-track-field input {
   flex: 1;
   min-width: 0;
-  height: 46px;
-  padding: 0 14px;
-  border: 1px solid #d9d9e0;
-  border-radius: 10px;
+  height: 48px;
+  border: 0;
+  background: transparent;
+  color: var(--sf-text, #333);
   font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
-.sf-track-form input:focus {
-  border-color: var(--sf-primary, #05ab7d);
-  outline: 2px solid var(--sf-primary, #05ab7d);
-  outline-offset: -1px;
+.sf-track-field input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+  letter-spacing: 0;
 }
-.sf-track-form button,
-.sf-track .sf-track-login,
-.sf-track .sf-track-account {
+.sf-track-field input:focus {
+  outline: none;
+}
+.sf-track-field button,
+.sf-track-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 0 22px;
+  min-height: 48px;
+  padding: 0 28px;
   border: 0;
-  border-radius: 10px;
-  background: var(--sf-primary, #05ab7d);
+  border-radius: 999px;
+  background: var(--sf-track-green);
   color: var(--sf-on-primary, #fff);
+  font: inherit;
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.2s;
 }
-.sf-track-form button:hover,
-.sf-track .sf-track-login:hover,
-.sf-track .sf-track-account:hover {
-  background: var(--sf-primary-hover, #048c66);
+.sf-track-field button:hover,
+.sf-track-button:hover {
+  background: var(--sf-primary-hover, #079c72);
 }
-.sf-track-message {
-  display: grid;
-  justify-items: start;
-  gap: 12px;
-  margin: 0;
-  padding: 16px 20px;
-  border-radius: 12px;
-  background: #eef7f3;
+.sf-track-field button:active,
+.sf-track-button:active {
+  transform: scale(0.98);
 }
-.sf-track-message p {
-  margin: 0;
+.sf-track-button.is-secondary {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: var(--sf-text, #333);
 }
-.sf-track-message.is-error {
-  background: #fdecec;
-  color: #b42318;
-}
-.sf-track-card {
-  display: grid;
-  gap: 16px;
-  padding: 24px;
-  border: 1px solid var(--sf-pdp-line, #e6e6e6);
-  border-radius: 16px;
+.sf-track-button.is-secondary:hover {
+  border-color: var(--sf-track-green);
   background: #fff;
 }
-.sf-track-card header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-.sf-track-card h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-}
-.sf-track-card header p {
-  margin: 4px 0 0;
-  color: #666;
+.sf-track-hint {
+  margin: 12px 0 0;
+  color: #6b7280;
   font-size: 14px;
 }
-.sf-track-card h3 {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 700;
+
+/* Not found and sign-in: one card with an icon and the next step. */
+.sf-track-state {
+  display: flex;
+  gap: 18px;
+  padding: 24px;
+  border-radius: 22px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  animation: sf-track-in 0.35s ease-out;
 }
-.sf-track-status {
-  padding: 6px 12px;
-  border-radius: 999px;
-  color: #fff;
-  font-size: 13px;
+.sf-track-state h2 {
+  margin: 0 0 6px;
   font-weight: 700;
+  font-size: 20px;
+}
+.sf-track-state p {
+  margin: 0;
+  color: #4b5563;
+}
+.sf-track-state .sf-track-button {
+  margin-top: 16px;
+}
+.sf-track-state-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 16px;
+}
+.sf-track-state.is-error {
+  border-color: color-mix(in srgb, var(--sf-sale, #ff3d47) 30%, #fff);
+}
+.sf-track-state.is-error .sf-track-state-icon {
+  background: color-mix(in srgb, var(--sf-sale, #ff3d47) 12%, #fff);
+  color: var(--sf-sale, #ff3d47);
+}
+.sf-track-state.is-info .sf-track-state-icon {
+  background: color-mix(in srgb, var(--sf-track-green) 12%, #fff);
+  color: var(--sf-track-green);
+}
+
+/* The order: number, current status and its history. */
+.sf-track-card {
+  display: grid;
+  gap: 24px;
+  padding: 28px;
+  border: 1px solid #e5e7eb;
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgb(15 23 42 / 0.07);
+  animation: sf-track-in 0.4s ease-out;
+}
+.sf-track-eyebrow {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.sf-track-number-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+.sf-track-number-row h2 {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(24px, 3vw, 30px);
+  letter-spacing: -0.01em;
+}
+.sf-track-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  color: #4b5563;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.sf-track-copy:hover {
+  border-color: var(--sf-track-green);
+  color: var(--sf-track-green);
+}
+.sf-track-copy svg {
+  width: 16px;
+  height: 16px;
+}
+.sf-track-placed {
+  margin: 6px 0 0;
+  color: #6b7280;
+}
+.sf-track-current {
+  --sf-track-accent: var(--sf-track-green);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--sf-track-accent) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--sf-track-accent) 25%, #fff);
+}
+.sf-track-current-name {
+  margin: 2px 0 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--sf-track-accent) 70%, #111827);
+}
+.sf-track-updated {
+  margin: 4px 0 0;
+  color: #4b5563;
+  font-size: 14px;
+}
+.sf-track-pulse {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--sf-track-accent);
+}
+.sf-track-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--sf-track-accent);
+  animation: sf-track-pulse 1.8s ease-out infinite;
+}
+.sf-track-history h3 {
+  margin: 0 0 14px;
+  font-weight: 700;
+  font-size: 16px;
 }
 .sf-track-timeline {
   display: grid;
-  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .sf-track-timeline li {
   position: relative;
-  display: grid;
-  grid-template-columns: 18px minmax(0, 1fr) auto;
-  gap: 4px 12px;
-  align-items: center;
-  padding: 10px 0;
-  color: #666;
-  font-size: 14px;
+  display: flex;
+  gap: 16px;
+  padding: 0 0 22px;
 }
-.sf-track-timeline li + li {
-  border-top: 1px dashed var(--sf-pdp-line, #e6e6e6);
+.sf-track-timeline li:last-child {
+  padding-bottom: 0;
 }
-.sf-track-timeline li.is-current {
-  color: var(--sf-text, #1c1c1c);
-}
-.sf-track-timeline strong {
-  font-weight: 600;
+/* The line joining each step to the next. */
+.sf-track-timeline li:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  left: 6px;
+  width: 2px;
+  background: #e5e7eb;
 }
 .sf-track-dot {
-  width: 12px;
-  height: 12px;
+  position: relative;
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  flex: none;
   border-radius: 50%;
-  background: #bbb;
+  background: var(--sf-track-step);
+  box-shadow: 0 0 0 4px #fff;
 }
-.sf-track .sf-track-account {
-  justify-self: start;
+.sf-track-timeline li.is-current .sf-track-dot {
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 7px color-mix(in srgb, var(--sf-track-step) 30%, #fff);
+}
+.sf-track-timeline li > div {
+  display: grid;
+  gap: 2px;
+}
+.sf-track-timeline li:not(.is-current) strong {
+  color: #4b5563;
+  font-weight: 600;
+}
+.sf-track-when {
+  color: #6b7280;
+  font-size: 14px;
+}
+.sf-track-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Before a lookup: where to find the number, and the account shortcut. */
+.sf-track-help {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sf-track-help li {
+  display: flex;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  background: #fff;
+}
+.sf-track-help h2 {
+  margin: 0 0 6px;
+  font-weight: 700;
+  font-size: 17px;
+}
+.sf-track-help p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 15px;
+}
+.sf-track-help a {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--sf-track-green);
+  font-weight: 700;
+}
+.sf-track-help-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--sf-track-green) 12%, #fff);
+  color: var(--sf-track-green);
+}
+@keyframes sf-track-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes sf-track-pulse {
+  from {
+    opacity: 0.8;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sf-track-card,
+  .sf-track-state,
+  .sf-track-pulse::after {
+    animation: none;
+  }
 }
 @media (max-width: 639px) {
-  .sf-track-form div {
-    flex-direction: column;
+  .sf-track-hero {
+    padding: 32px 18px 26px;
+    border-radius: 22px;
   }
-  .sf-track-timeline li {
-    grid-template-columns: 18px minmax(0, 1fr);
+  .sf-track-field {
+    padding-left: 14px;
   }
-  .sf-track-timeline time {
-    grid-column: 2;
+  .sf-track-field button {
+    padding: 0 18px;
+  }
+  .sf-track-card {
+    padding: 20px;
+    border-radius: 22px;
+  }
+  .sf-track-help {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sf-track-actions .sf-track-button {
+    flex: 1 1 100%;
   }
 }
 
