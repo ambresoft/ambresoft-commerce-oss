@@ -1,0 +1,31 @@
+{
+    "name": "acme/bank-transfer",
+    "description": "Example third-party add-on: an offline bank transfer payment method.",
+    "version": "1.0.0",
+    "type": "cms-addon",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Acme"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Acme\\BankTransfer\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 2,
+            "title": "Bank transfer",
+            "cms": "^1.0",
+            "provider": "Acme\\BankTransfer\\Infrastructure\\BankTransferServiceProvider",
+            "requires": [],
+            "contributes": {
+                "payment-methods": {
+                    "acme.bank-transfer": "Acme\\BankTransfer\\Infrastructure\\BankTransferPaymentMethod"
+                }
+            }
+        }
+    }
+}

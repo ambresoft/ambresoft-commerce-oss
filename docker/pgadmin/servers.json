@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "CMS local database",
+      "Group": "Local development",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "cms",
+      "Username": "cms",
+      "SSLMode": "prefer"
+    }
+  }
+}

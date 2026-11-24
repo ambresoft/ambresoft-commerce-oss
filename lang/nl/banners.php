@@ -1,0 +1,26 @@
+<?php
+
+return array_replace(require __DIR__.'/../en/banners.php', [
+    'title' => 'Banners',
+    'create' => 'Banner maken',
+    'edit' => 'Banner bewerken',
+    'saved' => 'Banner opgeslagen.',
+    'tab_general' => 'Algemeen',
+    'preview' => 'Voorbeeld',
+    'groups' => 'Groepen',
+    'save' => 'Opslaan',
+    'permission_view' => 'Banners bekijken',
+    'permission_manage' => 'Banners beheren',
+    'preview_height' => 'Hoogte',
+    'button_hover' => 'Hovereffect van de knop',
+    'button_hover_help' => 'Hoe de knop reageert als de aanwijzer erboven staat.',
+    'button_transition' => 'Overgang (seconden)',
+    'button_transition_help' => 'Hoe lang de verandering duurt, van 0 tot 2 seconden (bijv. 0,3).',
+    'hover_none' => 'Geen',
+    'hover_darken' => 'Donkerder',
+    'hover_lighten' => 'Lichter',
+    'hover_lift' => 'Optillen',
+    'hover_grow' => 'Vergroten',
+    'hover_glow' => 'Gloed',
+    'hover_invert' => 'Kleuren omwisselen',
+]);
