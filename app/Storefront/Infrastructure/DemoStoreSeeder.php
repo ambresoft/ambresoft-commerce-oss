@@ -184,7 +184,7 @@ final class DemoStoreSeeder
             ['products', 'product_carousel', 'Laptops for every need', 'Laptops για κάθε ανάγκη', ['source' => 'manual', 'limit' => 8, 'hide_arrows_mobile' => true], ['items' => ['product_id', $laptops]]],
             ['products', 'product_carousel', 'Customer favourites', 'Αγαπημένα των πελατών', ['source' => 'manual', 'limit' => 10, 'show_rating' => true, 'hide_arrows_mobile' => true], ['items' => ['product_id', $favourites]]],
             ['coupons', 'coupon_carousel', 'Coupons for you', 'Κουπόνια για εσάς', ['limit' => 6, 'per_row' => 3, 'hide_arrows_mobile' => true], ['items' => ['coupon_id', DB::table('coupons')->whereIn('code', ['WELCOME10', 'SAVE20', 'FREESHIP'])->orderBy('id')->pluck('id')->all()]]],
-            ['brands', 'brand_carousel', 'Our brands', 'Οι μάρκες μας', ['source' => 'alphabetical', 'limit' => 12, 'per_row' => 6, 'image_width' => 300, 'image_height' => 160, 'image_radius' => 20, 'hide_arrows_mobile' => true], []],
+            ['brands', 'brand_carousel', 'Our brands', 'Οι μάρκες μας', ['source' => 'alphabetical', 'limit' => 12, 'per_row' => 4, 'image_width' => 320, 'image_height' => 180, 'image_radius' => 20, 'hide_arrows_mobile' => true], []],
             ['blog_posts', 'blog_carousel', 'From the blog', 'Από το blog', ['source' => 'latest', 'limit' => 6, 'hide_arrows_mobile' => true], []],
         ];
         $layout = DB::table('storefront_layouts')->where('page_type', 'homepage')->value('id');

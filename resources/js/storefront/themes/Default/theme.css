@@ -1629,7 +1629,9 @@
 }
 
 /* Product page (main content block on the Products layout). */
-.sf-visually-hidden {
+/* A brand logo already says the name: brand tiles with a logo keep the name for screen readers only. */
+.sf-visually-hidden,
+.sf-brand:has(.sf-media img) h3 {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -3561,6 +3563,20 @@ button.sf-pdp-pill {
 
 .sf-brand-items.sf-sized .sf-media picture {
   height: 100%;
+}
+/* Phones: narrow columns, so the logo box follows the picture instead of a fixed height (no empty band around it). */
+@media (max-width: 767px) {
+  .sf-sized.sf-brand-items {
+    --sf-cols: min(var(--sf-n), 1.6);
+  }
+  .sf-brand-items.sf-sized .sf-media {
+    padding: 4px;
+  }
+  .sf-brand-items.sf-sized .sf-media,
+  .sf-brand-items.sf-sized .sf-media picture,
+  .sf-brand-items.sf-sized .sf-media:not(:has(.sf-no-image)) img {
+    height: auto;
+  }
 }
 
 @media (max-width: 1023px) {
