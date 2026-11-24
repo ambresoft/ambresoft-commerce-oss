@@ -862,14 +862,16 @@
   .sf-carousel-wrap:has(> .sf-category-items.sf-carousel),
   .sf-carousel-wrap:has(> .sf-blog-items.sf-carousel),
   .sf-carousel-wrap:has(> .sf-menu-items.sf-carousel),
-  .sf-carousel-wrap:has(> .sf-deal-items.sf-carousel) {
+  .sf-carousel-wrap:has(> .sf-deal-items.sf-carousel),
+  .sf-carousel-wrap:has(> .sf-reel-items.sf-carousel) {
     margin-right: -16px;
   }
   .sf-product-items.sf-carousel,
   .sf-category-items.sf-carousel,
   .sf-blog-items.sf-carousel,
   .sf-menu-items.sf-carousel,
-  .sf-deal-items.sf-carousel {
+  .sf-deal-items.sf-carousel,
+  .sf-reel-items.sf-carousel {
     padding-right: 16px;
   }
 }

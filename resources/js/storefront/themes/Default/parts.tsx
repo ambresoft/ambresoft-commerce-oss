@@ -88,6 +88,7 @@ export function Picture({
   tablet,
   alt,
   eager = false,
+  nearby = false,
 }: {
   image: PublicImage;
   mobile?: PublicImage | null;
@@ -95,6 +96,8 @@ export function Picture({
   alt: string;
   /** Above-the-fold pictures such as the logo load immediately. */
   eager?: boolean;
+  /** Loads immediately at normal priority (a carousel's first row, which a side-scrolling row would otherwise keep waiting). */
+  nearby?: boolean;
 }) {
   return (
     <picture>
@@ -105,7 +108,7 @@ export function Picture({
         alt={alt}
         width={image.width}
         height={image.height}
-        loading={eager ? 'eager' : 'lazy'}
+        loading={eager || nearby ? 'eager' : 'lazy'}
         fetchPriority={eager ? 'high' : undefined}
       />
     </picture>
@@ -359,12 +362,23 @@ export function BlogCard({
     </article>
   );
 }
-export function CategoryTile({ item }: { item: PublicItem }) {
+export function CategoryTile({
+  item,
+  nearby = false,
+}: {
+  item: PublicItem;
+  /** Tiles in a carousel's first row load at once: a lazy picture in a side-scrolling row waits for a scroll. */
+  nearby?: boolean;
+}) {
   const body = (
     <>
       <div className="sf-media">
         {item.image ? (
-          <Picture image={item.image} alt={item.image_alt ?? ''} />
+          <Picture
+            image={item.image}
+            alt={item.image_alt ?? ''}
+            nearby={nearby}
+          />
         ) : (
           <NoImage />
         )}
@@ -1399,7 +1413,10 @@ export function Collection({
               <article
                 className={`sf-category ${kind === 'brand' ? 'sf-brand' : ''} ${menuCards || (kind === 'category' && display.card_shadow) ? 'sf-card-shadow' : ''}`}
               >
-                <CategoryTile item={item} />
+                <CategoryTile
+                  item={item}
+                  nearby={carousel && index <= Number(display.per_row ?? 5)}
+                />
               </article>
             )}
           </div>
