@@ -94,6 +94,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 return $response;
             }
 
+            // A rejection before HandleInertiaRequests ran (e.g. an expired CSRF token) still needs the shared props the page reads.
+            if (Inertia::getShared('i18n') === null && request()->hasSession()) {
+                Inertia::share(app(HandleInertiaRequests::class)->share(request()));
+            }
             $page = Inertia::render('Error', [
                 'status' => $response->getStatusCode(),
                 'retryAfter' => $response->headers->get('Retry-After'),
