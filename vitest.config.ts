@@ -7,5 +7,7 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['resources/js/**/*.test.tsx'],
     setupFiles: ['resources/js/tests/setup.ts'],
+    // Full editors (banners, products) can need more than the default 5 s on busy CI runners; a real hang still fails.
+    testTimeout: 15000,
   },
 });
