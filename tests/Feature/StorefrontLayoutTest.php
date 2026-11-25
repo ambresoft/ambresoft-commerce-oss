@@ -913,6 +913,16 @@ final class StorefrontLayoutTest extends TestCase
             ->orderBy('storefront_grids.position')->orderBy('storefront_placements.position')->pluck('template')->all());
         self::assertSame(1, DB::table('storefront_grids')->whereIn('id', DB::table('storefront_placements')->whereIn('block_id', DB::table('storefront_blocks')->where('name', 'like', 'Promotions%')->select('id'))->select('grid_id'))->distinct()->count('row'));
         self::assertTrue($all->firstWhere('content.display.fill_height', true)['template'] === 'banner_single');
+        // The Black Friday landing: its hero first, the deals on a dark band, the page's intro and FAQs last; linked from the menus.
+        $landing = DB::table('storefront_layouts')->where('page_id', DB::table('page_translations')->where('slug', 'black-friday')->value('page_id'))->value('id');
+        self::assertSame(['Black Friday hero', 'Black Friday categories', 'Black Friday deals'], DB::table('storefront_blocks')->where('storefront_blocks.layout_id', $landing)
+            ->join('storefront_placements', 'storefront_placements.block_id', '=', 'storefront_blocks.id')->join('storefront_grids', 'storefront_grids.id', '=', 'storefront_placements.grid_id')
+            ->orderBy('storefront_grids.row')->orderBy('storefront_grids.position')->limit(3)->pluck('name')->all());
+        self::assertSame('main_content', DB::table('storefront_blocks')->where('storefront_blocks.layout_id', $landing)->join('storefront_placements', 'storefront_placements.block_id', '=', 'storefront_blocks.id')
+            ->join('storefront_grids', 'storefront_grids.id', '=', 'storefront_placements.grid_id')->orderByDesc('storefront_grids.row')->value('type'));
+        self::assertFalse((bool) DB::table('storefront_placements')->where('layout_id', $landing)->whereIn('block_id', DB::table('storefront_blocks')->where('type', 'main_content')->select('id'))->value('enabled'));
+        self::assertSame(2, DB::table('website_menu_items')->where('url', '/black-friday')->count());
+        $this->get('/black-friday')->assertOk();
         // Rerunning keeps the account (and its password) and creates nothing twice.
         $this->artisan('cms:demo-store', ['--with-admin' => true, '--email' => 'demo@example.com'])->expectsOutputToContain('already exists')->assertSuccessful();
         self::assertSame(1, UserRecord::where('email', 'demo@example.com')->count());

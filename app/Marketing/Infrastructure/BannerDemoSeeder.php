@@ -34,8 +34,34 @@ final class BannerDemoSeeder
         $this->record('banner.hero2', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero2($group), $this->artwork('hero-audio')));
         $this->record('banner.hero3', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, $this->hero3($group), $this->artwork('hero-phones')));
         $this->promotions($actor, $created);
+        $this->blackFriday($actor, $created);
 
         return $created;
+    }
+
+    /**
+     * The Black Friday landing page's hero: black and gold, text on the left. Tracked as banners.promo.blackfriday.
+     *
+     * @param  array<string, int>  $created
+     */
+    private function blackFriday(string $actor, array &$created): void
+    {
+        $group = $this->record('group.blackfriday', 'banner_groups', $created, 'groups', function () use ($actor): string {
+            $existing = DB::table('banner_groups')->whereRaw('lower(name) = ?', ['black friday (sample)'])->value('id');
+
+            return $existing !== null ? (string) $existing : $this->banners->createGroup($actor, 'Black Friday (sample)');
+        });
+        $this->record('promo.blackfriday', 'banners', $created, 'banners', fn (): string => $this->banners->save($actor, null, null, [
+            ...$this->base($group, 0, 'dark'),
+            'names' => $this->texts('Black Friday hero (sample)', 'Black Friday hero (δείγμα)'),
+            // The landing page's main heading.
+            'title_weight' => 'heavy', 'title_tag' => 'h1', 'button_style' => 'standard', 'url' => '/offers',
+            'layouts' => $this->layouts('#f5c451', '#111111'),
+            'contents' => $this->contents(
+                ['<span class="banner-title-above" style="color: #f5c451">Up to 40% off</span>Black Friday<br><i>Real deals. No tricks.</i>', "Every discount checked against the lowest price of the last 30 days.\nUntil Cyber Monday, while stocks last.", 'Shop the deals'],
+                ['<span class="banner-title-above" style="color: #f5c451">Έως 40% έκπτωση</span>Black Friday<br><i>Αληθινές προσφορές.</i>', "Κάθε έκπτωση ελέγχεται με τη χαμηλότερη τιμή των τελευταίων 30 ημερών.\nΜέχρι τη Cyber Monday, έως εξαντλήσεως.", 'Δείτε τις προσφορές'],
+            ),
+        ], $this->artwork('hero-blackfriday')));
     }
 
     /**

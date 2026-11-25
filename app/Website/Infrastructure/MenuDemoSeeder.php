@@ -137,6 +137,21 @@ final class MenuDemoSeeder
         return $id;
     }
 
+    /** "Black Friday" first under Offers in the main menu and first in the top links; nothing when already there. */
+    public function blackFridayLinks(): void
+    {
+        $locales = DB::table('locales')->where('is_active', true)->pluck('id', 'code')->all();
+        $menu = fn (string $name): ?int => ($id = DB::table('website_menu_translations')->where('name', $name)->value('menu_id')) === null ? null : (int) $id;
+        $main = $menu('Main menu (demo)');
+        $offers = $main === null ? null : DB::table('website_menu_items as i')->join('website_menu_item_translations as t', 't.item_id', '=', 'i.id')
+            ->where('i.menu_id', $main)->whereNull('i.parent_id')->where('t.name', 'Offers')->value('i.id');
+        foreach ([[$main, $offers === null ? null : (int) $offers], [$menu('Secondary links (demo)'), null]] as [$target, $parent]) {
+            if ($target !== null && ! DB::table('website_menu_items')->where('menu_id', $target)->where('url', '/black-friday')->exists()) {
+                $this->item($target, $parent, 'Black Friday', 'Black Friday', 'url', '/black-friday', null, 5, $locales, null);
+            }
+        }
+    }
+
     /** @param array<string,int> $locales */
     private function item(int $menu, ?int $parent, string $en, string $el, string $kind, ?string $url, ?int $category, int $position, array $locales, ?int $media): int
     {

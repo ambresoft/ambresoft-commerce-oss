@@ -241,11 +241,11 @@ final class BannerTest extends TestCase
         Storage::fake('local');
         $this->artisan('cms:banners-demo', ['actor' => (string) $this->actor->id])->assertSuccessful();
         $this->artisan('cms:banners-demo', ['actor' => (string) $this->actor->id])->assertSuccessful();
-        // Three heroes and seven homepage promotions, each with its own phone layout.
-        self::assertSame(10, DB::table('banners')->where('status', 'active')->count());
-        self::assertSame(['Homepage hero (sample)', 'Homepage promotions (sample)'], DB::table('banner_groups')->orderBy('name')->pluck('name')->all());
-        self::assertSame(10, DB::table('banner_layouts')->where('device', 'pc')->count());
-        self::assertSame(10, DB::table('banner_layouts')->where('device', 'phone')->count());
+        // Three heroes, seven homepage promotions and the Black Friday hero, each with its own phone layout.
+        self::assertSame(11, DB::table('banners')->where('status', 'active')->count());
+        self::assertSame(['Black Friday (sample)', 'Homepage hero (sample)', 'Homepage promotions (sample)'], DB::table('banner_groups')->orderBy('name')->pluck('name')->all());
+        self::assertSame(11, DB::table('banner_layouts')->where('device', 'pc')->count());
+        self::assertSame(11, DB::table('banner_layouts')->where('device', 'phone')->count());
         $media = DB::table('media_files')->whereIn('id', DB::table('banner_contents')->pluck('background_image_media_id'))->get();
         self::assertNotEmpty($media);
         self::assertContains('2400x900', $media->map(fn ($m) => $m->width.'x'.$m->height)->all());
@@ -253,7 +253,7 @@ final class BannerTest extends TestCase
         self::assertContains('1200x630', $media->map(fn ($m) => $m->width.'x'.$m->height)->all());
         $el = DB::table('locales')->where('code', 'el')->value('id');
         self::assertStringContainsString('Nimbus Air 13', (string) DB::table('banner_contents')->where('locale_id', $el)->orderBy('banner_id')->value('title'));
-        $this->get('/admin/banners')->assertInertia(fn (Assert $p) => $p->where('banners.total', 10)->where('banners.data.0.state', 'live'));
+        $this->get('/admin/banners')->assertInertia(fn (Assert $p) => $p->where('banners.total', 11)->where('banners.data.0.state', 'live'));
     }
 
     public function test_view_only_staff_read_and_others_are_refused(): void

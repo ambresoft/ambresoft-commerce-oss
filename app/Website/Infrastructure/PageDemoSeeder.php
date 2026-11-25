@@ -41,6 +41,13 @@ final class PageDemoSeeder
             ['Επιστροφές και αλλαγές', 'Επιστροφές και αλλαγές', 'Επιστρέψτε ή αλλάξτε την παραγγελία σας μέσα σε 14 ημέρες.', 'επιστροφές, αλλαγές, επιστροφή χρημάτων', $this->returnsEl()],
         )), $actor);
 
+        // The Black Friday landing page: its own layout (see DemoStoreSeeder::blackFriday) carries the deals around this intro.
+        $this->record('page.blackfriday', $created, fn (): string => $this->withFaqs($this->pages->save($actor, null, null, $this->page(2, 'website',
+            ['Black Friday', 'Black Friday deals – up to 40% off', 'Black Friday deals on laptops, phones, audio and wearables: up to 40% off until Cyber Monday.', 'black friday, deals, offers, cyber monday',
+                '<p>Our biggest sale of the year: up to <strong>40% off</strong> laptops, phones, audio, wearables and accessories, until Cyber Monday or while stocks last.</p><ul><li><strong>Real discounts:</strong> next to every discount we show the lowest price of the last 30 days.</li><li><strong>Free returns</strong> within 14 days, gifts included.</li><li><strong>One more coupon:</strong> BLACKFRIDAY takes another 15% off orders over €100.</li></ul>'],
+            ['Black Friday', 'Προσφορές Black Friday – έως 40% έκπτωση', 'Προσφορές Black Friday σε laptops, κινητά, ήχο και wearables: έως 40% έκπτωση μέχρι τη Cyber Monday.', 'black friday, προσφορές, εκπτώσεις, cyber monday',
+                '<p>Η μεγαλύτερη έκπτωση της χρονιάς: έως <strong>40% έκπτωση</strong> σε laptops, κινητά, ήχο, wearables και αξεσουάρ, μέχρι τη Cyber Monday ή έως εξαντλήσεως.</p><ul><li><strong>Αληθινές εκπτώσεις:</strong> δίπλα σε κάθε έκπτωση δείχνουμε τη χαμηλότερη τιμή των τελευταίων 30 ημερών.</li><li><strong>Δωρεάν επιστροφές</strong> μέσα σε 14 ημέρες, και για δώρα.</li><li><strong>Ένα ακόμη κουπόνι:</strong> το BLACKFRIDAY αφαιρεί επιπλέον 15% σε παραγγελίες άνω των 100€.</li></ul>'],
+        )), $this->blackFridayFaqs()), $actor);
         $this->record('page.contact', $created, fn (): string => $this->pages->save($actor, null, null, [...$this->page(30, 'website',
             ['Contact us', 'Contact us', 'Send us a message and we will reply as soon as possible.', 'contact, form, support', $this->contactEn()],
             ['Επικοινωνία', 'Επικοινωνία', 'Στείλτε μας μήνυμα και θα απαντήσουμε το συντομότερο δυνατό.', 'επικοινωνία, φόρμα, υποστήριξη', $this->contactEl()],
@@ -200,6 +207,45 @@ HTML;
 </table>
 <p>Προϊόντα με εκτύπωση κατά παραγγελία (π.χ. σακούλες με το λογότυπό σας) δεν επιστρέφονται, εκτός αν είναι ελαττωματικά.</p>
 HTML;
+    }
+
+    /**
+     * The questions shoppers ask about Black Friday, as general FAQs (editable in FAQs).
+     *
+     * @return list<array{array{string, string}, array{string, string}}> English and Greek question and answer
+     */
+    private function blackFridayFaqs(): array
+    {
+        return [
+            [['Are the Black Friday discounts real?', 'Yes. Next to every discount we show the lowest price of the last 30 days, so you can see exactly what you save.'],
+                ['Είναι αληθινές οι εκπτώσεις της Black Friday;', 'Ναι. Δίπλα σε κάθε έκπτωση δείχνουμε τη χαμηλότερη τιμή των τελευταίων 30 ημερών, για να βλέπετε ακριβώς τι κερδίζετε.']],
+            [['When does Black Friday end?', 'The offers last until Cyber Monday at midnight, or while stocks last. Each product page shows its own end time.'],
+                ['Πότε λήγει η Black Friday;', 'Οι προσφορές ισχύουν μέχρι τα μεσάνυχτα της Cyber Monday ή έως εξαντλήσεως. Κάθε σελίδα προϊόντος δείχνει τη δική της λήξη.']],
+            [['Can I use a coupon with the Black Friday deals?', 'Yes, one coupon per order: BLACKFRIDAY takes another 15% off orders over €100.'],
+                ['Μπορώ να χρησιμοποιήσω κουπόνι μαζί με τις προσφορές;', 'Ναι, ένα κουπόνι ανά παραγγελία: το BLACKFRIDAY αφαιρεί επιπλέον 15% σε παραγγελίες άνω των 100€.']],
+            [['Can I return a Black Friday purchase?', 'Yes. Returns are free within 14 days, and gifts can be exchanged until 15 January.'],
+                ['Μπορώ να επιστρέψω μια αγορά της Black Friday;', 'Ναι. Οι επιστροφές είναι δωρεάν μέσα σε 14 ημέρες και τα δώρα αλλάζουν έως τις 15 Ιανουαρίου.']],
+        ];
+    }
+
+    /**
+     * Creates the questions as general FAQs and shows them on the page, in this order.
+     *
+     * @param  list<array{array{string, string}, array{string, string}}>  $faqs
+     */
+    private function withFaqs(string $page, array $faqs): string
+    {
+        $locales = app(LocaleCatalog::class)->active()->pluck('id', 'code');
+        foreach ($faqs as $n => [$english, $greek]) {
+            $faq = DB::table('faqs')->insertGetId(['type' => 'general', 'status' => 'active', 'position' => 100 + $n, 'created_at' => now(), 'updated_at' => now()]);
+            foreach ($locales as $code => $locale) {
+                [$question, $answer] = $code === 'el' ? $greek : $english;
+                DB::table('faq_translations')->insert(['faq_id' => $faq, 'locale_id' => $locale, 'question' => $question, 'answer' => '<p>'.$answer.'</p>']);
+            }
+            DB::table('page_faqs')->insert(['page_id' => $page, 'faq_id' => $faq, 'faq_type' => 'general', 'position' => $n + 1]);
+        }
+
+        return $page;
     }
 
     /** @param array<string, int> $created */

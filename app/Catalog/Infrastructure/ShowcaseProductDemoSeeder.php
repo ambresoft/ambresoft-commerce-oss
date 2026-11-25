@@ -196,7 +196,8 @@ final class ShowcaseProductDemoSeeder
     /** Three public sample coupons for the homepage coupon block. */
     private function coupons(): int
     {
-        $samples = [['Welcome 10% (demo)', 'WELCOME10', 'percentage', '10', '0', false], ['€20 off over €200 (demo)', 'SAVE20', 'fixed', '20', '200', false], ['Free shipping (demo)', 'FREESHIP', 'percentage', '0', '30', true]];
+        $samples = [['Welcome 10% (demo)', 'WELCOME10', 'percentage', '10', '0', false], ['€20 off over €200 (demo)', 'SAVE20', 'fixed', '20', '200', false], ['Free shipping (demo)', 'FREESHIP', 'percentage', '0', '30', true],
+            ['Black Friday 15% over €100 (demo)', 'BLACKFRIDAY', 'percentage', '15', '100', false]];
         foreach ($samples as [$name, $code, $type, $amount, $minimum, $shipping]) {
             if (! DB::table('coupons')->where('code', $code)->exists()) {
                 DB::table('coupons')->insert(['name' => $name, 'code' => $code, 'type' => $type, 'amount' => $amount, 'minimum' => $minimum, 'free_shipping' => $shipping, 'all_products' => true, 'status' => 'active', 'created_at' => now(), 'updated_at' => now()]);

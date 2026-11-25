@@ -57,6 +57,7 @@ final class SeedDemoStore extends Command
                     $this->call($demo, ['actor' => $admin]);
                 }
                 $seeder->promotions();
+                $seeder->blackFriday();
                 $reviews = app(ShowcaseProductDemoSeeder::class)->reviews();
                 if ($reviews > 0) {
                     $this->info('Added '.$reviews.' reviews to the Nimbus Pro 16 showcase.');

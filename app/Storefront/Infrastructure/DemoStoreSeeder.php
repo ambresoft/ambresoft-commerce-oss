@@ -278,38 +278,124 @@ final class DemoStoreSeeder
             return false;
         }
         $row = (int) DB::table('storefront_grids')->where('layout_id', $layout)->where('region', 'content')->max('row') + 1;
-        $place = function (string $grid, int $position, string $name, string $template, array $settings, array $banners, array $title = ['', ''], array $html = ['', '']) use ($layout): void {
-            $block = (string) Str::uuid();
-            DB::table('storefront_blocks')->insert(['id' => $block, 'layout_id' => $layout, 'type' => $template === 'html' ? 'html' : 'banners', 'name' => $name, 'template' => $template, 'settings' => json_encode((object) $settings)]);
-            DB::table('storefront_placements')->insert(['id' => (string) Str::uuid(), 'layout_id' => $layout, 'grid_id' => $grid, 'block_id' => $block, 'position' => $position]);
-            foreach (DB::table('locales')->get() as $locale) {
-                $greek = $locale->code === 'el';
-                DB::table('storefront_block_translations')->insert(['block_id' => $block, 'locale_id' => $locale->id, 'title' => $title[$greek ? 1 : 0], 'html' => $html[$greek ? 1 : 0]]);
-            }
-            foreach ($banners as $n => $banner) {
-                DB::table('storefront_block_selections')->insert(['block_id' => $block, 'field' => 'items', 'position' => $n + 1, 'banner_id' => $banner]);
-            }
-        };
-        $grid = function (int $row, int $position, int $width) use ($layout): string {
-            $id = (string) Str::uuid();
-            DB::table('storefront_grids')->insert(['id' => $id, 'layout_id' => $layout, 'region' => 'content', 'width' => $width, 'row' => $row, 'position' => $position]);
-
-            return $id;
-        };
-        $place($grid($row, 1, 16), 1, 'Our promotions', 'html', [], [], ['Discover our promotions', 'Ανακαλύψτε τις προσφορές μας'],
+        $this->placeBlock((string) $layout, $this->addGrid((string) $layout, $row, 1, 16), 1, 'html', 'Our promotions', 'html', [], [], ['Discover our promotions', 'Ανακαλύψτε τις προσφορές μας'],
             ['<p>Hand-picked offers on wearables, audio, e-readers and accessories.</p>', '<p>Επιλεγμένες προσφορές σε wearables, ήχο, e-readers και αξεσουάρ.</p>']);
-        // Side banners are 40% taller than the default design; the carousels change slide every 6 seconds and show dots.
-        $single = ['source' => 'manual', 'limit' => 1, 'height_desktop' => 140, 'height_tablet' => 140];
-        $carousel = [...$single, 'limit' => 4, 'autoplay_seconds' => 6, 'navigation_style' => 'dots', 'hide_arrows_mobile' => true];
-        [$left, $centre, $right] = [$grid($row + 1, 1, 5), $grid($row + 1, 2, 6), $grid($row + 1, 3, 5)];
-        $place($left, 1, 'Promotions', 'banner_carousel', $carousel, [$promo('trail'), $promo('buds')]);
-        $place($left, 2, 'Promotions 2', 'banner_single', $single, [$promo('reader')]);
-        $place($centre, 1, 'Promotions 3', 'banner_single', [...$single, 'fill_height' => true], [$promo('watch')]);
-        $place($right, 1, 'Promotions 4', 'banner_carousel', $carousel, [$promo('charger'), $promo('backpack')]);
-        $place($right, 2, 'Promotions 5', 'banner_single', $single, [$promo('band')]);
+        $this->promotionRow((string) $layout, $row + 1, 'Promotions', $promo);
         $this->orderHomepage($layout);
 
         return true;
+    }
+
+    /**
+     * One row of three grids: two banner blocks stacked either side (the top ones small carousels) and a single banner
+     * between them that fills the row's height.
+     *
+     * @param  callable(string): ?string  $promo  the sample promotion banner's id by name
+     */
+    private function promotionRow(string $layout, int $row, string $name, callable $promo): void
+    {
+        // Side banners are 40% taller than the default design; the carousels change slide every 6 seconds and show dots.
+        $single = ['source' => 'manual', 'limit' => 1, 'height_desktop' => 140, 'height_tablet' => 140];
+        $carousel = [...$single, 'limit' => 4, 'autoplay_seconds' => 6, 'navigation_style' => 'dots', 'hide_arrows_mobile' => true];
+        [$left, $centre, $right] = [$this->addGrid($layout, $row, 1, 5), $this->addGrid($layout, $row, 2, 6), $this->addGrid($layout, $row, 3, 5)];
+        $banners = fn (string ...$names): array => ['items' => ['banner_id', array_map($promo, $names)]];
+        $this->placeBlock($layout, $left, 1, 'banners', $name, 'banner_carousel', $carousel, $banners('trail', 'buds'));
+        $this->placeBlock($layout, $left, 2, 'banners', $name.' 2', 'banner_single', $single, $banners('reader'));
+        $this->placeBlock($layout, $centre, 1, 'banners', $name.' 3', 'banner_single', [...$single, 'fill_height' => true], $banners('watch'));
+        $this->placeBlock($layout, $right, 1, 'banners', $name.' 4', 'banner_carousel', $carousel, $banners('charger', 'backpack'));
+        $this->placeBlock($layout, $right, 2, 'banners', $name.' 5', 'banner_single', $single, $banners('band'));
+    }
+
+    private function addGrid(string $layout, int $row, int $position, int $width): string
+    {
+        $id = (string) Str::uuid();
+        DB::table('storefront_grids')->insert(['id' => $id, 'layout_id' => $layout, 'region' => 'content', 'width' => $width, 'row' => $row, 'position' => $position]);
+
+        return $id;
+    }
+
+    /**
+     * @param  array<string, mixed>  $settings
+     * @param  array<string, array{string, list<int|string|null>}>  $selections  field => [column, ids]
+     * @param  array{string, string}  $title  English, Greek (Greek where Greek is active, English elsewhere)
+     * @param  array{string, string}  $html
+     * @param  array<string, mixed>  $columns  further block columns (pictures, CSS class)
+     */
+    private function placeBlock(string $layout, string $grid, int $position, string $type, string $name, string $template, array $settings, array $selections = [], array $title = ['', ''], array $html = ['', ''], array $columns = []): void
+    {
+        $block = (string) Str::uuid();
+        DB::table('storefront_blocks')->insert(['id' => $block, 'layout_id' => $layout, 'type' => $type, 'name' => $name, 'template' => $template, 'settings' => json_encode((object) $settings), ...$columns]);
+        DB::table('storefront_placements')->insert(['id' => (string) Str::uuid(), 'layout_id' => $layout, 'grid_id' => $grid, 'block_id' => $block, 'position' => $position]);
+        foreach (DB::table('locales')->get() as $locale) {
+            $greek = $locale->code === 'el';
+            DB::table('storefront_block_translations')->insert(['block_id' => $block, 'locale_id' => $locale->id, 'title' => $title[$greek ? 1 : 0], 'html' => $html[$greek ? 1 : 0]]);
+        }
+        foreach ($selections as $field => [$column, $ids]) {
+            foreach ($ids as $n => $id) {
+                DB::table('storefront_block_selections')->insert(['block_id' => $block, 'field' => $field, 'position' => $n + 1, $column => $id]);
+            }
+        }
+    }
+
+    /**
+     * The Black Friday landing page (cms:pages-demo) built from the store's own blocks: a black and gold hero, the page's
+     * category shortcuts, every sale product on a dark band beside a promo picture, coupons, the promotions grid,
+     * department carousels and brands. The page's own intro and FAQs follow, switched off. Its links join the main and top menus.
+     */
+    public function blackFriday(): bool
+    {
+        return DB::transaction(fn (): bool => $this->placeBlackFriday());
+    }
+
+    private function placeBlackFriday(): bool
+    {
+        $records = DB::table('feature_demo_records')->pluck('entity_id', 'key');
+        $page = $records['pages.page.blackfriday'] ?? null;
+        $hero = $records['banners.promo.blackfriday'] ?? null;
+        $layout = $page === null ? null : DB::table('storefront_layouts')->where('page_id', $page)->value('id');
+        $promo = fn (string $name): ?string => isset($records['banners.promo.'.$name]) ? (string) $records['banners.promo.'.$name] : null;
+        if ($layout === null || $hero === null || in_array(null, array_map($promo, ['trail', 'buds', 'reader', 'watch', 'charger', 'backpack', 'band']), true)) {
+            return false;
+        }
+        app(MenuDemoSeeder::class)->blackFridayLinks();
+        $layout = (string) $layout;
+        if (DB::table('storefront_blocks')->where('layout_id', $layout)->where('name', 'Black Friday deals')->exists()) {
+            return false;
+        }
+        // The page's own content (title, intro and its FAQs) stays at the end but switched off: the hero carries the
+        // page's heading. Switching it on in Layouts brings the intro and the questions back.
+        DB::table('storefront_grids')->where('layout_id', $layout)->where('region', 'content')->update(['row' => 11]);
+        DB::table('storefront_placements')->where('layout_id', $layout)->whereIn('block_id', DB::table('storefront_blocks')->where('layout_id', $layout)->where('type', 'main_content')->select('id'))->update(['enabled' => false]);
+        $this->placeBlock($layout, $this->addGrid($layout, 1, 1, 16), 1, 'banners', 'Black Friday hero', 'banner_single', ['source' => 'manual', 'limit' => 1, 'full_width' => true, 'preload' => 'first'],
+            ['items' => ['banner_id', [$hero]]], columns: ['css_class' => 'sf-flush-top']);
+        $this->placeBlock($layout, $this->addGrid($layout, 3, 1, 16), 1, 'categories', 'Black Friday categories', 'category_carousel', ['limit' => 8, 'hide_arrows_mobile' => true],
+            ['items' => ['category_id', DB::table('categories')->whereNull('parent_id')->orderBy('position')->orderBy('id')->limit(8)->pluck('id')->all()]], ['Shop the deals by category', 'Οι προσφορές ανά κατηγορία']);
+        $this->placeBlock($layout, $this->addGrid($layout, 4, 1, 16), 1, 'products', 'Black Friday deals', 'product_carousel',
+            ['source' => 'sale', 'limit' => 12, 'per_row' => 4, 'hide_arrows_mobile' => true, 'background_color' => '#111111', 'full_width_background' => true, 'title_color' => '#F5C451',
+                'image_side' => 'left', 'image_fit' => 'cover', 'image_link' => '/offers'], [], ['Black Friday deals', 'Προσφορές Black Friday'],
+            columns: ['image_media_id' => app(DemoPicture::class)->photo('promo-blackfriday'), 'image_mobile_media_id' => app(DemoPicture::class)->photo('promo-blackfriday-phone')]);
+        $this->placeBlock($layout, $this->addGrid($layout, 5, 1, 16), 1, 'coupons', 'Black Friday coupons', 'coupon_carousel', ['limit' => 6, 'per_row' => 4, 'hide_arrows_mobile' => true],
+            ['items' => ['coupon_id', DB::table('coupons')->whereIn('code', ['BLACKFRIDAY', 'WELCOME10', 'SAVE20', 'FREESHIP'])->orderByRaw("code <> 'BLACKFRIDAY'")->orderBy('id')->pluck('id')->all()]],
+            ['Save even more with a coupon', 'Κερδίστε κι άλλο με ένα κουπόνι']);
+        $this->promotionRow($layout, 6, 'Black Friday picks', $promo);
+        foreach ([['laptops', 'Laptops on Black Friday', 'Laptops στη Black Friday'], ['phones', 'Phones on Black Friday', 'Κινητά στη Black Friday'], ['audio', 'Audio on Black Friday', 'Ήχος στη Black Friday']] as $n => [$department, $en, $el]) {
+            $this->placeBlock($layout, $this->addGrid($layout, 7 + $n, 1, 16), 1, 'products', $en, 'product_carousel', ['source' => 'manual', 'limit' => 10, 'hide_arrows_mobile' => true],
+                ['items' => ['product_id', $this->departmentProducts($department)]], [$en, $el]);
+        }
+        $this->placeBlock($layout, $this->addGrid($layout, 10, 1, 16), 1, 'brands', 'Black Friday brands', 'brand_carousel',
+            ['source' => 'alphabetical', 'limit' => 12, 'per_row' => 4, 'image_width' => 320, 'image_height' => 180, 'image_radius' => 20, 'hide_arrows_mobile' => true], [], ['Brands on sale', 'Μάρκες σε προσφορά']);
+        DB::table('storefront_layouts')->where('id', $layout)->increment('lock_version');
+
+        return true;
+    }
+
+    /** @return list<int> Demo products in a department's sub-categories. */
+    private function departmentProducts(string $slug): array
+    {
+        $department = DB::table('category_translations')->where('slug', $slug)->value('category_id');
+
+        return $department === null ? [] : DB::table('products')->where('sku', 'like', 'TECH-%')->whereIn('category_id', DB::table('categories')->where('parent_id', $department)->select('id'))
+            ->orderBy('id')->pluck('id')->map(fn ($id): int => (int) $id)->all();
     }
 
     /** The homepage newsletter sign-up, joining the first active newsletter list (when there is one). */

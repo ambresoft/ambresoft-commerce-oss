@@ -58,6 +58,7 @@ Ambresoft name and logo:
 - `brand-*.png` — wordmarks of the fictional demo brands.
 - `payment-cod.png` — the cash on delivery badge.
 - `hero-*.jpg` — homepage banner artwork (desktop and `-phone` versions), composed from the CC0 product photos above.
+- `hero-blackfriday.jpg`, `promo-blackfriday.jpg` and their `-phone` versions — the Black Friday landing artwork, composed from the CC0 `nimbus-air-13.jpg` and `orbit-watch-3.jpg` photos.
 - `promo-audio.jpg` and `promo-audio-phone.jpg` — the homepage audio promo beside the carousel (tall and wide versions), composed from the CC0 `volta-studio-anc.jpg` photo.
 - `promo-{trail,buds,reader,watch,charger,backpack,band}.jpg` and their `-phone` versions — the homepage promotions banners, composed from the CC0 product photos above (`orbit-trail-gps`, `volta-buds-pro`, `lumo-read-paper-7`, `orbit-watch-3`, `kova-30w-charger`, `kova-commuter-backpack`, `orbit-band-5-lime`).
 - `../videos/reel-*.mp4` and their `.jpg` covers — demo reels. `reel-made-to-move` is an original animation; the others are
