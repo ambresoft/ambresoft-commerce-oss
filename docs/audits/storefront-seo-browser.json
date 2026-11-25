@@ -1,0 +1,312 @@
+[
+  {
+    "canonical": [
+      "http://localhost:8000/"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "type": "WebPage"
+        },
+        {
+          "type": "Organization"
+        },
+        {
+          "type": "WebSite"
+        }
+      ]
+    ],
+    "h1": [
+      "Sergio Ramos – Νέα smartphones, laptops, τηλεοράσεις και πολλά ακόμη"
+    ],
+    "path": "/",
+    "robots": [],
+    "title": "Sergio Ramos – Νέα smartphones, laptops, τηλεοράσεις και πολλά ακόμη",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/texh"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "items": 2,
+          "type": "CollectionPage"
+        },
+        {
+          "type": "BreadcrumbList"
+        }
+      ]
+    ],
+    "h1": [
+      "Texnologia"
+    ],
+    "path": "/texh",
+    "robots": [],
+    "title": "texh - Sergio Ramos",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/texh/foriti-ipologhistes?page=2"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "items": 24,
+          "type": "CollectionPage"
+        },
+        {
+          "type": "BreadcrumbList"
+        }
+      ]
+    ],
+    "h1": [
+      "Φορητοί υπολογιστές"
+    ],
+    "path": "/texh/foriti-ipologhistes?page=2",
+    "robots": [],
+    "title": "Φορητοί υπολογιστές – Σελίδα 2",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/apple"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "items": 24,
+          "type": "CollectionPage"
+        },
+        {
+          "type": "BreadcrumbList"
+        }
+      ]
+    ],
+    "h1": [
+      "Apple"
+    ],
+    "path": "/apple",
+    "robots": [],
+    "title": "Apple",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/brands"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "type": "CollectionPage"
+        },
+        {
+          "type": "BreadcrumbList"
+        }
+      ]
+    ],
+    "h1": [
+      "Όλες οι μάρκες"
+    ],
+    "path": "/brands",
+    "robots": [],
+    "title": "Όλες οι μάρκες",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/sitemap"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "type": "CollectionPage"
+        },
+        {
+          "type": "BreadcrumbList"
+        }
+      ]
+    ],
+    "h1": [
+      "Χάρτης ιστοτόπου"
+    ],
+    "path": "/sitemap",
+    "robots": [],
+    "title": "Χάρτης ιστοτόπου",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/blog/nea"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "items": 4,
+          "type": "CollectionPage"
+        },
+        {
+          "type": "BreadcrumbList"
+        }
+      ]
+    ],
+    "h1": [
+      "Νέα"
+    ],
+    "path": "/blog/nea",
+    "robots": [],
+    "title": "Νέα",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/blog/nea/to-neo-mas-ilektroniko-katastima-inai-edw"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "type": "BlogPosting"
+        },
+        {
+          "type": "BreadcrumbList"
+        }
+      ]
+    ],
+    "h1": [
+      "Το νέο μας ηλεκτρονικό κατάστημα είναι εδώ"
+    ],
+    "path": "/blog/nea/to-neo-mas-ilektroniko-katastima-inai-edw",
+    "robots": [],
+    "title": "Το νέο μας ηλεκτρονικό κατάστημα είναι εδώ",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/politiki-aporritoy"
+    ],
+    "descriptions": 1,
+    "graphs": [
+      [
+        {
+          "type": "WebPage"
+        },
+        {
+          "type": "BreadcrumbList"
+        }
+      ]
+    ],
+    "h1": [
+      "Πολιτική Απορρήτου"
+    ],
+    "path": "/politiki-aporritoy",
+    "robots": [],
+    "title": "Πολιτική Απορρήτου",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/cart"
+    ],
+    "descriptions": 1,
+    "graphs": [],
+    "h1": [
+      "Το καλάθι σου"
+    ],
+    "path": "/cart",
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "title": "Καλάθι",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/search"
+    ],
+    "descriptions": 1,
+    "graphs": [],
+    "h1": [
+      "Αποτελέσματα για «macbook»"
+    ],
+    "path": "/search?q=macbook",
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "title": "Αποτελέσματα για «macbook»",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/cart"
+    ],
+    "descriptions": 1,
+    "graphs": [],
+    "h1": [
+      "Το καλάθι σου"
+    ],
+    "path": "/cart",
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "title": "Καλάθι",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/comparison"
+    ],
+    "descriptions": 1,
+    "graphs": [],
+    "h1": [
+      "Σύγκριση προϊόντων"
+    ],
+    "path": "/comparison",
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "title": "Σύγκριση προϊόντων",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/wishlist"
+    ],
+    "descriptions": 1,
+    "graphs": [],
+    "h1": [
+      "Ο λογαριασμός μου"
+    ],
+    "path": "/wishlist",
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "title": "Αγαπημένα",
+    "titles": 1
+  },
+  {
+    "canonical": [
+      "http://localhost:8000/order-status"
+    ],
+    "descriptions": 1,
+    "graphs": [],
+    "h1": [
+      "Κατάσταση παραγγελίας"
+    ],
+    "path": "/order-status",
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "title": "Κατάσταση παραγγελίας",
+    "titles": 1
+  }
+]

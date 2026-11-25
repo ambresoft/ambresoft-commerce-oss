@@ -1,0 +1,593 @@
+[
+  {
+    "requested": "/",
+    "status": 200,
+    "final_url": "http://localhost:8000/",
+    "title": [
+      "Sergio Ramos – Νέα smartphones, laptops, τηλεοράσεις και πολλά ακόμη"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "WebPage",
+      "Organization",
+      "WebSite"
+    ],
+    "response_bytes": 187731,
+    "local_response_ms": 269.3
+  },
+  {
+    "requested": "/texh",
+    "status": 200,
+    "final_url": "http://localhost:8000/texh",
+    "title": [
+      "texh - Sergio Ramos"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/texh"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "CollectionPage",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1400094,
+    "local_response_ms": 133.4
+  },
+  {
+    "requested": "/texh/foriti-ipologhistes",
+    "status": 200,
+    "final_url": "http://localhost:8000/texh/foriti-ipologhistes",
+    "title": [
+      "Φορητοί υπολογιστές"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/texh/foriti-ipologhistes"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "CollectionPage",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1442776,
+    "local_response_ms": 303.0,
+    "item_list_matches_visible_data": true,
+    "items": 24
+  },
+  {
+    "requested": "/texh/foriti-ipologhistes?page=2",
+    "status": 200,
+    "final_url": "http://localhost:8000/texh/foriti-ipologhistes?page=2",
+    "title": [
+      "Φορητοί υπολογιστές – Σελίδα 2"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/texh/foriti-ipologhistes?page=2"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "CollectionPage",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1440995,
+    "local_response_ms": 263.3,
+    "item_list_matches_visible_data": true,
+    "items": 24
+  },
+  {
+    "requested": "/texh/foriti-ipologhistes?sort=price_asc",
+    "status": 200,
+    "final_url": "http://localhost:8000/texh/foriti-ipologhistes?sort=price_asc",
+    "title": [
+      "Φορητοί υπολογιστές"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/texh/foriti-ipologhistes"
+    ],
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1422368,
+    "local_response_ms": 241.5
+  },
+  {
+    "requested": "/texh/foriti-ipologhistes/macbook-pro-14-mauro-32-gb-1-tb",
+    "status": 200,
+    "final_url": "http://localhost:8000/texh/foriti-ipologhistes/macbook-pro-14-mauro-32-gb-1-tb",
+    "title": [
+      "MacBook Pro 14\" (Μαύρο, 32 GB, 1 TB) - Sergio Ramos"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/texh/foriti-ipologhistes/macbook-pro-14-mauro-32-gb-1-tb"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "Product",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1443155,
+    "local_response_ms": 498.7,
+    "offer_matches_visible_data": true
+  },
+  {
+    "requested": "/apple",
+    "status": 200,
+    "final_url": "http://localhost:8000/apple",
+    "title": [
+      "Apple"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/apple"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "CollectionPage",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1438164,
+    "local_response_ms": 504.2,
+    "item_list_matches_visible_data": true,
+    "items": 24
+  },
+  {
+    "requested": "/brands",
+    "status": 200,
+    "final_url": "http://localhost:8000/brands",
+    "title": [
+      "Όλες οι μάρκες"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/brands"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "CollectionPage",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1401909,
+    "local_response_ms": 164.4
+  },
+  {
+    "requested": "/sitemap",
+    "status": 200,
+    "final_url": "http://localhost:8000/sitemap",
+    "title": [
+      "Χάρτης ιστοτόπου"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/sitemap"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "CollectionPage",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1409701,
+    "local_response_ms": 202.5
+  },
+  {
+    "requested": "/politiki-aporritoy",
+    "status": 200,
+    "final_url": "http://localhost:8000/politiki-aporritoy",
+    "title": [
+      "Πολιτική Απορρήτου"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/politiki-aporritoy"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "WebPage",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1407189,
+    "local_response_ms": 151.3
+  },
+  {
+    "requested": "/blog/nea",
+    "status": 200,
+    "final_url": "http://localhost:8000/blog/nea",
+    "title": [
+      "Νέα"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/blog/nea"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "CollectionPage",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1404989,
+    "local_response_ms": 157.3
+  },
+  {
+    "requested": "/blog/nea/to-neo-mas-ilektroniko-katastima-inai-edw",
+    "status": 200,
+    "final_url": "http://localhost:8000/blog/nea/to-neo-mas-ilektroniko-katastima-inai-edw",
+    "title": [
+      "Το νέο μας ηλεκτρονικό κατάστημα είναι εδώ"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/blog/nea/to-neo-mas-ilektroniko-katastima-inai-edw"
+    ],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 1,
+    "schema_types": [
+      "BlogPosting",
+      "BreadcrumbList"
+    ],
+    "response_bytes": 1406470,
+    "local_response_ms": 128.1
+  },
+  {
+    "requested": "/search?q=macbook",
+    "status": 200,
+    "final_url": "http://localhost:8000/search?q=macbook",
+    "title": [
+      "Αποτελέσματα για «macbook»"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/search"
+    ],
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1420679,
+    "local_response_ms": 335.3
+  },
+  {
+    "requested": "/cart",
+    "status": 200,
+    "final_url": "http://localhost:8000/cart",
+    "title": [
+      "Καλάθι"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/cart"
+    ],
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "x_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1398072,
+    "local_response_ms": 145.1
+  },
+  {
+    "requested": "/checkout",
+    "status": 200,
+    "final_url": "http://localhost:8000/cart",
+    "title": [
+      "Καλάθι"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/cart"
+    ],
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "x_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1398072,
+    "local_response_ms": 217.0
+  },
+  {
+    "requested": "/comparison",
+    "status": 200,
+    "final_url": "http://localhost:8000/comparison",
+    "title": [
+      "Σύγκριση προϊόντων"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/comparison"
+    ],
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "x_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1398317,
+    "local_response_ms": 143.5
+  },
+  {
+    "requested": "/wishlist",
+    "status": 200,
+    "final_url": "http://localhost:8000/login",
+    "title": [
+      "Ambresoft Commerce"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [
+      "noindex, nofollow, noarchive, nosnippet, noimageindex"
+    ],
+    "x_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1371200,
+    "local_response_ms": 114.3
+  },
+  {
+    "requested": "/order-status",
+    "status": 200,
+    "final_url": "http://localhost:8000/order-status",
+    "title": [
+      "Κατάσταση παραγγελίας"
+    ],
+    "description_count": 1,
+    "canonical": [
+      "http://localhost:8000/order-status"
+    ],
+    "robots": [
+      "noindex, nofollow"
+    ],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1398315,
+    "local_response_ms": 140.4
+  },
+  {
+    "requested": "/login",
+    "status": 200,
+    "final_url": "http://localhost:8000/login",
+    "title": [
+      "Ambresoft Commerce"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [
+      "noindex, nofollow, noarchive, nosnippet, noimageindex"
+    ],
+    "x_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1371200,
+    "local_response_ms": 88.6
+  },
+  {
+    "requested": "/register",
+    "status": 200,
+    "final_url": "http://localhost:8000/register",
+    "title": [
+      "Ambresoft Commerce"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [
+      "noindex, nofollow, noarchive, nosnippet, noimageindex"
+    ],
+    "x_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1371210,
+    "local_response_ms": 97.4
+  },
+  {
+    "requested": "/account",
+    "status": 200,
+    "final_url": "http://localhost:8000/login",
+    "title": [
+      "Ambresoft Commerce"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [
+      "noindex, nofollow, noarchive, nosnippet, noimageindex"
+    ],
+    "x_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1371200,
+    "local_response_ms": 109.3
+  },
+  {
+    "requested": "/seo-audit-missing",
+    "status": 404,
+    "final_url": "http://localhost:8000/seo-audit-missing",
+    "title": [
+      "Not Found"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 6586,
+    "local_response_ms": 81.3
+  },
+  {
+    "requested": "/admin/login",
+    "status": 200,
+    "final_url": "http://localhost:8000/admin/login",
+    "title": [
+      "Ambresoft Commerce"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [
+      "noindex, nofollow, noarchive, nosnippet, noimageindex"
+    ],
+    "x_robots": "noindex, nofollow, noarchive, nosnippet, noimageindex",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 1350720,
+    "local_response_ms": 83.2
+  },
+  {
+    "requested": "/sitemap.xml",
+    "status": 404,
+    "final_url": "http://localhost:8000/sitemap.xml",
+    "title": [
+      "Not Found"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 6586,
+    "local_response_ms": 75.7
+  },
+  {
+    "requested": "/robots.txt",
+    "status": 200,
+    "final_url": "http://localhost:8000/robots.txt",
+    "title": [],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": null,
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 811,
+    "local_response_ms": 2.1
+  },
+  {
+    "requested": "/about",
+    "status": 404,
+    "final_url": "http://localhost:8000/about",
+    "title": [
+      "Not Found"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 6586,
+    "local_response_ms": 80.3
+  },
+  {
+    "requested": "/contact",
+    "status": 404,
+    "final_url": "http://localhost:8000/contact",
+    "title": [
+      "Not Found"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 6586,
+    "local_response_ms": 80.7
+  },
+  {
+    "requested": "/gift-certificates",
+    "status": 404,
+    "final_url": "http://localhost:8000/gift-certificates",
+    "title": [
+      "Not Found"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 6586,
+    "local_response_ms": 79.7
+  },
+  {
+    "requested": "/blog",
+    "status": 404,
+    "final_url": "http://localhost:8000/blog",
+    "title": [
+      "Not Found"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 6586,
+    "local_response_ms": 82.8
+  },
+  {
+    "requested": "/favorites",
+    "status": 404,
+    "final_url": "http://localhost:8000/favorites",
+    "title": [
+      "Not Found"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 6586,
+    "local_response_ms": 79.7
+  },
+  {
+    "requested": "/compare",
+    "status": 404,
+    "final_url": "http://localhost:8000/compare",
+    "title": [
+      "Not Found"
+    ],
+    "description_count": 0,
+    "canonical": [],
+    "robots": [],
+    "x_robots": "noindex, nofollow",
+    "graph_count": 0,
+    "schema_types": [],
+    "response_bytes": 6586,
+    "local_response_ms": 85.2
+  }
+]

@@ -1,0 +1,31 @@
+{
+    "name": "ambresoft/cart-reminders",
+    "description": "Abandoned cart reminders: e-mails signed-up customers who left products in their cart, after a delay and as many times as you choose.",
+    "version": "1.0.0",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ambresoft"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ambresoft\\CartReminders\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 2,
+            "icon": "icon.svg",
+            "title": "Abandoned cart reminders",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\CartReminders\\Infrastructure\\CartRemindersServiceProvider",
+            "requires": [],
+            "migrations": "database/migrations",
+            "contributes": {
+                "settings": "Ambresoft\\CartReminders\\Infrastructure\\CartReminderSettings"
+            }
+        }
+    }
+}

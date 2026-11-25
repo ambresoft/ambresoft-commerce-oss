@@ -1,0 +1,32 @@
+{
+    "name": "ambresoft/typesense",
+    "description": "Typesense product search: typo-tolerant, multilingual search, autocomplete and filters for the storefront, kept in step with the catalog.",
+    "version": "1.1.0",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ambresoft"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ambresoft\\Typesense\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 2,
+            "icon": "icon.svg",
+            "title": "Typesense search",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\Typesense\\Infrastructure\\TypesenseServiceProvider",
+            "requires": [],
+            "contributes": {
+                "search-providers": {
+                    "typesense": "Ambresoft\\Typesense\\Infrastructure\\TypesenseSearchProvider"
+                }
+            }
+        }
+    }
+}

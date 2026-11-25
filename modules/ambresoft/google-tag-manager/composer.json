@@ -1,0 +1,30 @@
+{
+    "name": "ambresoft/google-tag-manager",
+    "description": "Google Tag Manager on public storefront pages, with shopper events pushed to the data layer.",
+    "version": "1.0.0",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ambresoft"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ambresoft\\GoogleTagManager\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 4,
+            "title": "Google Tag Manager",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\GoogleTagManager\\Infrastructure\\GoogleTagManagerServiceProvider",
+            "requires": [],
+            "icon": "icon.svg",
+            "contributes": {
+                "settings": "Ambresoft\\GoogleTagManager\\Infrastructure\\GoogleTagManagerSettings"
+            }
+        }
+    }
+}

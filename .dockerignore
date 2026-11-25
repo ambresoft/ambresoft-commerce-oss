@@ -1,0 +1,12 @@
+.git
+.agents
+.env
+.env.*
+!.env.example
+auth.json
+vendor
+node_modules
+.pnpm-store
+storage
+public/build
+docs

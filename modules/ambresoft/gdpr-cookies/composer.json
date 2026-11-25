@@ -1,0 +1,28 @@
+{
+    "name": "ambresoft/gdpr-cookies",
+    "description": "GDPR cookie consent: banner, categories, cookie declarations, consented scripts and proof of consent.",
+    "version": "1.1.0",
+    "type": "cms-addon",
+    "license": "AGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Ambresoft"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ambresoft\\GdprCookies\\": "src/"
+        }
+    },
+    "extra": {
+        "cms-module": {
+            "contract": 4,
+            "title": "GDPR Cookies",
+            "cms": "^1.0",
+            "provider": "Ambresoft\\GdprCookies\\Infrastructure\\GdprCookiesServiceProvider",
+            "requires": [],
+            "migrations": "database/migrations",
+            "icon": "icon.svg"
+        }
+    }
+}
