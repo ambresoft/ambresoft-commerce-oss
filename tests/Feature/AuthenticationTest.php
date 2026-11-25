@@ -334,6 +334,9 @@ final class AuthenticationTest extends TestCase
         }
         $this->actingAs($this->user())->post('/admin/logout')->assertStatus(419);
         $this->post('/admin/email/verification-notification')->assertStatus(419);
+        // The error page is rendered outside the Inertia middleware but still receives the props it reads.
+        $this->withHeaders(['X-Inertia' => 'true', 'X-Requested-With' => 'XMLHttpRequest'])->post('/account/profile', [])->assertStatus(419)
+            ->assertJsonPath('component', 'Error')->assertJsonStructure(['props' => ['i18n' => ['strings'], 'links' => ['login'], 'authArea']]);
         $this->get('/admin/email/verify');
         $this->post('/admin/logout', ['_token' => session()->token()])->assertRedirect('/admin/login');
     }
