@@ -1,10 +1,8 @@
-FROM dunglas/frankenphp:1.13.5-php8.4-bookworm
+FROM dunglas/frankenphp:1.14.0-php8.5-bookworm
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git unzip libpq-dev libicu-dev libzip-dev \
-    && docker-php-ext-install pdo_pgsql intl zip bcmath pcntl \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
+# install-php-extensions (bundled with FrankenPHP) builds core and PECL extensions.
+RUN apt-get update && apt-get install -y --no-install-recommends git unzip \
+    && install-php-extensions pdo_pgsql intl zip bcmath pcntl redis \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2.8 /usr/bin/composer /usr/local/bin/composer

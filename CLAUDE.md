@@ -8,7 +8,7 @@ The project instructions above, the architecture documents they reference, and t
 
 All shared project and framework skills live in `.agents/skills/`. Claude Code discovers them through relative per-skill symlinks in `.claude/skills/`; edit the canonical files in `.agents/skills/`, not separate copies. Tool settings remain in `.claude/`. `config/boost.php` directs Boost skill updates to the canonical library.
 
-The supported PHP minimum remains 8.3 even though the local runtime is 8.4. PHP and Composer run in Docker: `docker compose -p cms-foundation exec -T app`. Use the existing project checks in `docs/development.md`; do not install a host PHP runtime or upgrade application dependencies just to use Boost.
+The supported PHP minimum remains 8.3 even though the local runtime is 8.5. PHP and Composer run in Docker: `docker compose -p cms-foundation exec -T app`. Use the existing project checks in `docs/development.md`; do not install a host PHP runtime or upgrade application dependencies just to use Boost.
 
 Laravel Boost is a development dependency. Its MCP configuration uses only the local `cms-foundation` container through the guarded `scripts/boost-mcp.php` launcher. Never point it at production credentials or databases, register an HTTP MCP endpoint, or enable it on the web application. The local `.env` disables Boost; the stdio launcher enables it for that process only after checking the local environment/database target.
 
@@ -21,7 +21,7 @@ Laravel Boost is a development dependency. Its MCP configuration uses only the l
 
 ## Foundational Context
 
-This application is a Laravel application running on PHP 8.4. Always use the APIs that match the installed major version of each package — do not assume a version.
+This application is a Laravel application running on PHP 8.5. Always use the APIs that match the installed major version of each package — do not assume a version.
 
 Before relying on a package's API, confirm its installed version:
 - PHP packages: run `composer show --direct` to list direct dependencies with versions, or `composer show <vendor/package>` for a single package.

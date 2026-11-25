@@ -32,6 +32,12 @@ final class StripeCheckoutTest extends TestCase
 
     private const WHSEC = 'whsec_AbCdEfGhIjKlMnOpQrStUvWxYz0123456789';
 
+    /** A well-formed but made-up key, built at runtime so no live-key-shaped literal sits in the source. */
+    private static function fake(string $prefix, int $length): string
+    {
+        return $prefix.substr('51AbCdEfGhIjKlMnOpQrStUvWxYz0123456789', 0, $length);
+    }
+
     private const ENDPOINT = '/payments/webhooks/stripe_checkout';
 
     private UserRecord $actor;
@@ -214,7 +220,7 @@ final class StripeCheckoutTest extends TestCase
     {
         $this->enableAddon();
         $this->configure(['settings' => ['secret_key' => 'not-a-key']])->assertSessionHasErrors('settings.secret_key');
-        $this->configure(['settings' => ['secret_key' => 'sk_live_'.'fixture-redacted-00000000']])->assertSessionHasErrors('settings.secret_key');
+        $this->configure(['settings' => ['secret_key' => self::fake('sk_live_', 24)]])->assertSessionHasErrors('settings.secret_key');
         $this->configure(['settings' => ['mode' => 'live']])->assertSessionHasErrors('settings.secret_key');
         $this->configure(['settings' => ['webhook_secret' => 'nope']])->assertSessionHasErrors('settings.webhook_secret');
         self::assertSame(0, $this->stripe->count('get', '/v1/checkout/sessions'), 'Invalid input never reaches Stripe');
@@ -246,7 +252,7 @@ final class StripeCheckoutTest extends TestCase
 
         // Changing the mode (a credential) requires the matching key and a new verification.
         $this->configure(['settings' => ['mode' => 'live']])->assertSessionHasErrors('settings.secret_key');
-        $this->configure(['settings' => ['mode' => 'live', 'secret_key' => 'sk_live_'.'fixture-redacted-0000000000']])->assertSessionHasNoErrors();
+        $this->configure(['settings' => ['mode' => 'live', 'secret_key' => self::fake('sk_live_', 26)]])->assertSessionHasNoErrors();
         self::assertSame($verifications + 1, $this->stripe->count('get', '/v1/checkout/sessions'));
         // Removing the key makes the method unavailable; disabling is always possible.
         $this->configure(['is_active' => false, 'clear' => ['secret_key' => true], 'settings' => ['mode' => 'test']])->assertSessionHasNoErrors();

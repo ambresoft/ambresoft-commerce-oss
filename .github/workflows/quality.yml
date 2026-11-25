@@ -1,14 +1,22 @@
-name: Foundation quality
+name: Quality
 
 on:
   push:
+    branches: [main]
   pull_request:
 
 permissions:
   contents: read
 
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
+  # The full check in the Docker runtime (FrankenPHP, PHP 8.5): Pint, PHPStan, PHPUnit, TypeScript, ESLint, Prettier,
+  # Vitest and the production build, then HTTP smoke checks against the running stack.
   quality:
+    name: Quality (Docker runtime)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -45,3 +53,26 @@ jobs:
       - name: Stop services without deleting volumes
         if: always()
         run: docker compose down
+
+  # composer.json still supports PHP 8.3+: the code must at least parse and the locked dependencies install there.
+  php-compatibility:
+    name: PHP ${{ matrix.php }} compatibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_pgsql, intl, zip, bcmath, pcntl, redis
+          coverage: none
+      - name: Install locked dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Platform requirements
+        run: composer check-platform-reqs
+      - name: Syntax
+        run: find app bootstrap config database routes modules tests -name '*.php' -print0 | xargs -0 -n 50 -P 4 php -l > /dev/null

@@ -157,7 +157,7 @@ Every storefront page is built to rank and to win the click:
 
 ## Built for ownership and extension
 
-Ambresoft Commerce uses **Laravel 13, PHP 8.3+, PostgreSQL, Redis, Inertia 3, React 19, TypeScript and Tailwind CSS 4**.
+Ambresoft Commerce uses **Laravel 13, PHP 8.3+ (the Docker image runs PHP 8.5 on FrankenPHP), PostgreSQL, Redis, Inertia 3, React 19, TypeScript and Tailwind CSS 4**.
 
 The application is a modular monolith organized by business context. Server-side workflows own pricing, stock, validation and permissions. Add-ons use published extension contracts, while storefront themes and blocks build on the existing presentation system.
 

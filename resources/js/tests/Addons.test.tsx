@@ -48,7 +48,12 @@ const stripe: AddonRow = {
   contributes: { 'payment-methods': ['stripe_checkout'] },
   error: null,
   upgrade_available: false,
-  settings: [{ name: 'Stripe Checkout', href: '/admin/payment-methods/stripe_checkout/edit' }],
+  settings: [
+    {
+      name: 'Stripe Checkout',
+      href: '/admin/payment-methods/stripe_checkout/edit',
+    },
+  ],
   actions: {
     install: false,
     enable: false,
@@ -82,7 +87,9 @@ it('opens the upload from the + button and links an add-on to its settings', () 
   expect(screen.queryByLabelText('ZIP package')).not.toBeVisible();
   fireEvent.click(screen.getByRole('button', { name: 'Upload an add-on' }));
   expect(screen.getByLabelText('ZIP package')).toBeVisible();
-  fireEvent.click(within(row).getByRole('switch', { name: 'Disable: Stripe Checkout' }));
+  fireEvent.click(
+    within(row).getByRole('switch', { name: 'Disable: Stripe Checkout' }),
+  );
   expect(post).toHaveBeenCalledWith(
     '/admin/addons/ambresoft/stripe-checkout/disable',
     {},

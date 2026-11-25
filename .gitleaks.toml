@@ -1,0 +1,12 @@
+# Secret scanning (gitleaks, also run in CI). The CMS ships no secrets; the allowlist covers made-up test fixtures and
+# one documentation line only.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Test fixtures and a documentation example, never real credentials"
+paths = [
+  '''(^|/)tests/''',
+  '''(^|/)resources/js/tests/''',
+  '''(^|/)docs/architecture/localization\.md$''',
+]

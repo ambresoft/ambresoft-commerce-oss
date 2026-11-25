@@ -1,0 +1,59 @@
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Every Monday: new advisories appear without any code change.
+    - cron: '17 5 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: Secret scan (full history)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest git /repo --no-banner --redact --config /repo/.gitleaks.toml
+
+  dependencies:
+    name: Dependency advisories
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.24.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Composer audit
+        run: composer audit --locked --no-interaction
+      - name: pnpm audit
+        run: pnpm audit --prod
+
+  dependency-review:
+    name: Dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+          comment-summary-in-pr: on-failure
