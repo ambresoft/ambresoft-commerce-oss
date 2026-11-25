@@ -1,7 +1,10 @@
-FROM dunglas/frankenphp:1.14.0-php8.5-bookworm
+# Debian 13 (trixie), the current stable release: far fewer open CVEs than bookworm.
+FROM dunglas/frankenphp:1.14.0-php8.5-trixie
 
 # install-php-extensions (bundled with FrankenPHP) builds core and PECL extensions.
-RUN apt-get update && apt-get install -y --no-install-recommends git unzip \
+# Debian security updates first, then the tools Composer needs.
+RUN apt-get update && apt-get upgrade -y --no-install-recommends \
+    && apt-get install -y --no-install-recommends git unzip \
     && install-php-extensions pdo_pgsql intl zip bcmath pcntl redis \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
