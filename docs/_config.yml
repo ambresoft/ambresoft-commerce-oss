@@ -1,0 +1,81 @@
+# Ambresoft Commerce documentation site (GitHub Pages: Settings → Pages → Deploy from a branch → master, /docs).
+title: Ambresoft Commerce Docs
+description: User, administrator and developer documentation for Ambresoft Commerce, the open-source B2C ecommerce platform.
+repository: ambresoft/ambresoft-commerce-oss
+remote_theme: just-the-docs/just-the-docs@v0.12.0
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-github-metadata
+  - jekyll-include-cache
+  - jekyll-sitemap
+  - jekyll-relative-links
+
+logo: /assets/images/logo.svg
+favicon_ico: /assets/images/favicon.ico
+color_scheme: ambresoft
+permalink: pretty
+
+# Every page uses the theme's layout unless it sets its own (the home page uses `home`).
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+search_enabled: true
+search:
+  heading_level: 3
+  previews: 3
+  button: true
+heading_anchors: true
+enable_copy_code_button: true
+back_to_top: true
+back_to_top_text: Back to top
+
+aux_links:
+  GitHub:
+    - https://github.com/ambresoft/ambresoft-commerce-oss
+aux_links_new_tab: true
+
+gh_edit_link: true
+gh_edit_link_text: Edit this page on GitHub
+gh_edit_repository: https://github.com/ambresoft/ambresoft-commerce-oss
+gh_edit_branch: master
+gh_edit_source: docs
+gh_edit_view_mode: tree
+
+footer_content: 'Ambresoft Commerce is free software under the <a href="https://github.com/ambresoft/ambresoft-commerce-oss/blob/master/LICENSE">GNU AGPL v3.0</a>. Copyright &copy; 2026 Ambresoft.'
+
+callouts:
+  note:
+    title: Note
+    color: blue
+  tip:
+    title: Tip
+    color: green
+  important:
+    title: Important
+    color: yellow
+  warning:
+    title: Warning
+    color: red
+
+relative_links:
+  enabled: true
+  collections: false
+
+# The internal engineering notes in this folder stay on GitHub; they are not part of the published site.
+exclude:
+  - architecture/
+  - audits/
+  - examples/
+  - integrations/
+  - addons.md
+  - development.md
+  - project-structure.md
+  - phase-*.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - .jekyll-cache/
