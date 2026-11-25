@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="public/brand/ambresoft-lockup-white.svg">
-    <img src="public/brand/ambresoft-lockup-green.svg" alt="Ambresoft" width="320">
-  </picture>
+  <img src="docs/images/social-preview.png" alt="Ambresoft Commerce, the open-source ecommerce platform for fast, beautiful B2C stores" width="100%">
 </p>
 
 <h1 align="center">Ambresoft Commerce</h1>
