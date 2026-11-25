@@ -10,6 +10,13 @@
   B2C · Self-hosted · Open source (AGPL-3.0) · Multilingual · AI-assisted · FrankenPHP, Typesense and Redis for speed
 </p>
 
+<p align="center">
+  <a href="https://ambresoft.github.io/ambresoft-commerce-oss/"><strong>Documentation</strong></a> ·
+  <a href="https://ambresoft.github.io/ambresoft-commerce-oss/getting-started/installation/">Installation</a> ·
+  <a href="https://ambresoft.github.io/ambresoft-commerce-oss/admin/">Administration guide</a> ·
+  <a href="https://ambresoft.github.io/ambresoft-commerce-oss/developers/">Developer guide</a>
+</p>
+
 ---
 
 Ambresoft Commerce is built for **B2C online stores** — brands and retailers selling directly to consumers.
@@ -128,7 +135,7 @@ Every storefront page is built to rank and to win the click:
 - **Banner generation**, **blog writing**, **newsletter writing** and **FAQ writing** in every active language, as a chat
   inside the editor. Ask for changes, undo, then save.
 - Usage limits per staff member and an AI activity log. Keys are encrypted and never sent to the browser.
-  See [AI configuration and history](docs/architecture/ai-settings.md).
+  See [AI settings](https://ambresoft.github.io/ambresoft-commerce-oss/admin/settings/general/#ai-settings).
 - The **Ambresoft shopping assistant** for your storefront is a separate product; its add-on only needs the assistant's
   widget ID.
 
@@ -150,7 +157,7 @@ Every storefront page is built to rank and to win the click:
 - **Add-on system** with bundled add-ons (Stripe Checkout, Typesense search, Sitemap, Product feeds, Google Analytics,
   Google Tag Manager, GDPR cookies, Cart reminders, Black Friday theme) and ZIP upload for your own.
 - Published extension contracts for payment methods, storefront blocks, widgets and settings panels — see the
-  [add-on developer guide](docs/addons.md).
+  [add-on developer guide](https://ambresoft.github.io/ambresoft-commerce-oss/developers/creating-an-addon/).
 
 ## Built for ownership and extension
 
@@ -158,21 +165,21 @@ Ambresoft Commerce uses **Laravel 13, PHP 8.3+ (the Docker image runs PHP 8.5 on
 
 The application is a modular monolith organized by business context. Server-side workflows own pricing, stock, validation and permissions. Add-ons use published extension contracts, while storefront themes and blocks build on the existing presentation system.
 
-- [Architecture overview](docs/architecture/overview.md)
-- [Project structure](docs/project-structure.md)
-- [Add-on developer guide](docs/addons.md)
-- [Storefront layouts and blocks](docs/architecture/storefront-architecture.md)
+- [Architecture and context-first DDD](https://ambresoft.github.io/ambresoft-commerce-oss/developers/architecture/)
+- [Project structure](https://ambresoft.github.io/ambresoft-commerce-oss/developers/project-structure/)
+- [Creating an add-on](https://ambresoft.github.io/ambresoft-commerce-oss/developers/creating-an-addon/) and the [add-on reference](https://ambresoft.github.io/ambresoft-commerce-oss/developers/addon-reference/)
+- [Storefront layouts and blocks](https://ambresoft.github.io/ambresoft-commerce-oss/admin/website/layouts/)
 
 ## Get started locally
 
-Use these instructions for a **new checkout**. Existing installations must retain their environment file, application key, Compose project name and persistent volumes; follow the [development and update guide](docs/development.md) instead of initializing them again.
+Use these instructions for a **new checkout**. Existing installations must retain their environment file, application key, Compose project name and persistent volumes; follow the [upgrade guide](https://ambresoft.github.io/ambresoft-commerce-oss/getting-started/upgrading/) instead of initializing them again.
 
 ### Requirements
 
 - Docker with Docker Compose.
 - Node.js **22.13+ within Node 22** and **pnpm 10.24.0** for frontend commands.
 
-FrankenPHP serves the application in classic mode. PHP, Composer, PostgreSQL and Redis run in Docker. A Docker-only frontend workflow is also documented in the [setup guide](docs/development.md#docker-only-frontend-alternative).
+FrankenPHP serves the application in classic mode. PHP, Composer, PostgreSQL and Redis run in Docker. A Docker-only frontend workflow is also documented in the [installation guide](https://ambresoft.github.io/ambresoft-commerce-oss/getting-started/installation/#docker-only-frontend-optional).
 
 ### Installation
 
@@ -221,7 +228,7 @@ FrankenPHP serves the application in classic mode. PHP, Composer, PostgreSQL and
 | Administration          | [localhost:8000/admin](http://localhost:8000/admin) |
 | Development email inbox | [localhost:8025](http://localhost:8025)             |
 
-The supplied Compose configuration is for local development. Use the [security guidance](docs/architecture/security.md) and an appropriate production deployment process before publishing a customer store.
+The supplied Compose configuration is for local development. Use the [production checklist](https://ambresoft.github.io/ambresoft-commerce-oss/getting-started/production/) and an appropriate production deployment process before publishing a customer store.
 
 ## Configure your store
 
@@ -229,27 +236,30 @@ Start with company details, languages, currencies, taxes, shipping and payment m
 
 During development, General settings → Basic settings → Storefront access lets you close the store to visitors while verified staff retain preview access. The separate development indexing setting adds `noindex, nofollow` to the storefront; disable it when the public store is ready for indexing.
 
-Keep queue workers and the scheduler running for background work such as email, search indexing and file cleanup. See [runtime operations](docs/development.md#runtime-operations) for the supported workflows.
+Keep queue workers and the scheduler running for background work such as email, search indexing and file cleanup. See [Redis, queues and the scheduler](https://ambresoft.github.io/ambresoft-commerce-oss/developers/redis-queues-scheduler/) for the supported workflows.
 
 ## Documentation
 
-| Topic                            | Guide                                                                   |
-| -------------------------------- | ----------------------------------------------------------------------- |
-| Installation, updates and checks | [Development and operations](docs/development.md)                       |
-| Staff access and capabilities    | [Authorization](docs/architecture/authorization.md)                     |
-| Languages and translated content | [Localization](docs/architecture/localization.md)                       |
-| Product management               | [Products](docs/architecture/products.md)                               |
-| Product variation groups         | [Variations](docs/architecture/variations.md)                           |
-| Payments and provider setup      | [Payments](docs/architecture/payments.md)                               |
-| Shipping and carrier setup       | [Shipping](docs/architecture/shipping.md)                               |
-| Storefront customization         | [Storefront architecture](docs/architecture/storefront-architecture.md) |
-| Extension development            | [Add-ons](docs/addons.md)                                               |
-| XML sitemaps                     | [Sitemap add-on](docs/architecture/xml-sitemap.md)                      |
-| AI provider settings and history | [AI settings](docs/architecture/ai-settings.md)                         |
-| Local AI development tooling     | [Claude Code and Boost guidance](CLAUDE.md)                             |
-| Security practices               | [Security](docs/architecture/security.md)                               |
+The full documentation is published at **[ambresoft.github.io/ambresoft-commerce-oss](https://ambresoft.github.io/ambresoft-commerce-oss/)**. Its source lives in
+[`docs/`](docs/), so it is versioned with the code.
 
-Architecture decisions and phase reports record the project's implementation history. They do not define customer license entitlements or promise future features.
+| Topic                                  | Guide                                                                                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------- |
+| Installation, first steps and upgrades | [Getting started](https://ambresoft.github.io/ambresoft-commerce-oss/getting-started/)                                               |
+| Setting up a new store                 | [Set up your store](https://ambresoft.github.io/ambresoft-commerce-oss/getting-started/first-steps/)                                 |
+| Every administration screen            | [Administration guide](https://ambresoft.github.io/ambresoft-commerce-oss/admin/)                                                    |
+| Products and variation groups          | [Products](https://ambresoft.github.io/ambresoft-commerce-oss/admin/catalog/products/), [Variation groups](https://ambresoft.github.io/ambresoft-commerce-oss/admin/catalog/variation-groups/) |
+| Payments and shipping                  | [Payment methods](https://ambresoft.github.io/ambresoft-commerce-oss/admin/payment-methods/), [Shipping & Taxes](https://ambresoft.github.io/ambresoft-commerce-oss/admin/shipping-taxes/) |
+| What customers see                     | [The storefront](https://ambresoft.github.io/ambresoft-commerce-oss/storefront/)                                                     |
+| Stripe, search, sitemap and more       | [Bundled add-ons](https://ambresoft.github.io/ambresoft-commerce-oss/bundled-addons/)                                                |
+| Architecture, stack and extensions     | [Developer guide](https://ambresoft.github.io/ambresoft-commerce-oss/developers/)                                                    |
+| Routes, permissions, commands, `.env`  | [Reference](https://ambresoft.github.io/ambresoft-commerce-oss/reference/)                                                           |
+| Going live                             | [Going to production](https://ambresoft.github.io/ambresoft-commerce-oss/getting-started/production/)                                |
+| Local AI development tooling           | [Claude Code and Boost guidance](CLAUDE.md)                                             |
+
+Detailed engineering notes (architecture decisions, phase reports and design contracts) stay in
+[`docs/architecture/`](docs/architecture/) and [`docs/development.md`](docs/development.md). They record the project's
+implementation history; they do not define customer license entitlements or promise future features.
 
 ## Development checks
 
@@ -257,7 +267,7 @@ Architecture decisions and phase reports record the project's implementation his
 make check
 ```
 
-The project uses PHPUnit with an isolated PostgreSQL test database, Vitest and Testing Library, PHPStan/Larastan, Pint, TypeScript, ESLint, Prettier and Vite. See the [verification guide](docs/development.md#verification) for individual commands and environment requirements.
+The project uses PHPUnit with an isolated PostgreSQL test database, Vitest and Testing Library, PHPStan/Larastan, Pint, TypeScript, ESLint, Prettier and Vite. See the [quality checks](https://ambresoft.github.io/ambresoft-commerce-oss/developers/local-development/#quality-checks) for individual commands and environment requirements.
 
 ### MCP for local development
 
