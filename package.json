@@ -43,7 +43,7 @@
     "@eslint/js": "^10.0.0",
     "@inertiajs/vite": "^3.8.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/jest-dom": "8.0.0",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
