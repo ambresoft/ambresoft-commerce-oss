@@ -80,7 +80,7 @@ final class GeneralSettingsController
                 }
             }
             if ($request->has('ai_settings')) {
-                $aiInput = $request->validate(['ai_settings' => ['required', 'array:version,enabled,api_key,clear_key,model,max_tokens,hourly_limit']]);
+                $aiInput = $request->validate(['ai_settings' => ['required', 'array:version,enabled,api_key,clear_key,model,max_tokens,hourly_limit,daily_limit']]);
                 try {
                     app(AiSettings::class)->save((string) $request->user()->getAuthIdentifier(), $aiInput['ai_settings']);
                 } catch (ValidationException $failure) {

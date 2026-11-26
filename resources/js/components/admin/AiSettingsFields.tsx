@@ -10,6 +10,7 @@ export type AiValues = {
   model: string;
   max_tokens: number;
   hourly_limit: number;
+  daily_limit: number;
 };
 export type AiSettings = Omit<AiValues, 'api_key' | 'clear_key'> & {
   has_key: boolean;
@@ -99,6 +100,17 @@ export default function AiSettingsFields({
         value={value.hourly_limit}
         error={errors.hourly_limit}
         onChange={(e) => setData('hourly_limit', Number(e.target.value))}
+      />
+      <FormField
+        id="ai-daily-limit"
+        label={t('ai.daily_limit')}
+        type="number"
+        min={1}
+        max={100000}
+        value={value.daily_limit}
+        error={errors.daily_limit}
+        onChange={(e) => setData('daily_limit', Number(e.target.value))}
+        hint={t('ai.daily_limit_help')}
       />
     </section>
   );

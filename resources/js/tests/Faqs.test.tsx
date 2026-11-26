@@ -368,6 +368,7 @@ it('does not display saved credentials and preserves them by submitting an empty
         model: 'claude-sonnet-4-6',
         max_tokens: 3000,
         hourly_limit: 50,
+        daily_limit: 200,
         version: 2,
       }}
       aiModels={[{ value: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6' }]}

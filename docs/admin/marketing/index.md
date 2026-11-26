@@ -35,3 +35,15 @@ the editor: describe what you want, ask for changes, then review and save. Nothi
 needs an Anthropic API key in **Settings → General settings** (AI) and the matching permission (*Generate banners with
 AI*, *Write blog posts with AI*, *Write newsletters with AI*, *Generate FAQ drafts with AI*). Every generation is listed
 in **Logs → AI log**.
+
+### What the assistant can and cannot do
+
+- It only writes the draft of the screen you are on. It has no access to your server, files, code, database, settings
+  or other records, and it cannot run commands or change anything: requests such as running scripts, deleting data or
+  showing configuration are declined.
+- It receives only what it needs: your messages, the editor's current content, your store's languages and name, and
+  for FAQs the public contact details and the description you chose. API keys and server settings are never sent.
+- Everything it writes is checked and cleaned by the server before it reaches the editor, and nothing is saved, sent or
+  published until you save it yourself.
+- Usage is limited per staff member (per hour) and for the whole store (per day); both limits are set in **Settings →
+  General settings → AI settings**.

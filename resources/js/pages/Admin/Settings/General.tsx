@@ -173,6 +173,7 @@ function GeneralEditor({
           model: aiSettings.model,
           max_tokens: aiSettings.max_tokens,
           hourly_limit: aiSettings.hourly_limit,
+          daily_limit: aiSettings.daily_limit,
         } as AiValues)
       : undefined,
     ...basicDefaults,

@@ -20,6 +20,9 @@ use Illuminate\Validation\ValidationException;
  */
 final class NewsletterAiGenerator
 {
+    /** Largest editor state sent with one request (a long article is well under it), keeping each call\'s cost bounded. */
+    private const CURRENT_BYTES = 60000;
+
     private const SYSTEM = <<<'PROMPT'
 You write marketing emails for an ecommerce store in a chat with the merchant. Each turn, return the complete email for the requested language reflecting everything agreed so far, plus a short reply.
 
@@ -50,7 +53,7 @@ PROMPT;
         $id = isset($data['newsletter_id']) && DB::table('newsletters')->where('id', $data['newsletter_id'])->exists() ? (string) $data['newsletter_id'] : null;
         $conversation = app(AiClient::class)->conversation($input, [
             'type' => $data['type'], 'language' => $data['locale'], 'store' => array_intersect_key(app(CompanySettings::class)->all(), array_flip(['name', 'country_code'])),
-        ], 250000);
+        ], self::CURRENT_BYTES);
         $string = ['type' => 'string'];
         $fields = ['name' => $string, 'subject' => $string, 'random_subjects' => ['type' => 'array', 'items' => $string], 'body_html' => $string];
         $schema = ['type' => 'object', 'properties' => [
