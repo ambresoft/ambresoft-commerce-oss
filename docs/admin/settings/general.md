@@ -127,6 +127,7 @@ header** colour. **Use default** resets a colour.
 | **Claude model** | The model used for generation |
 | **Maximum output tokens per call** | Limits the length (and cost) of each answer |
 | **Generations per user per hour** | A per-staff-member limit |
+| **Generations per day for the whole store** | Shared by all staff over the last 24 hours (default 200). Every request to the AI provider counts, including failed ones |
 
 Usage is listed in **Logs → AI log**. Input tokens are also billed by Anthropic.
 

@@ -30,7 +30,7 @@ final class AiSettings
     {
         $row = DB::table('ai_settings')->where('id', 1)->firstOrFail();
 
-        return ['enabled' => (bool) $row->enabled, 'has_key' => $row->api_key !== null, 'model' => $row->model, 'max_tokens' => (int) $row->max_tokens, 'hourly_limit' => (int) $row->hourly_limit, 'version' => (int) $row->lock_version];
+        return ['enabled' => (bool) $row->enabled, 'has_key' => $row->api_key !== null, 'model' => $row->model, 'max_tokens' => (int) $row->max_tokens, 'hourly_limit' => (int) $row->hourly_limit, 'daily_limit' => (int) $row->daily_limit, 'version' => (int) $row->lock_version];
     }
 
     public function key(): string
@@ -52,7 +52,7 @@ final class AiSettings
         app(AuditLogger::class)->operation('ai_settings', $actor, fn () => DB::transaction(function () use ($actor, $input): void {
             Gate::forUser(UserRecord::findOrFail($actor))->authorize('settings.manage');
             app(AuditContext::class)->actor($actor);
-            $data = Validator::make($input, ['version' => ['required', 'integer', 'min:1'], 'enabled' => ['required', 'boolean'], 'api_key' => ['nullable', 'string', 'max:500', 'regex:/^\S+$/D'], 'clear_key' => ['sometimes', 'boolean'], 'model' => ['required', Rule::in(array_keys(self::MODELS))], 'max_tokens' => ['required', 'integer', 'between:256,16000'], 'hourly_limit' => ['required', 'integer', 'between:1,1000']])->validate();
+            $data = Validator::make($input, ['version' => ['required', 'integer', 'min:1'], 'enabled' => ['required', 'boolean'], 'api_key' => ['nullable', 'string', 'max:500', 'regex:/^\S+$/D'], 'clear_key' => ['sometimes', 'boolean'], 'model' => ['required', Rule::in(array_keys(self::MODELS))], 'max_tokens' => ['required', 'integer', 'between:256,16000'], 'hourly_limit' => ['required', 'integer', 'between:1,1000'], 'daily_limit' => ['sometimes', 'required', 'integer', 'between:1,100000']])->validate();
             $row = DB::table('ai_settings')->where('id', 1)->lockForUpdate()->firstOrFail();
             if ((int) $row->lock_version !== (int) $data['version']) {
                 throw ValidationException::withMessages(['version' => __('ai.stale')]);
@@ -64,7 +64,7 @@ final class AiSettings
             if ($data['enabled'] && $key === null) {
                 throw ValidationException::withMessages(['api_key' => __('ai.key_required')]);
             }
-            DB::table('ai_settings')->where('id', 1)->update(['enabled' => (bool) $data['enabled'], 'api_key' => $key, 'model' => $data['model'], 'max_tokens' => $data['max_tokens'], 'hourly_limit' => $data['hourly_limit'], 'lock_version' => (int) $data['version'] + 1, 'updated_by' => $actor, 'updated_at' => now()]);
+            DB::table('ai_settings')->where('id', 1)->update(['enabled' => (bool) $data['enabled'], 'api_key' => $key, 'model' => $data['model'], 'max_tokens' => $data['max_tokens'], 'hourly_limit' => $data['hourly_limit'], 'daily_limit' => $data['daily_limit'] ?? $row->daily_limit, 'lock_version' => (int) $data['version'] + 1, 'updated_by' => $actor, 'updated_at' => now()]);
             if ($key !== $row->api_key) {
                 app(AuditLogger::class)->record(new AuditEvent('ai_settings.credentials_changed', 'ai_settings', '1', metadata: ['key_configured' => $key !== null]));
             }

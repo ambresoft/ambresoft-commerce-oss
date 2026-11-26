@@ -19,6 +19,9 @@ use Illuminate\Validation\ValidationException;
  */
 final class BlogAiGenerator
 {
+    /** Largest editor state sent with one request (a long article is well under it), keeping each call\'s cost bounded. */
+    private const CURRENT_BYTES = 60000;
+
     private const SYSTEM = <<<'PROMPT'
 You write blog posts for an ecommerce store in a chat with the merchant. Each turn, return the complete post for the requested language reflecting everything agreed so far, plus a short reply.
 
@@ -47,7 +50,7 @@ PROMPT;
         $postId = isset($data['post_id']) && DB::table('blog_posts')->where('id', $data['post_id'])->exists() ? (string) $data['post_id'] : null;
         $conversation = app(AiClient::class)->conversation($input, [
             'language' => $data['locale'], 'store' => array_intersect_key(app(CompanySettings::class)->all(), array_flip(['name', 'country_code'])),
-        ], 200000);
+        ], self::CURRENT_BYTES);
         $string = ['type' => 'string'];
         $fields = ['name' => $string, 'excerpt' => $string, 'content' => $string, 'seo_title' => $string, 'meta_description' => $string, 'meta_keywords' => $string, 'tags' => ['type' => 'array', 'items' => $string]];
         $schema = ['type' => 'object', 'properties' => [
